@@ -1,0 +1,16 @@
+[
+{
+  "modid": "forgekit",
+  "name": "ForgeKit",
+  "description": "Not client-side, remove",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Timardo"],
+  "credits": "PaperMC Dev Team, SpigotMC Dev Team, Bukkit Dev Team and others",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
