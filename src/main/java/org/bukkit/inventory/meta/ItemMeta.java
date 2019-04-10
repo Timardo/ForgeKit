@@ -194,6 +194,5 @@ public interface ItemMeta extends Cloneable, ConfigurationSerializable {
      */
     void setUnbreakable(boolean unbreakable);
 
-    @SuppressWarnings("javadoc")
     ItemMeta clone();
 }

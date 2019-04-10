@@ -88,7 +88,8 @@ public class Hopper extends MaterialData implements Directional, Redstone {
      * @param isActive True if the hopper is active, false if deactivated as if
      * powered by redstone
      */
-    public void setActive(boolean isActive) {
+    @SuppressWarnings("deprecation")
+	public void setActive(boolean isActive) {
         setData((byte) (getData() & 0x7 | (isActive ? 0x0 : 0x8)));
     }
 
@@ -97,7 +98,8 @@ public class Hopper extends MaterialData implements Directional, Redstone {
      *
      * @return True if the hopper is active, false if deactivated
      */
-    public boolean isActive() {
+    @SuppressWarnings("deprecation")
+	public boolean isActive() {
         return (getData() & 0x8) == 0;
     }
 
@@ -108,7 +110,8 @@ public class Hopper extends MaterialData implements Directional, Redstone {
      *
      * @see BlockFace
      */
-    @Override
+    @SuppressWarnings({ "deprecation", "incomplete-switch" })
+	@Override
     public void setFacingDirection(BlockFace face) {
         int data = getData() & 0x8;
 
@@ -140,7 +143,8 @@ public class Hopper extends MaterialData implements Directional, Redstone {
      *
      * @see BlockFace
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public BlockFace getFacing() {
         byte data = (byte) (getData() & 0x7);
 
@@ -174,7 +178,8 @@ public class Hopper extends MaterialData implements Directional, Redstone {
      *
      * @return true if the hopper is powered
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean isPowered() {
         return (getData() & 0x8) != 0;
     }

@@ -90,7 +90,8 @@ public class Crops extends MaterialData {
      *
      * @return CropState of this crop
      */
-    public CropState getState() {
+    @SuppressWarnings("deprecation")
+	public CropState getState() {
         switch (getItemType()) {
             case CROPS:
             case CARROT:
@@ -121,7 +122,8 @@ public class Crops extends MaterialData {
      *
      * @param state New growth state of this crop
      */
-    public void setState(CropState state) {
+    @SuppressWarnings("deprecation")
+	public void setState(CropState state) {
         switch (getItemType()) {
             case CROPS:
             case CARROT:

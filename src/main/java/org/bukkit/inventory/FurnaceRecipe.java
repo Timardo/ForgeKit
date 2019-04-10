@@ -27,7 +27,8 @@ public class FurnaceRecipe implements Recipe {
      * @param result The item you want the recipe to create.
      * @param source The input material.
      */
-    public FurnaceRecipe(ItemStack result, MaterialData source) {
+    @SuppressWarnings("deprecation")
+	public FurnaceRecipe(ItemStack result, MaterialData source) {
         this(result, source.getItemType(), source.getData(), 0);
     }
 
@@ -38,7 +39,8 @@ public class FurnaceRecipe implements Recipe {
      * @param source The input material.
      * @param experience The experience given by this recipe
      */
-    public FurnaceRecipe(ItemStack result, MaterialData source, float experience) {
+    @SuppressWarnings("deprecation")
+	public FurnaceRecipe(ItemStack result, MaterialData source, float experience) {
         this(result, source.getItemType(), source.getData(), experience);
     }
 
@@ -79,7 +81,8 @@ public class FurnaceRecipe implements Recipe {
      * @param input The input material.
      * @return The changed recipe, so you can chain calls.
      */
-    public FurnaceRecipe setInput(MaterialData input) {
+    @SuppressWarnings("deprecation")
+	public FurnaceRecipe setInput(MaterialData input) {
         return setInput(input.getItemType(), input.getData());
     }
 

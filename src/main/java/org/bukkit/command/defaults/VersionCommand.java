@@ -22,8 +22,6 @@ import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -150,7 +148,8 @@ public class VersionCommand extends BukkitCommand {
     private boolean versionTaskStarted = false;
     private long lastCheck = 0;
 
-    private void sendVersion(CommandSender sender) {
+    @SuppressWarnings("unused")
+	private void sendVersion(CommandSender sender) {
         if (hasVersion) {
             if (System.currentTimeMillis() - lastCheck > 21600000) {
                 lastCheck = System.currentTimeMillis();

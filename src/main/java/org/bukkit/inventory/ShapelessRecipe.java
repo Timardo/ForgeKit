@@ -85,7 +85,8 @@ public class ShapelessRecipe implements Recipe, Keyed {
      * @param ingredient The ingredient to add.
      * @return The changed recipe, so you can chain calls.
      */
-    public ShapelessRecipe addIngredient(int count, MaterialData ingredient) {
+    @SuppressWarnings("deprecation")
+	public ShapelessRecipe addIngredient(int count, MaterialData ingredient) {
         return addIngredient(count, ingredient.getItemType(), ingredient.getData());
     }
 
@@ -144,7 +145,8 @@ public class ShapelessRecipe implements Recipe, Keyed {
      * @param ingredient The ingredient to remove
      * @return The changed recipe.
      */
-    public ShapelessRecipe removeIngredient(MaterialData ingredient) {
+    @SuppressWarnings("deprecation")
+	public ShapelessRecipe removeIngredient(MaterialData ingredient) {
         return removeIngredient(ingredient.getItemType(), ingredient.getData());
     }
 
@@ -170,7 +172,8 @@ public class ShapelessRecipe implements Recipe, Keyed {
      * @param ingredient The ingredient to remove.
      * @return The changed recipe.
      */
-    public ShapelessRecipe removeIngredient(int count, MaterialData ingredient) {
+    @SuppressWarnings("deprecation")
+	public ShapelessRecipe removeIngredient(int count, MaterialData ingredient) {
         return removeIngredient(count, ingredient.getItemType(), ingredient.getData());
     }
 

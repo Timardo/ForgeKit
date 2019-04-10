@@ -16,7 +16,8 @@ import org.bukkit.configuration.serialization.SerializableAs;
  */
 @SerializableAs("Vector")
 public class Vector implements Cloneable, ConfigurationSerializable {
-    private static final long serialVersionUID = -2657651106777219169L;
+    @SuppressWarnings("unused")
+	private static final long serialVersionUID = -2657651106777219169L;
 
     private static Random random = new Random();
 

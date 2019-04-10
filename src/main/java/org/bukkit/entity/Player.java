@@ -29,6 +29,7 @@ import org.bukkit.scoreboard.Scoreboard;
 /**
  * Represents a player, connected or not
  */
+@SuppressWarnings("deprecation")
 public interface Player extends HumanEntity, Conversable, CommandSender, OfflinePlayer, PluginMessageRecipient {
 
     /**

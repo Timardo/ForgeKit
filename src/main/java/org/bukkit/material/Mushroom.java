@@ -67,7 +67,8 @@ public class Mushroom extends MaterialData {
      * @see Material#HUGE_MUSHROOM_1
      * @see Material#HUGE_MUSHROOM_2
      */
-    public Mushroom(Material shroom, MushroomBlockTexture texture) {
+    @SuppressWarnings("deprecation")
+	public Mushroom(Material shroom, MushroomBlockTexture texture) {
         this(shroom, texture.getData());
     }
 
@@ -96,7 +97,8 @@ public class Mushroom extends MaterialData {
     /**
      * @return Whether this is a mushroom stem.
      */
-    public boolean isStem() {
+    @SuppressWarnings("deprecation")
+	public boolean isStem() {
         return getData() == MushroomBlockTexture.STEM_SIDES.getData() || getData() == MushroomBlockTexture.ALL_STEM.getData();
     }
 
@@ -121,7 +123,8 @@ public class Mushroom extends MaterialData {
      *
      * @return The mushroom texture of this block
      */
-    public MushroomBlockTexture getBlockTexture() {
+    @SuppressWarnings("deprecation")
+	public MushroomBlockTexture getBlockTexture() {
         return MushroomBlockTexture.getByData(getData());
     }
 
@@ -130,7 +133,8 @@ public class Mushroom extends MaterialData {
      *
      * @param texture The mushroom texture to set
      */
-    public void setBlockTexture(MushroomBlockTexture texture) {
+    @SuppressWarnings("deprecation")
+	public void setBlockTexture(MushroomBlockTexture texture) {
         setData(texture.getData());
     }
 
@@ -140,7 +144,8 @@ public class Mushroom extends MaterialData {
      * @param face The face to check.
      * @return True if it is painted.
      */
-    public boolean isFacePainted(BlockFace face) {
+    @SuppressWarnings("deprecation")
+	public boolean isFacePainted(BlockFace face) {
         byte data = getData();
 
         if (data == MushroomBlockTexture.ALL_PORES.getData() || data == MushroomBlockTexture.STEM_SIDES.getData()
@@ -282,7 +287,8 @@ public class Mushroom extends MaterialData {
         return faces;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public String toString() {
         return Material.getMaterial(getItemTypeId()).toString() + (isStem() ? " STEM " : " CAP ") + getPaintedFaces();
     }

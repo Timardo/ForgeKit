@@ -50,12 +50,14 @@ public class Observer extends MaterialData implements Directional, Redstone {
         super(type, data);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean isPowered() {
         return (getData() & 0x8) == 0x8;
     }
 
-    @Override
+    @SuppressWarnings({ "deprecation", "incomplete-switch" })
+	@Override
     public void setFacingDirection(BlockFace face) {
         byte data = (byte) (getData() & 0x8);
 
@@ -83,7 +85,8 @@ public class Observer extends MaterialData implements Directional, Redstone {
         setData(data);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public BlockFace getFacing() {
         int data = getData() & 0x7;
 

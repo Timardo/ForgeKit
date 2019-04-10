@@ -17,7 +17,8 @@ public class EntityDamageByEntityEvent extends EntityDamageEvent {
         this.damager = damager;
     }
 
-    public EntityDamageByEntityEvent(final Entity damager, final Entity damagee, final DamageCause cause, final Map<DamageModifier, Double> modifiers, final Map<DamageModifier, ? extends Function<? super Double, Double>> modifierFunctions) {
+    @SuppressWarnings("deprecation")
+	public EntityDamageByEntityEvent(final Entity damager, final Entity damagee, final DamageCause cause, final Map<DamageModifier, Double> modifiers, final Map<DamageModifier, ? extends Function<? super Double, Double>> modifierFunctions) {
         super(damagee, cause, modifiers, modifierFunctions);
         this.damager = damager;
     }

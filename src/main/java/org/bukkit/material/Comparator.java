@@ -97,7 +97,8 @@ public class Comparator extends MaterialData implements Directional, Redstone {
      *
      * @param isSubtraction True if the comparator is in subtraction mode, false for normal comparator operation
      */
-    public void setSubtractionMode(boolean isSubtraction) {
+    @SuppressWarnings("deprecation")
+	public void setSubtractionMode(boolean isSubtraction) {
         setData((byte) (getData() & 0xB | (isSubtraction ? 0x4 : 0x0)));
     }
 
@@ -106,7 +107,8 @@ public class Comparator extends MaterialData implements Directional, Redstone {
      *
      * @return True if the comparator is in subtraction mode, false if normal comparator operation
      */
-    public boolean isSubtractionMode() {
+    @SuppressWarnings("deprecation")
+	public boolean isSubtractionMode() {
         return (getData() & 0x4) != 0;
     }
 
@@ -117,7 +119,8 @@ public class Comparator extends MaterialData implements Directional, Redstone {
      *
      * @see BlockFace
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setFacingDirection(BlockFace face) {
         int data = getData() & 0xC;
 
@@ -149,7 +152,8 @@ public class Comparator extends MaterialData implements Directional, Redstone {
      *
      * @see BlockFace
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public BlockFace getFacing() {
         byte data = (byte) (getData() & 0x3);
 
@@ -194,7 +198,8 @@ public class Comparator extends MaterialData implements Directional, Redstone {
      *
      * @return true if the comparator is being powered
      */
-    public boolean isBeingPowered() {
+    @SuppressWarnings("deprecation")
+	public boolean isBeingPowered() {
         return (getData() & 0x8) != 0;
     }
 }

@@ -63,3 +63,11 @@ processResources {
         exclude 'mcmod.info'
     }
 }
+
+jar {
+    from {
+        configurations.shipInJar.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}

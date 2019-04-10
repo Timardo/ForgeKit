@@ -18,7 +18,8 @@ import java.util.List;
 public class BlockMultiPlaceEvent extends BlockPlaceEvent {
     private final List<BlockState> states;
 
-    public BlockMultiPlaceEvent(List<BlockState> states, Block clicked, ItemStack itemInHand, Player thePlayer, boolean canBuild) {
+    @SuppressWarnings("deprecation")
+	public BlockMultiPlaceEvent(List<BlockState> states, Block clicked, ItemStack itemInHand, Player thePlayer, boolean canBuild) {
         super(states.get(0).getBlock(), states.get(0), clicked, itemInHand, thePlayer, canBuild);
         this.states = ImmutableList.copyOf(states);
     }

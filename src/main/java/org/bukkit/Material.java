@@ -68,6 +68,7 @@ import org.bukkit.material.Observer;
 /**
  * An enum of all material IDs accepted by the official server and client
  */
+@SuppressWarnings("deprecation")
 public enum Material {
     AIR(0, 0),
     STONE(1),

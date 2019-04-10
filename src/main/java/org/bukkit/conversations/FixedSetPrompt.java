@@ -26,7 +26,8 @@ public abstract class FixedSetPrompt extends ValidatingPrompt {
         this.fixedSet = Arrays.asList(fixedSet);
     }
 
-    private FixedSetPrompt() {}
+    @SuppressWarnings("unused")
+	private FixedSetPrompt() {}
 
     @Override
     protected boolean isInputValid(ConversationContext context, String input) {

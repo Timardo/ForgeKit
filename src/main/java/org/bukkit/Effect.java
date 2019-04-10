@@ -10,6 +10,7 @@ import org.bukkit.potion.Potion;
 /**
  * A list of effects that the server is able to send to players.
  */
+@SuppressWarnings("deprecation")
 public enum Effect {
     /**
      * An alternate click sound.

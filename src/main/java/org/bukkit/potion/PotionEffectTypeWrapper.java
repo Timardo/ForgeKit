@@ -22,7 +22,8 @@ public class PotionEffectTypeWrapper extends PotionEffectType {
      *
      * @return The potion effect type
      */
-    public PotionEffectType getType() {
+    @SuppressWarnings("deprecation")
+	public PotionEffectType getType() {
         return PotionEffectType.getById(getId());
     }
 

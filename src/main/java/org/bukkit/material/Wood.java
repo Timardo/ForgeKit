@@ -85,7 +85,8 @@ public class Wood extends MaterialData {
      *
      * @return TreeSpecies of this wood block
      */
-    public TreeSpecies getSpecies() {
+    @SuppressWarnings("deprecation")
+	public TreeSpecies getSpecies() {
         switch (getItemType()) {
             case WOOD:
             case WOOD_DOUBLE_STEP:
@@ -144,7 +145,8 @@ public class Wood extends MaterialData {
      *
      * @param species New species of this wood block
      */
-    public void setSpecies(final TreeSpecies species) {
+    @SuppressWarnings("deprecation")
+	public void setSpecies(final TreeSpecies species) {
         boolean firstType = false;
         switch (getItemType()) {
             case WOOD:

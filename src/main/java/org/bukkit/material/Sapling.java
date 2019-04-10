@@ -95,7 +95,8 @@ public class Sapling extends Wood {
      *
      * @return true if the Sapling would grow when next ticked with bonemeal
      */
-    public boolean isInstantGrowable() {
+    @SuppressWarnings("deprecation")
+	public boolean isInstantGrowable() {
         return (getData() & 0x8) == 0x8;
     }
 
@@ -105,7 +106,8 @@ public class Sapling extends Wood {
      * @param isInstantGrowable true if the Sapling should grow when next ticked
      * with bonemeal
      */
-    public void setIsInstantGrowable(boolean isInstantGrowable) {
+    @SuppressWarnings("deprecation")
+	public void setIsInstantGrowable(boolean isInstantGrowable) {
         setData(isInstantGrowable ? (byte) ((getData() & 0x7) | 0x8) : (byte) (getData() & 0x7));
     }
 

@@ -71,7 +71,8 @@ public class MaterialData implements Cloneable {
      *
      * @return Material represented by this MaterialData
      */
-    public Material getItemType() {
+    @SuppressWarnings("deprecation")
+	public Material getItemType() {
         return Material.getMaterial(type);
     }
 
@@ -104,7 +105,8 @@ public class MaterialData implements Cloneable {
      * @param amount The stack size of the new stack
      * @return New ItemStack containing a copy of this MaterialData
      */
-    public ItemStack toItemStack(int amount) {
+    @SuppressWarnings("deprecation")
+	public ItemStack toItemStack(int amount) {
         return new ItemStack(type, amount, data);
     }
 

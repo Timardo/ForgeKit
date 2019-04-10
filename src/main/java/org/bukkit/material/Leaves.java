@@ -107,7 +107,8 @@ public class Leaves extends Wood {
      *
      * @return true if the leaf block is in the process of decaying
      */
-    public boolean isDecaying() {
+    @SuppressWarnings("deprecation")
+	public boolean isDecaying() {
         return (getData() & 0x8) != 0;
     }
 
@@ -116,7 +117,8 @@ public class Leaves extends Wood {
      *
      * @param isDecaying whether the block is decaying or not
      */
-    public void setDecaying(boolean isDecaying) {
+    @SuppressWarnings("deprecation")
+	public void setDecaying(boolean isDecaying) {
         setData((byte) ((getData() & 0x3) | (isDecaying
                 ? 0x8 // Clear the permanent flag to make this a decayable flag and set the decaying flag
                 : (getData() & 0x4)))); // Only persist the decayable flag if this is not a decaying block
@@ -129,7 +131,8 @@ public class Leaves extends Wood {
      * @return true if the leaf block is permanent or can decay when too far
      * from a log
      */
-    public boolean isDecayable() {
+    @SuppressWarnings("deprecation")
+	public boolean isDecayable() {
         return (getData() & 0x4) == 0;
     }
 
@@ -138,7 +141,8 @@ public class Leaves extends Wood {
      *
      * @param isDecayable whether the block is permanent or can disappear
      */
-    public void setDecayable(boolean isDecayable) {
+    @SuppressWarnings("deprecation")
+	public void setDecayable(boolean isDecayable) {
         setData((byte) ((getData() & 0x3) | (isDecayable
                 ? (getData() & 0x8) // Only persist the decaying flag if this is a decayable block
                 : 0x4)));
