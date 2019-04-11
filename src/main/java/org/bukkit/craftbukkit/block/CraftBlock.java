@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.server.*;
+import net.minecraft.util.EnumFacing;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -241,20 +242,20 @@ public class CraftBlock implements Block {
         }
     }
 
-    public static EnumDirection blockFaceToNotch(BlockFace face) {
+    public static EnumFacing blockFaceToNotch(BlockFace face) {
         switch (face) {
         case DOWN:
-            return EnumDirection.DOWN;
+            return EnumFacing.DOWN;
         case UP:
-            return EnumDirection.UP;
+            return EnumFacing.UP;
         case NORTH:
-            return EnumDirection.NORTH;
+            return EnumFacing.NORTH;
         case SOUTH:
-            return EnumDirection.SOUTH;
+            return EnumFacing.SOUTH;
         case WEST:
-            return EnumDirection.WEST;
+            return EnumFacing.WEST;
         case EAST:
-            return EnumDirection.EAST;
+            return EnumFacing.EAST;
         default:
             return null;
         }
@@ -355,20 +356,20 @@ public class CraftBlock implements Block {
         getWorld().setBiome(x, z, bio);
     }
 
-    public static Biome biomeBaseToBiome(BiomeBase base) {
+    public static Biome biomeBaseToBiome(net.minecraft.world.biome.Biome base) {
         if (base == null) {
             return null;
         }
 
-        return Biome.valueOf(BiomeBase.REGISTRY_ID.b(base).getKey().toUpperCase(java.util.Locale.ENGLISH));
+        return Biome.valueOf(net.minecraft.world.biome.Biome.REGISTRY_ID.b(base).getKey().toUpperCase(java.util.Locale.ENGLISH));
     }
 
-    public static BiomeBase biomeToBiomeBase(Biome bio) {
+    public static net.minecraft.world.biome.Biome biomeToBiomeBase(Biome bio) {
         if (bio == null) {
             return null;
         }
 
-        return BiomeBase.REGISTRY_ID.get(new MinecraftKey(bio.name().toLowerCase(java.util.Locale.ENGLISH)));
+        return net.minecraft.world.biome.Biome.REGISTRY_ID.get(new MinecraftKey(bio.name().toLowerCase(java.util.Locale.ENGLISH)));
     }
 
     public double getTemperature() {

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.*;
 
 import org.bukkit.EntityEffect;
@@ -45,8 +48,8 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          */
         if (entity instanceof EntityLiving) {
             // Players
-            if (entity instanceof EntityHuman) {
-                if (entity instanceof EntityPlayer) { return new CraftPlayer(server, (EntityPlayer) entity); }
+            if (entity instanceof net.minecraft.entity.player.EntityPlayer) {
+                if (entity instanceof EntityPlayerMP) { return new CraftPlayer(server, (EntityPlayerMP) entity); }
                 else { return new CraftHumanEntity(server, (EntityHuman) entity); }
             }
             // Water Animals

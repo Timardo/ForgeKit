@@ -45,29 +45,29 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     private CraftMagicNumbers() {}
 
-    public static Block getBlock(org.bukkit.block.Block block) {
+    public static net.minecraft.block.Block getBlock(org.bukkit.block.Block block) {
         return getBlock(block.getType());
     }
 
     @Deprecated
     // A bad method for bad magic.
-    public static Block getBlock(int id) {
+    public static net.minecraft.block.Block getBlock(int id) {
         return getBlock(Material.getMaterial(id));
     }
 
     @Deprecated
     // A bad method for bad magic.
-    public static int getId(Block block) {
-        return Block.getId(block);
+    public static int getId(net.minecraft.block.Block block) {
+        return net.minecraft.block.Block.getStateId(block);
     }
 
-    public static Material getMaterial(Block block) {
-        return Material.getMaterial(Block.getId(block));
+    public static Material getMaterial(net.minecraft.block.Block block) {
+        return Material.getMaterial(net.minecraft.block.Block.getStateId(block));
     }
 
-    public static Item getItem(Material material) {
+    public static net.minecraft.item.Item getItem(Material material) {
         // TODO: Don't use ID
-        Item item = Item.getById(material.getId());
+    	net.minecraft.item.Item item = net.minecraft.item.Item.getItemById(material.getId());
         return item;
     }
 
@@ -94,15 +94,15 @@ public final class CraftMagicNumbers implements UnsafeValues {
         return material;
     }
 
-    public static Block getBlock(Material material) {
+    public static net.minecraft.block.Block getBlock(Material material) {
         if (material == null) {
             return null;
         }
         // TODO: Don't use ID
-        Block block = Block.getById(material.getId());
+        net.minecraft.block.Block block = net.minecraft.block.Block.getBlockById(material.getId());
 
         if (block == null) {
-            return Blocks.AIR;
+            return net.minecraft.init.Blocks.AIR;
         }
 
         return block;

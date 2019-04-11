@@ -24,6 +24,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.*;
 import net.minecraft.server.PacketPlayOutTitle.EnumTitleAction;
 
@@ -87,7 +88,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     private boolean scaledHealth = false;
     private double healthScale = 20;
 
-    public CraftPlayer(CraftServer server, EntityPlayer entity) {
+    public CraftPlayer(CraftServer server, EntityPlayerMP entity) {
         super(server, entity);
 
         firstPlayed = System.currentTimeMillis();
@@ -1020,11 +1021,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public EntityPlayer getHandle() {
-        return (EntityPlayer) entity;
+    public EntityPlayerMP getHandle() {
+        return (EntityPlayerMP) entity;
     }
 
-    public void setHandle(final EntityPlayer entity) {
+    public void setHandle(final EntityPlayerMP entity) {
         super.setHandle(entity);
     }
 

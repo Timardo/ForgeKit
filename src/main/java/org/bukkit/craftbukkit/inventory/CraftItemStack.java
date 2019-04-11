@@ -25,13 +25,13 @@ import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 @DelegateDeserialization(ItemStack.class)
 public final class CraftItemStack extends ItemStack {
 
-    public static net.minecraft.server.ItemStack asNMSCopy(ItemStack original) {
+    public static net.minecraft.item.ItemStack asNMSCopy(ItemStack original) {
         if (original instanceof CraftItemStack) {
             CraftItemStack stack = (CraftItemStack) original;
-            return stack.handle == null ? net.minecraft.server.ItemStack.a : stack.handle.cloneItemStack();
+            return stack.handle == null ? net.minecraft.item.ItemStack.a : stack.handle.cloneItemStack();
         }
         if (original == null || original.getTypeId() <= 0) {
-            return net.minecraft.server.ItemStack.a;
+            return net.minecraft.item.ItemStack.a;
         }
 
         Item item = CraftMagicNumbers.getItem(original.getType());
@@ -70,7 +70,7 @@ public final class CraftItemStack extends ItemStack {
         return stack;
     }
 
-    public static CraftItemStack asCraftMirror(net.minecraft.server.ItemStack original) {
+    public static CraftItemStack asCraftMirror(net.minecraft.item.ItemStack original) {
         return new CraftItemStack((original == null || original.isEmpty()) ? null : original);
     }
 
@@ -90,7 +90,7 @@ public final class CraftItemStack extends ItemStack {
         return new CraftItemStack(CraftMagicNumbers.getMaterial(item), amount, (short) 0, null);
     }
 
-    net.minecraft.server.ItemStack handle;
+    net.minecraft.item.ItemStack handle;
 
     /**
      * Mirror

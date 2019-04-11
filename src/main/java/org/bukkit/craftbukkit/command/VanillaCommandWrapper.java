@@ -3,6 +3,7 @@ package org.bukkit.craftbukkit.command;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.server.*;
 
 import org.apache.commons.lang.Validate;
@@ -21,9 +22,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 public final class VanillaCommandWrapper extends BukkitCommand {
-    protected final CommandAbstract vanillaCommand;
+    protected final CommandBase vanillaCommand;
 
-    public VanillaCommandWrapper(CommandAbstract vanillaCommand, String usage) {
+    public VanillaCommandWrapper(CommandBase vanillaCommand, String usage) {
         super(vanillaCommand.getCommand(), "A Mojang provided command.", usage, vanillaCommand.getAliases());
         this.vanillaCommand = vanillaCommand;
         this.setPermission("minecraft.command." + vanillaCommand.getCommand());

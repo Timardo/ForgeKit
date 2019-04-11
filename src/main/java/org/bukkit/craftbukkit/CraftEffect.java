@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.potion.Potion;
 
+@SuppressWarnings("deprecation")
 public class CraftEffect {
     public static <T> int getDataValue(Effect effect, T data) {
         int datavalue;

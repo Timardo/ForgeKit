@@ -1,8 +1,8 @@
 package org.bukkit.craftbukkit;
 
-import net.minecraft.server.EntityTypes;
-import net.minecraft.server.EntityTypes.MonsterEggInfo;
-import net.minecraft.server.StatisticList;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.ResourceLocation;
 
 import org.bukkit.Statistic;
 import org.bukkit.Material;
@@ -11,9 +11,9 @@ import org.bukkit.entity.EntityType;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
-import net.minecraft.server.Block;
-import net.minecraft.server.Item;
-import net.minecraft.server.MinecraftKey;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 
 public class CraftStatistic {
@@ -34,8 +34,8 @@ public class CraftStatistic {
 
     private CraftStatistic() {}
 
-    public static org.bukkit.Statistic getBukkitStatistic(net.minecraft.server.Statistic statistic) {
-        return getBukkitStatisticByName(statistic.name);
+    public static org.bukkit.Statistic getBukkitStatistic(StatBase statistic) {
+        return getBukkitStatisticByName(statistic.statId);
     }
 
     public static org.bukkit.Statistic getBukkitStatisticByName(String name) {
@@ -66,29 +66,29 @@ public class CraftStatistic {
         return statistics.get(name);
     }
 
-    public static net.minecraft.server.Statistic getNMSStatistic(org.bukkit.Statistic statistic) {
-        return StatisticList.getStatistic(statistics.inverse().get(statistic));
+    public static StatBase getNMSStatistic(org.bukkit.Statistic statistic) {
+        return StatList.getOneShotStat(statistics.inverse().get(statistic));
     }
 
-    public static net.minecraft.server.Statistic getMaterialStatistic(org.bukkit.Statistic stat, Material material) {
+    public static StatBase getMaterialStatistic(org.bukkit.Statistic stat, Material material) {
         try {
             if (stat == Statistic.MINE_BLOCK) {
-                return StatisticList.a(CraftMagicNumbers.getBlock(material)); // PAIL: getMineBlockStatistic
+                return StatList.getBlockStats(CraftMagicNumbers.getBlock(material)); // PAIL: getMineBlockStatistic
             }
             if (stat == Statistic.CRAFT_ITEM) {
-                return StatisticList.a(CraftMagicNumbers.getItem(material)); // PAIL: getCraftItemStatistic
+                return StatList.getCraftStats(CraftMagicNumbers.getItem(material)); // PAIL: getCraftItemStatistic
             }
             if (stat == Statistic.USE_ITEM) {
-                return StatisticList.b(CraftMagicNumbers.getItem(material)); // PAIL: getUseItemStatistic
+                return StatList.getObjectUseStats(CraftMagicNumbers.getItem(material)); // PAIL: getUseItemStatistic
             }
             if (stat == Statistic.BREAK_ITEM) {
-                return StatisticList.c(CraftMagicNumbers.getItem(material)); // PAIL: getBreakItemStatistic
+                return StatList.getObjectBreakStats(CraftMagicNumbers.getItem(material)); // PAIL: getBreakItemStatistic
             }
             if (stat == Statistic.PICKUP) {
-                return StatisticList.d(CraftMagicNumbers.getItem(material)); // PAIL: getPickupStatistic
+                return StatList.getObjectsPickedUpStats(CraftMagicNumbers.getItem(material)); // PAIL: getPickupStatistic
             }
             if (stat == Statistic.DROP) {
-                return StatisticList.e(CraftMagicNumbers.getItem(material)); // PAIL: getDropItemStatistic
+                return StatList.getDroppedObjectStats(CraftMagicNumbers.getItem(material)); // PAIL: getDropItemStatistic
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
@@ -96,35 +96,38 @@ public class CraftStatistic {
         return null;
     }
 
-    public static net.minecraft.server.Statistic getEntityStatistic(org.bukkit.Statistic stat, EntityType entity) {
-        MonsterEggInfo monsteregginfo = (MonsterEggInfo) EntityTypes.eggInfo.get(new MinecraftKey(entity.getName()));
+    @SuppressWarnings("deprecation")
+	public static StatBase getEntityStatistic(org.bukkit.Statistic stat, EntityType entity) {
+    	EntityList.EntityEggInfo monsteregginfo = (EntityList.EntityEggInfo) EntityList.ENTITY_EGGS.get(new ResourceLocation(entity.getName()));
 
         if (monsteregginfo != null) {
             if (stat == org.bukkit.Statistic.KILL_ENTITY) {
-                return monsteregginfo.killEntityStatistic;
+                return monsteregginfo.killEntityStat;
             }
             if (stat == org.bukkit.Statistic.ENTITY_KILLED_BY) {
-                return monsteregginfo.killedByEntityStatistic;
+                return monsteregginfo.entityKilledByStat;
             }
         }
         return null;
     }
 
-    public static EntityType getEntityTypeFromStatistic(net.minecraft.server.Statistic statistic) {
-        String statisticString = statistic.name;
+    @SuppressWarnings("deprecation")
+	public static EntityType getEntityTypeFromStatistic(StatBase statistic) {
+        String statisticString = statistic.statId;
         return EntityType.fromName(statisticString.substring(statisticString.lastIndexOf(".") + 1));
     }
 
-    public static Material getMaterialFromStatistic(net.minecraft.server.Statistic statistic) {
-        String statisticString = statistic.name;
+    @SuppressWarnings("deprecation")
+	public static Material getMaterialFromStatistic(StatBase statistic) {
+        String statisticString = statistic.statId;
         String val = statisticString.substring(statisticString.lastIndexOf(".") + 1);
-        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(val));
+        Item item = (Item) Item.REGISTRY.getObject(new ResourceLocation(val));
         if (item != null) {
-            return Material.getMaterial(Item.getId(item));
+            return Material.getMaterial(Item.getIdFromItem(item));
         }
-        Block block = (Block) Block.REGISTRY.get(new MinecraftKey(val));
+        Block block = (Block) Block.REGISTRY.getObject(new ResourceLocation(val));
         if (block != null) {
-            return Material.getMaterial(Block.getId(block));
+            return Material.getMaterial(Block.getIdFromBlock(block));
         }
         try {
             return Material.getMaterial(Integer.parseInt(val));

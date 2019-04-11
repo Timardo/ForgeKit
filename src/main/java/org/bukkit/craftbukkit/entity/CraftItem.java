@@ -1,7 +1,7 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.Entity;
-import net.minecraft.server.EntityItem;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -22,7 +22,7 @@ public class CraftItem extends CraftEntity implements Item {
     }
 
     public ItemStack getItemStack() {
-        return CraftItemStack.asCraftMirror(item.getItemStack());
+        return CraftItemStack.asCraftMirror(item.getItem());
     }
 
     public void setItemStack(ItemStack stack) {

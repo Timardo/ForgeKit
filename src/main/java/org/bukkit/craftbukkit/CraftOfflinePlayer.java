@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.WorldNBTStorage;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.storage.SaveHandler;
 
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -26,12 +25,12 @@ import org.bukkit.plugin.Plugin;
 public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializable {
     private final GameProfile profile;
     private final CraftServer server;
-    private final WorldNBTStorage storage;
+    private final SaveHandler storage;
 
     protected CraftOfflinePlayer(CraftServer server, GameProfile profile) {
         this.server = server;
         this.profile = profile;
-        this.storage = (WorldNBTStorage) (server.console.worlds.get(0).getDataManager());
+        this.storage = (SaveHandler) (server.console.worlds[0].getSaveHandler());
 
     }
 
@@ -74,7 +73,7 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     public boolean isOp() {
-        return server.getHandle().isOp(profile);
+        return server.getHandle().canSendCommands(profile);
     }
 
     public void setOp(boolean value) {
@@ -110,14 +109,14 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     public boolean isWhitelisted() {
-        return server.getHandle().getWhitelist().isWhitelisted(profile);
+        return server.getHandle().getWhitelistedPlayers().isWhitelisted(profile);
     }
 
     public void setWhitelisted(boolean value) {
         if (value) {
-            server.getHandle().addWhitelist(profile);
+            server.getHandle().addWhitelistedPlayer(profile);
         } else {
-            server.getHandle().removeWhitelist(profile);
+            server.getHandle().removePlayerFromWhitelist(profile);
         }
     }
 
@@ -129,7 +128,8 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
         return result;
     }
 
-    public static OfflinePlayer deserialize(Map<String, Object> args) {
+    @SuppressWarnings("deprecation")
+	public static OfflinePlayer deserialize(Map<String, Object> args) {
         // Backwards comparability
         if (args.get("name") != null) {
             return Bukkit.getServer().getOfflinePlayer((String) args.get("name"));
@@ -169,7 +169,7 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     private NBTTagCompound getData() {
-        return storage.getPlayerData(getUniqueId().toString());
+        return storage.getPlayerData(getUniqueId().toString()); //TODO
     }
 
     private NBTTagCompound getBukkitData() {
@@ -177,16 +177,16 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
 
         if (result != null) {
             if (!result.hasKey("bukkit")) {
-                result.set("bukkit", new NBTTagCompound());
+                result.setTag("bukkit", new NBTTagCompound());
             }
-            result = result.getCompound("bukkit");
+            result = result.getCompoundTag("bukkit");
         }
 
         return result;
     }
 
     private File getDataFile() {
-        return new File(storage.getPlayerDir(), getUniqueId() + ".dat");
+        return new File(storage.getPlayerDir(), getUniqueId() + ".dat"); //TODO
     }
 
     public long getFirstPlayed() {
@@ -238,7 +238,7 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
             if (spawnWorld.equals("")) {
                 spawnWorld = server.getWorlds().get(0).getName();
             }
-            return new Location(server.getWorld(spawnWorld), data.getInt("SpawnX"), data.getInt("SpawnY"), data.getInt("SpawnZ"));
+            return new Location(server.getWorld(spawnWorld), data.getInteger("SpawnX"), data.getInteger("SpawnY"), data.getInteger("SpawnZ"));
         }
         return null;
     }

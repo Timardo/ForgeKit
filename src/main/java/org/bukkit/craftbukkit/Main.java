@@ -7,21 +7,21 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import net.minecraft.server.MinecraftServer;
-import org.fusesource.jansi.AnsiConsole;
 
 public class Main {
     public static boolean useJline = true;
     public static boolean useConsole = true;
 
+    //We probably don't need this class at all, but who knows
+    
     public static void main(String[] args) {
-        // Todo: Installation script
+        // TODO: Installation script
         OptionParser parser = new OptionParser() {
             {
                 acceptsAll(asList("?", "help"), "Show the help");
@@ -157,19 +157,19 @@ public class Main {
                     useJline = false;
                 }
 
-                if (useJline) {
-                    AnsiConsole.systemInstall();
-                } else {
-                    // This ensures the terminal literal will always match the jline implementation
-                    System.setProperty(jline.TerminalFactory.JLINE_TERMINAL, jline.UnsupportedTerminal.class.getName());
-                }
+//                if (useJline) {
+//                    AnsiConsole.systemInstall();
+//                } else {
+//                    // This ensures the terminal literal will always match the jline implementation
+//                    System.setProperty(jline.TerminalFactory.JLINE_TERMINAL, jline.UnsupportedTerminal.class.getName());
+//                }
 
 
                 if (options.has("noconsole")) {
                     useConsole = false;
                 }
 
-                if (false && Main.class.getPackage().getImplementationVendor() != null && System.getProperty("IReallyKnowWhatIAmDoingISwear") == null) {
+                if (Main.class.getPackage().getImplementationVendor() != null && System.getProperty("IReallyKnowWhatIAmDoingISwear") == null) {
                     Date buildDate = new SimpleDateFormat("yyyyMMdd-HHmm").parse(Main.class.getPackage().getImplementationVendor());
 
                     Calendar deadline = Calendar.getInstance();
@@ -183,7 +183,7 @@ public class Main {
                 }
 
                 System.out.println("Loading libraries, please wait...");
-                MinecraftServer.main(options);
+//                MinecraftServer.main(options);
             } catch (Throwable t) {
                 t.printStackTrace();
             }

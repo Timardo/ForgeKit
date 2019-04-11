@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.block.CraftBlock;
 
-import net.minecraft.server.BiomeBase;
-
 /**
  * Represents a static, thread-safe snapshot of chunk of blocks
  * Purpose is to allow clean, efficient copy of a chunk data to be made, and then handed off for processing in another thread (e.g. map rendering)
@@ -21,11 +19,11 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
     private final boolean[] empty;
     private final int[] hmap; // Height map
     private final long captureFulltime;
-    private final BiomeBase[] biome;
+    private final net.minecraft.world.biome.Biome[] biome;
     private final double[] biomeTemp;
     private final double[] biomeRain;
 
-    CraftChunkSnapshot(int x, int z, String wname, long wtime, short[][] sectionBlockIDs, byte[][] sectionBlockData, byte[][] sectionSkyLights, byte[][] sectionEmitLights, boolean[] sectionEmpty, int[] hmap, BiomeBase[] biome, double[] biomeTemp, double[] biomeRain) {
+    CraftChunkSnapshot(int x, int z, String wname, long wtime, short[][] sectionBlockIDs, byte[][] sectionBlockData, byte[][] sectionSkyLights, byte[][] sectionEmitLights, boolean[] sectionEmpty, int[] hmap, net.minecraft.world.biome.Biome[] biome, double[] biomeTemp, double[] biomeRain) {
         this.x = x;
         this.z = z;
         this.worldname = wname;
@@ -53,7 +51,8 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
         return worldname;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Material getBlockType(int x, int y, int z) {
         return Material.getMaterial(getBlockTypeId(x, y, z));
     }

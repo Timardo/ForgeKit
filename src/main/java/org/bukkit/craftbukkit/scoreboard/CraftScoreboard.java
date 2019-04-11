@@ -1,9 +1,7 @@
 package org.bukkit.craftbukkit.scoreboard;
 
 import java.util.Collection;
-import net.minecraft.server.Scoreboard;
-import net.minecraft.server.ScoreboardObjective;
-import net.minecraft.server.ScoreboardTeam;
+import net.minecraft.scoreboard.Scoreboard;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
