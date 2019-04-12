@@ -2,10 +2,6 @@ package org.bukkit.craftbukkit.block;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.MobEffectList;
-import net.minecraft.server.TileEntity;
-import net.minecraft.server.TileEntityBeacon;
 import org.bukkit.Material;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
@@ -14,6 +10,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.BeaconInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBeacon;
 
 public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Beacon {
 
@@ -45,11 +46,11 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
         if (tileEntity instanceof TileEntityBeacon) {
             TileEntityBeacon beacon = (TileEntityBeacon) tileEntity;
 
-            Collection<EntityHuman> nms = beacon.getHumansInRange();
+            Collection<EntityPlayer> nms = beacon.getHumansInRange(); //TODO impl
             Collection<LivingEntity> bukkit = new ArrayList<LivingEntity>(nms.size());
 
-            for (EntityHuman human : nms) {
-                bukkit.add(human.getBukkitEntity());
+            for (EntityPlayer human : nms) {
+                bukkit.add(human.getBukkitEntity()); //TODO impl
             }
 
             return bukkit;
@@ -61,27 +62,29 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
 
     @Override
     public int getTier() {
-        return this.getSnapshot().levels;
+        return this.getSnapshot().getLevels();
     }
 
     @Override
     public PotionEffect getPrimaryEffect() {
-        return this.getSnapshot().getPrimaryEffect();
+        return this.getSnapshot().getPrimaryEffect(); //TODO impl
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setPrimaryEffect(PotionEffectType effect) {
-        this.getSnapshot().primaryEffect = (effect != null) ? MobEffectList.fromId(effect.getId()) : null;
+        this.getSnapshot().primaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null; //TODO impl
     }
 
     @Override
     public PotionEffect getSecondaryEffect() {
-        return this.getSnapshot().getSecondaryEffect();
+        return this.getSnapshot().getSecondaryEffect(); //TODO impl
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setSecondaryEffect(PotionEffectType effect) {
-        this.getSnapshot().secondaryEffect = (effect != null) ? MobEffectList.fromId(effect.getId()) : null;
+        this.getSnapshot().secondaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null; //TODO impl
     }
 
     @Override
@@ -92,6 +95,6 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
 
     @Override
     public void setCustomName(String name) {
-        this.getSnapshot().setCustomName(name);
+        this.getSnapshot().setName(name);
     }
 }

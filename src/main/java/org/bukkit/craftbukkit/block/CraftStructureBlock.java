@@ -1,10 +1,14 @@
 package org.bukkit.craftbukkit.block;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.EnumBlockMirror;
-import net.minecraft.server.EnumBlockRotation;
-import net.minecraft.server.TileEntityStructure;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntityStructure;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,35 +34,36 @@ public class CraftStructureBlock extends CraftBlockEntityState<TileEntityStructu
 
     @Override
     public String getStructureName() {
-        return getSnapshot().a(); // PAIL: rename getStructureName
+        return getSnapshot().getName();
     }
 
     @Override
     public void setStructureName(String name) {
         Preconditions.checkArgument(name != null, "Structure Name cannot be null");
-        getSnapshot().a(name); // PAIL: rename setStructureName
+        getSnapshot().setName(name);
     }
 
     @Override
     public String getAuthor() {
-        return getSnapshot().f;
+        return getSnapshot().author; //TODO AT use writeToNBT to get all these values?
     }
 
     @Override
     public void setAuthor(String author) {
-        Preconditions.checkArgument(author != null && !author.isEmpty(), "Author name cannot be null nor empty");
-        getSnapshot().f = author; // PAIL: rename author
+    	EntityLivingBase omgwtf = new EntityPlayerMP(null, null, null, null);
+    	omgwtf.setCustomNameTag(author);
+        getSnapshot().createdBy(omgwtf); //TODO? why the hell the method createdBy uses EntityLivingBase as an argument?
     }
 
     @Override
     public void setAuthor(LivingEntity entity) {
         Preconditions.checkArgument(entity != null, "Structure Block author entity cannot be null");
-        getSnapshot().a(((CraftLivingEntity) entity).getHandle()); // PAIL: rename setAuthor
+        getSnapshot().createdBy(((CraftLivingEntity) entity).getHandle());
     }
 
     @Override
     public BlockVector getRelativePosition() {
-        return new BlockVector(getSnapshot().h.getX(), getSnapshot().h.getY(), getSnapshot().h.getZ()); // PAIL: rename relativePosition
+        return new BlockVector(getSnapshot().getPosition().getX(), getSnapshot().getPosition().getY(), getSnapshot().getPosition().getZ());
     }
 
     @Override
@@ -66,12 +71,12 @@ public class CraftStructureBlock extends CraftBlockEntityState<TileEntityStructu
         Validate.isTrue(isBetween(vector.getBlockX(), -MAX_SIZE, MAX_SIZE), "Structure Size (X) must be between -" + MAX_SIZE + " and " + MAX_SIZE);
         Validate.isTrue(isBetween(vector.getBlockY(), -MAX_SIZE, MAX_SIZE), "Structure Size (Y) must be between -" + MAX_SIZE + " and " + MAX_SIZE);
         Validate.isTrue(isBetween(vector.getBlockZ(), -MAX_SIZE, MAX_SIZE), "Structure Size (Z) must be between -" + MAX_SIZE + " and " + MAX_SIZE);
-        getSnapshot().h = new BlockPosition(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ()); // PAIL: rename relativePosition
+        getSnapshot().setPosition(new BlockPos(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ()));
     }
 
     @Override
     public BlockVector getStructureSize() {
-        return new BlockVector(getSnapshot().i.getX(), getSnapshot().i.getY(), getSnapshot().i.getZ()); // PAIL: rename size
+        return new BlockVector(getSnapshot().getStructureSize().getX(), getSnapshot().getStructureSize().getY(), getSnapshot().getStructureSize().getZ()); //TODO? getStructureSize is client-side only should I care?
     }
 
     @Override
@@ -79,101 +84,101 @@ public class CraftStructureBlock extends CraftBlockEntityState<TileEntityStructu
         Validate.isTrue(isBetween(vector.getBlockX(), 0, MAX_SIZE), "Structure Size (X) must be between 0 and " + MAX_SIZE);
         Validate.isTrue(isBetween(vector.getBlockY(), 0, MAX_SIZE), "Structure Size (Y) must be between 0 and " + MAX_SIZE);
         Validate.isTrue(isBetween(vector.getBlockZ(), 0, MAX_SIZE), "Structure Size (Z) must be between 0 and " + MAX_SIZE);
-        getSnapshot().i = new BlockPosition(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ()); // PAIL: rename size
+        getSnapshot().setSize(new BlockPos(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ()));
     }
 
     @Override
     public void setMirror(Mirror mirror) {
-        getSnapshot().j = EnumBlockMirror.valueOf(mirror.name()); // PAIL: rename mirror
+        getSnapshot().setMirror(net.minecraft.util.Mirror.valueOf(mirror.name()));
     }
 
     @Override
     public Mirror getMirror() {
-        return Mirror.valueOf(getSnapshot().j.name()); // PAIL: rename mirror
+        return Mirror.valueOf(getSnapshot().getMirror().name()); //Client-side again
     }
 
     @Override
     public void setRotation(StructureRotation rotation) {
-        getSnapshot().k = EnumBlockRotation.valueOf(rotation.name()); // PAIL: rename rotation
+        getSnapshot().setRotation(Rotation.valueOf(rotation.name()));
     }
 
     @Override
     public StructureRotation getRotation() {
-        return StructureRotation.valueOf(getSnapshot().k.name()); // PAIL: rename rotation
+        return StructureRotation.valueOf(getSnapshot().getRotation().name()); //Client-side
     }
 
     @Override
     public void setUsageMode(UsageMode mode) {
-        getSnapshot().a(TileEntityStructure.UsageMode.valueOf(mode.name())); // PAIL: rename setUsageMode
+        getSnapshot().setMode(TileEntityStructure.Mode.valueOf(mode.name()));
     }
 
     @Override
     public UsageMode getUsageMode() {
-        return UsageMode.valueOf(getSnapshot().k().name()); // PAIL rename getUsageMode
+        return UsageMode.valueOf(getSnapshot().getMode().name());
     }
 
     @Override
     public void setIgnoreEntities(boolean flag) {
-        getSnapshot().m = flag; // PAIL: rename ignoreEntities
+        getSnapshot().setIgnoresEntities(flag);
     }
 
     @Override
     public boolean isIgnoreEntities() {
-        return getSnapshot().m; // PAIL: rename ignoreEntities
+        return getSnapshot().ignoresEntities(); //Client-side again
     }
 
     @Override
     public void setShowAir(boolean showAir) {
-        getSnapshot().o = showAir; // PAIL rename showAir
+        getSnapshot().setShowAir(showAir);
     }
 
     @Override
     public boolean isShowAir() {
-        return getSnapshot().o; // PAIL: rename showAir
+        return getSnapshot().showsAir();
     }
 
     @Override
     public void setBoundingBoxVisible(boolean showBoundingBox) {
-        getSnapshot().p = showBoundingBox; // PAIL: rename boundingBoxVisible
+        getSnapshot().setShowBoundingBox(showBoundingBox);
     }
 
     @Override
     public boolean isBoundingBoxVisible() {
-        return getSnapshot().p; // PAIL: rename boundingBoxVisible
+        return getSnapshot().showsBoundingBox(); //Client-side
     }
 
     @Override
     public void setIntegrity(float integrity) {
         Validate.isTrue(isBetween(integrity, 0.0f, 1.0f), "Integrity must be between 0.0f and 1.0f");
-        getSnapshot().q = integrity; // PAIL: rename integrity
+        getSnapshot().setIntegrity(integrity);
     }
 
     @Override
     public float getIntegrity() {
-        return getSnapshot().q; // PAIL: rename integrity
+        return getSnapshot().getIntegrity(); //Client-side
     }
 
     @Override
     public void setSeed(long seed) {
-        getSnapshot().r = seed; // PAIL: rename seed
+        getSnapshot().setSeed(seed);
     }
 
     @Override
     public long getSeed() {
-        return getSnapshot().r; // PAIL: rename seed
+        return getSnapshot().getSeed(); //Client-Side
     }
 
     @Override
     public void setMetadata(String metadata) {
         Validate.notNull(metadata, "Structure metadata cannot be null");
         if (getUsageMode() == UsageMode.DATA) {
-            getSnapshot().g = metadata; // PAIL: rename metadata
+            getSnapshot().setMetadata(metadata);
         }
     }
 
     @Override
     public String getMetadata() {
-        return getSnapshot().g; // PAIL: rename metadata
+        return getSnapshot().getMetadata(); //Client-side
     }
 
     private static boolean isBetween(int num, int min, int max) {

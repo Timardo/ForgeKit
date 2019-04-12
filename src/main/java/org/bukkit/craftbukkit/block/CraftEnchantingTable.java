@@ -1,23 +1,24 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityEnchantTable;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.EnchantingTable;
 
-public class CraftEnchantingTable extends CraftBlockEntityState<TileEntityEnchantTable> implements EnchantingTable {
+import net.minecraft.tileentity.TileEntityEnchantmentTable;
+
+public class CraftEnchantingTable extends CraftBlockEntityState<TileEntityEnchantmentTable> implements EnchantingTable {
 
     public CraftEnchantingTable(final Block block) {
-        super(block, TileEntityEnchantTable.class);
+        super(block, TileEntityEnchantmentTable.class);
     }
 
-    public CraftEnchantingTable(final Material material, final TileEntityEnchantTable te) {
+    public CraftEnchantingTable(final Material material, final TileEntityEnchantmentTable te) {
         super(material, te);
     }
 
     @Override
     public String getCustomName() {
-        TileEntityEnchantTable enchant = this.getSnapshot();
+    	TileEntityEnchantmentTable enchant = this.getSnapshot();
         return enchant.hasCustomName() ? enchant.getName() : null;
     }
 
@@ -27,7 +28,7 @@ public class CraftEnchantingTable extends CraftBlockEntityState<TileEntityEnchan
     }
 
     @Override
-    public void applyTo(TileEntityEnchantTable enchantingTable) {
+    public void applyTo(TileEntityEnchantmentTable enchantingTable) {
         super.applyTo(enchantingTable);
 
         if (!this.getSnapshot().hasCustomName()) {

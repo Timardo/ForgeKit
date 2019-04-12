@@ -2,8 +2,9 @@ package org.bukkit.craftbukkit.block;
 
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.TileEntitySkull;
+import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -32,9 +33,9 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
     public void load(TileEntitySkull skull) {
         super.load(skull);
 
-        profile = skull.getGameProfile();
+        profile = skull.getPlayerProfile();
         skullType = getSkullType(skull.getSkullType());
-        rotation = (byte) skull.rotation;
+        rotation = (byte) skull.getSkullRotation();
     }
 
     static SkullType getSkullType(int id) {
@@ -167,7 +168,7 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
             return false;
         }
 
-        GameProfile profile = MinecraftServer.getServer().getUserCache().getProfile(name);
+        GameProfile profile = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getGameProfileForUsername(name);
         if (profile == null) {
             return false;
         }
@@ -180,7 +181,8 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
         return true;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public OfflinePlayer getOwningPlayer() {
         if (profile != null) {
             if (profile.getId() != null) {
@@ -235,11 +237,11 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
         super.applyTo(skull);
 
         if (skullType == SkullType.PLAYER) {
-            skull.setGameProfile(profile);
+            skull.setPlayerProfile(profile);
         } else {
-            skull.setSkullType(getSkullType(skullType));
+            skull.setType(getSkullType(skullType));
         }
 
-        skull.setRotation(rotation);
+        skull.setSkullRotation(rotation);
     }
 }

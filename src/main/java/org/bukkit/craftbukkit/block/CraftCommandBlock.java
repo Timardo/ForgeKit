@@ -1,29 +1,30 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityCommand;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CommandBlock;
 
-public class CraftCommandBlock extends CraftBlockEntityState<TileEntityCommand> implements CommandBlock {
+import net.minecraft.tileentity.TileEntityCommandBlock;
+
+public class CraftCommandBlock extends CraftBlockEntityState<TileEntityCommandBlock> implements CommandBlock {
 
     private String command;
     private String name;
 
     public CraftCommandBlock(Block block) {
-        super(block, TileEntityCommand.class);
+        super(block, TileEntityCommandBlock.class);
     }
 
-    public CraftCommandBlock(final Material material, final TileEntityCommand te) {
+    public CraftCommandBlock(final Material material, final TileEntityCommandBlock te) {
         super(material, te);
     }
 
     @Override
-    public void load(TileEntityCommand commandBlock) {
+    public void load(TileEntityCommandBlock commandBlock) {
         super.load(commandBlock);
 
-        command = commandBlock.getCommandBlock().getCommand();
-        name = commandBlock.getCommandBlock().getName();
+        command = commandBlock.getCommandBlockLogic().getCommand();
+        name = commandBlock.getCommandBlockLogic().getName();
     }
 
     @Override
@@ -47,10 +48,10 @@ public class CraftCommandBlock extends CraftBlockEntityState<TileEntityCommand> 
     }
 
     @Override
-    public void applyTo(TileEntityCommand commandBlock) {
+    public void applyTo(TileEntityCommandBlock commandBlock) {
         super.applyTo(commandBlock);
 
-        commandBlock.getCommandBlock().setCommand(command);
-        commandBlock.getCommandBlock().setName(name);
+        commandBlock.getCommandBlockLogic().setCommand(command);
+        commandBlock.getCommandBlockLogic().setName(name);
     }
 }

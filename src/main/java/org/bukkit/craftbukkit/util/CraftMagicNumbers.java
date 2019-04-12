@@ -14,18 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.AdvancementDataWorld;
 
-import net.minecraft.server.Block;
-import net.minecraft.server.Blocks;
-import net.minecraft.server.ChatDeserializer;
-import net.minecraft.server.Item;
-import net.minecraft.server.MinecraftKey;
+import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.MojangsonParseException;
-import net.minecraft.server.MojangsonParser;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.StatisticList;
 
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;

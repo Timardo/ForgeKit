@@ -1,11 +1,12 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityFurnace;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.craftbukkit.inventory.CraftInventoryFurnace;
 import org.bukkit.inventory.FurnaceInventory;
+
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class CraftFurnace extends CraftContainer<TileEntityFurnace> implements Furnace {
 
@@ -33,22 +34,22 @@ public class CraftFurnace extends CraftContainer<TileEntityFurnace> implements F
 
     @Override
     public short getBurnTime() {
-        return (short) this.getSnapshot().getProperty(0);
+        return (short) this.getSnapshot().getField(0);
     }
 
     @Override
     public void setBurnTime(short burnTime) {
-        this.getSnapshot().setProperty(0, burnTime);
+        this.getSnapshot().setField(0, burnTime);
     }
 
     @Override
     public short getCookTime() {
-        return (short) this.getSnapshot().getProperty(2);
+        return (short) this.getSnapshot().getField(2);
     }
 
     @Override
     public void setCookTime(short cookTime) {
-        this.getSnapshot().setProperty(2, cookTime);
+        this.getSnapshot().setField(2, cookTime);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class CraftFurnace extends CraftContainer<TileEntityFurnace> implements F
 
     @Override
     public void setCustomName(String name) {
-        this.getSnapshot().setCustomName(name);
+        this.getSnapshot().setCustomInventoryName(name);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CraftFurnace extends CraftContainer<TileEntityFurnace> implements F
         super.applyTo(furnace);
 
         if (!this.getSnapshot().hasCustomName()) {
-            furnace.setCustomName(null);
+            furnace.setCustomInventoryName(null);
         }
     }
 }

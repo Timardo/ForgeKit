@@ -1,12 +1,13 @@
 package org.bukkit.craftbukkit.block;
 
 import java.util.Objects;
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.TileEntityEndGateway;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.EndGateway;
+
+import net.minecraft.tileentity.TileEntityEndGateway;
+import net.minecraft.util.math.BlockPos;
 
 public class CraftEndGateway extends CraftBlockEntityState<TileEntityEndGateway> implements EndGateway {
 
@@ -20,37 +21,37 @@ public class CraftEndGateway extends CraftBlockEntityState<TileEntityEndGateway>
 
     @Override
     public Location getExitLocation() {
-        BlockPosition pos = this.getSnapshot().exitPortal;
+        BlockPos pos = this.getSnapshot().exitPortal; //TODO AT
         return pos == null ? null : new Location(this.isPlaced() ? this.getWorld() : null, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
     public void setExitLocation(Location location) {
         if (location == null) {
-            this.getSnapshot().exitPortal = null;
+            this.getSnapshot().exitPortal = null; //TODO AT
         } else if (!Objects.equals(location.getWorld(), this.isPlaced() ? this.getWorld() : null)) {
             throw new IllegalArgumentException("Cannot set exit location to different world");
         } else {
-            this.getSnapshot().exitPortal = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+            this.getSnapshot().exitPortal = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()); //TODO AT
         }
     }
 
     @Override
     public boolean isExactTeleport() {
-        return this.getSnapshot().exactTeleport;
+        return this.getSnapshot().exactTeleport; //TODO AT
     }
 
     @Override
     public void setExactTeleport(boolean exact) {
-        this.getSnapshot().exactTeleport = exact;
+        this.getSnapshot().exactTeleport = exact; //TODO AT
     }
 
     @Override
     public void applyTo(TileEntityEndGateway endGateway) {
         super.applyTo(endGateway);
 
-        if (this.getSnapshot().exitPortal == null) {
-            endGateway.exitPortal = null;
+        if (this.getSnapshot().exitPortal == null) { //TODO AT
+            endGateway.exitPortal = null; //TODO AT
         }
     }
 }

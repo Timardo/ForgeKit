@@ -1,8 +1,10 @@
 package org.bukkit.craftbukkit.block;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.server.EnumColor;
-import net.minecraft.server.TileEntityBed;
+
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.tileentity.TileEntityBed;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Bed;
@@ -20,11 +22,12 @@ public class CraftBed extends CraftBlockEntityState<TileEntityBed> implements Be
         super(material, te);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void load(TileEntityBed bed) {
         super.load(bed);
 
-        color = DyeColor.getByWoolData((byte) bed.a().getColorIndex());
+        color = DyeColor.getByWoolData((byte) bed.getColor().getMetadata());
     }
 
     @Override
@@ -39,10 +42,11 @@ public class CraftBed extends CraftBlockEntityState<TileEntityBed> implements Be
         this.color = color;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void applyTo(TileEntityBed bed) {
         super.applyTo(bed);
 
-        bed.a(EnumColor.fromColorIndex(color.getWoolData()));
+        bed.setColor(EnumDyeColor.byMetadata(color.getWoolData()));
     }
 }

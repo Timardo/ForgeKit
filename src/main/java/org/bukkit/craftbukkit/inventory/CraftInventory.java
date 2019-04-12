@@ -4,19 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.minecraft.server.IHopper;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.InventoryCrafting;
-import net.minecraft.server.InventoryEnderChest;
-import net.minecraft.server.InventoryMerchant;
-import net.minecraft.server.PlayerInventory;
-import net.minecraft.server.TileEntityBeacon;
-import net.minecraft.server.TileEntityBrewingStand;
-import net.minecraft.server.TileEntityDispenser;
-import net.minecraft.server.TileEntityDropper;
-import net.minecraft.server.TileEntityFurnace;
-import net.minecraft.server.TileEntityShulkerBox;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
@@ -24,6 +11,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
+import net.minecraft.inventory.IInventory;
+
 import org.bukkit.Material;
 
 public class CraftInventory implements Inventory {

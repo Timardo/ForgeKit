@@ -59,7 +59,7 @@ public final class CraftItemStack extends ItemStack {
     /**
      * Copies the NMS stack to return as a strictly-Bukkit stack
      */
-    public static ItemStack asBukkitCopy(net.minecraft.server.ItemStack original) {
+    public static ItemStack asBukkitCopy(net.minecraft.item.ItemStack original) {
         if (original.isEmpty()) {
             return new ItemStack(Material.AIR);
         }

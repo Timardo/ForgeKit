@@ -1,12 +1,13 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.ChatComponentText;
-import net.minecraft.server.IChatBaseComponent;
-import net.minecraft.server.TileEntitySign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements Sign {
 
@@ -24,8 +25,8 @@ public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements 
     public void load(TileEntitySign sign) {
         super.load(sign);
 
-        lines = new String[sign.lines.length];
-        System.arraycopy(revertComponents(sign.lines), 0, lines, 0, lines.length);
+        lines = new String[sign.signText.length];
+        System.arraycopy(revertComponents(sign.signText), 0, lines, 0, lines.length);
     }
 
     @Override
@@ -47,25 +48,25 @@ public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements 
     public void applyTo(TileEntitySign sign) {
         super.applyTo(sign);
 
-        IChatBaseComponent[] newLines = sanitizeLines(lines);
-        System.arraycopy(newLines, 0, sign.lines, 0, 4);
+        ITextComponent[] newLines = sanitizeLines(lines);
+        System.arraycopy(newLines, 0, sign.signText, 0, 4);
     }
 
-    public static IChatBaseComponent[] sanitizeLines(String[] lines) {
-        IChatBaseComponent[] components = new IChatBaseComponent[4];
+    public static ITextComponent[] sanitizeLines(String[] lines) {
+    	ITextComponent[] components = new ITextComponent[4];
 
         for (int i = 0; i < 4; i++) {
             if (i < lines.length && lines[i] != null) {
                 components[i] = CraftChatMessage.fromString(lines[i])[0];
             } else {
-                components[i] = new ChatComponentText("");
+                components[i] = new TextComponentString("");
             }
         }
 
         return components;
     }
 
-    public static String[] revertComponents(IChatBaseComponent[] components) {
+    public static String[] revertComponents(ITextComponent[] components) {
         String[] lines = new String[components.length];
         for (int i = 0; i < lines.length; i++) {
             lines[i] = revertComponent(components[i]);
@@ -73,7 +74,7 @@ public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements 
         return lines;
     }
 
-    private static String revertComponent(IChatBaseComponent component) {
+    private static String revertComponent(ITextComponent component) {
         return CraftChatMessage.fromComponent(component);
     }
 }

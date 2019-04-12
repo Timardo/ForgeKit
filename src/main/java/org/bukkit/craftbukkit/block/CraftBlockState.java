@@ -1,6 +1,5 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.BlockPosition;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.Chunk;
@@ -15,8 +14,10 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+
 import java.util.List;
-import net.minecraft.server.IBlockData;
 
 public class CraftBlockState implements BlockState {
     private final CraftWorld world;
@@ -28,7 +29,8 @@ public class CraftBlockState implements BlockState {
     protected MaterialData data;
     protected int flag;
 
-    public CraftBlockState(final Block block) {
+    @SuppressWarnings("deprecation")
+	public CraftBlockState(final Block block) {
         this.world = (CraftWorld) block.getWorld();
         this.x = block.getX();
         this.y = block.getY();
@@ -45,19 +47,20 @@ public class CraftBlockState implements BlockState {
         this.flag = flag;
     }
 
-    public CraftBlockState(Material material) {
+    @SuppressWarnings("deprecation")
+	public CraftBlockState(Material material) {
         world = null;
         type = material.getId();
         chunk = null;
         x = y = z = 0;
     }
 
-    public static CraftBlockState getBlockState(net.minecraft.server.World world, int x, int y, int z) {
-        return new CraftBlockState(world.getWorld().getBlockAt(x, y, z));
+    public static CraftBlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+        return new CraftBlockState(world.getWorld().getBlockAt(x, y, z)); //TODO
     }
 
-    public static CraftBlockState getBlockState(net.minecraft.server.World world, int x, int y, int z, int flag) {
-        return new CraftBlockState(world.getWorld().getBlockAt(x, y, z), flag);
+    public static CraftBlockState getBlockState(net.minecraft.world.World world, int x, int y, int z, int flag) {
+        return new CraftBlockState(world.getWorld().getBlockAt(x, y, z), flag); //TODO
     }
 
     public World getWorld() {
@@ -101,7 +104,8 @@ public class CraftBlockState implements BlockState {
         return data;
     }
 
-    public void setType(final Material type) {
+    @SuppressWarnings("deprecation")
+	public void setType(final Material type) {
         setTypeId(type.getId());
     }
 
@@ -114,7 +118,8 @@ public class CraftBlockState implements BlockState {
         return true;
     }
 
-    public Material getType() {
+    @SuppressWarnings("deprecation")
+	public Material getType() {
         return Material.getMaterial(getTypeId());
     }
 
@@ -147,7 +152,8 @@ public class CraftBlockState implements BlockState {
         return update(force, true);
     }
 
-    public boolean update(boolean force, boolean applyPhysics) {
+    @SuppressWarnings("deprecation")
+	public boolean update(boolean force, boolean applyPhysics) {
         if (!isPlaced()) {
             return true;
         }
@@ -159,25 +165,26 @@ public class CraftBlockState implements BlockState {
             }
         }
 
-        BlockPosition pos = new BlockPosition(x, y, z);
-        IBlockData newBlock = CraftMagicNumbers.getBlock(getType()).fromLegacyData(getRawData());
+        BlockPos pos = new BlockPos(x, y, z);
+        IBlockState newBlock = CraftMagicNumbers.getBlock(getType()).getDefaultState();
         block.setTypeIdAndData(getTypeId(), getRawData(), applyPhysics);
-        world.getHandle().notify(
+        world.getHandle().notifyBlockUpdate(
                 pos,
-                CraftMagicNumbers.getBlock(block).fromLegacyData(block.getData()),
+                CraftMagicNumbers.getBlock(block).getDefaultState(),
                 newBlock,
                 3
         );
 
         // Update levers etc
         if (applyPhysics && getData() instanceof Attachable) {
-            world.getHandle().applyPhysics(pos.shift(CraftBlock.blockFaceToNotch(((Attachable) getData()).getAttachedFace())), newBlock.getBlock(), false);
+            world.getHandle().notifyNeighborsOfStateChange(pos.offset(CraftBlock.blockFaceToNotch(((Attachable) getData()).getAttachedFace())), newBlock.getBlock(), false);
         }
 
         return true;
     }
 
-    private void createData(final byte data) {
+    @SuppressWarnings("deprecation")
+	private void createData(final byte data) {
         Material mat = getType();
         if (mat == null || mat.getData() == null) {
             this.data = new MaterialData(type, data);
@@ -186,7 +193,8 @@ public class CraftBlockState implements BlockState {
         }
     }
 
-    public byte getRawData() {
+    @SuppressWarnings("deprecation")
+	public byte getRawData() {
         return data.getData();
     }
 
@@ -207,7 +215,8 @@ public class CraftBlockState implements BlockState {
         return loc;
     }
 
-    public void setRawData(byte data) {
+    @SuppressWarnings("deprecation")
+	public void setRawData(byte data) {
         this.data.setData(data);
     }
 

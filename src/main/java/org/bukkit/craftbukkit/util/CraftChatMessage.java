@@ -12,6 +12,7 @@ import net.minecraft.server.ChatModifier;
 import net.minecraft.server.EnumChatFormat;
 import net.minecraft.server.ChatClickable.EnumClickAction;
 import net.minecraft.server.IChatBaseComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -133,28 +134,28 @@ public final class CraftChatMessage {
             currentChatComponent.addSibling(addition);
         }
 
-        private IChatBaseComponent[] getOutput() {
+        private ITextComponent[] getOutput() {
             return output;
         }
     }
 
-    public static IChatBaseComponent[] fromString(String message) {
+    public static ITextComponent[] fromString(String message) {
         return fromString(message, false);
     }
     
-    public static IChatBaseComponent[] fromString(String message, boolean keepNewlines) {
+    public static ITextComponent[] fromString(String message, boolean keepNewlines) {
         return new StringMessage(message, keepNewlines).getOutput();
     }
     
-    public static String fromComponent(IChatBaseComponent component) {
+    public static String fromComponent(ITextComponent component) {
         return fromComponent(component, EnumChatFormat.BLACK);
     }
 
-    public static String fromComponent(IChatBaseComponent component, EnumChatFormat defaultColor) {
+    public static String fromComponent(ITextComponent component, EnumChatFormat defaultColor) {
         if (component == null) return "";
         StringBuilder out = new StringBuilder();
         
-        for (IChatBaseComponent c : (Iterable<IChatBaseComponent>) component) {
+        for (ITextComponent c : (Iterable<ITextComponent>) component) {
             ChatModifier modi = c.getChatModifier();
             out.append(modi.getColor() == null ? defaultColor : modi.getColor());
             if (modi.isBold()) {

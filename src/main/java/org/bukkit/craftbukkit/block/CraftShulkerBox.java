@@ -1,7 +1,5 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.BlockShulkerBox;
-import net.minecraft.server.TileEntityShulkerBox;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,6 +7,9 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.inventory.Inventory;
+
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.tileentity.TileEntityShulkerBox;
 
 public class CraftShulkerBox extends CraftLootable<TileEntityShulkerBox> implements ShulkerBox {
 
@@ -34,10 +35,11 @@ public class CraftShulkerBox extends CraftLootable<TileEntityShulkerBox> impleme
         return new CraftInventory(this.getTileEntity());
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public DyeColor getColor() {
-        net.minecraft.server.Block block = CraftMagicNumbers.getBlock(this.getType());
+        net.minecraft.block.Block block = CraftMagicNumbers.getBlock(this.getType());
 
-        return DyeColor.getByWoolData((byte) ((BlockShulkerBox) block).color.getColorIndex());
+        return DyeColor.getByWoolData((byte) ((BlockShulkerBox) block).getColor().getMetadata());
     }
 }

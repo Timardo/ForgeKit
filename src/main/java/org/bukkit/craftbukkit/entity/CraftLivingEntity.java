@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityArmorStand;
 import net.minecraft.server.EntityArrow;
@@ -232,11 +233,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     }
 
     @Override
-    public EntityLiving getHandle() {
-        return (EntityLiving) entity;
+    public EntityLivingBase getHandle() {
+        return (EntityLivingBase) entity;
     }
 
-    public void setHandle(final EntityLiving entity) {
+    public void setHandle(final EntityLivingBase entity) {
         super.setHandle(entity);
     }
 

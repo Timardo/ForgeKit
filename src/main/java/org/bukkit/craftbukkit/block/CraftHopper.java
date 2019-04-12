@@ -1,11 +1,12 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityHopper;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
+
+import net.minecraft.tileentity.TileEntityHopper;
 
 public class CraftHopper extends CraftLootable<TileEntityHopper> implements Hopper {
 

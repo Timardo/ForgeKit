@@ -1,11 +1,12 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityLootable;
 import org.bukkit.Material;
 import org.bukkit.Nameable;
 import org.bukkit.block.Block;
 
-public abstract class CraftLootable<T extends TileEntityLootable> extends CraftContainer<T> implements Nameable {
+import net.minecraft.tileentity.TileEntityLockableLoot;
+
+public abstract class CraftLootable<T extends TileEntityLockableLoot> extends CraftContainer<T> implements Nameable {
 
     public CraftLootable(Block block, Class<T> tileEntityClass) {
         super(block, tileEntityClass);

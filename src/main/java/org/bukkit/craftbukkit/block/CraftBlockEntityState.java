@@ -1,11 +1,12 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.TileEntity;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState {
 
@@ -27,7 +28,8 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
         this.load(snapshot);
     }
 
-    public CraftBlockEntityState(Material material, T tileEntity) {
+    @SuppressWarnings("unchecked")
+	public CraftBlockEntityState(Material material, T tileEntity) {
         super(material);
 
         this.tileEntityClass = (Class<T>) tileEntity.getClass();
@@ -38,12 +40,13 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
         this.load(snapshot);
     }
 
-    private T createSnapshot(T tileEntity) {
+    @SuppressWarnings("unchecked")
+	private T createSnapshot(T tileEntity) {
         if (tileEntity == null) {
             return null;
         }
 
-        NBTTagCompound nbtTagCompound = tileEntity.save(new NBTTagCompound());
+        NBTTagCompound nbtTagCompound = tileEntity.writeToNBT(new NBTTagCompound());
         T snapshot = (T) TileEntity.create(null, nbtTagCompound);
 
         return snapshot;
@@ -51,12 +54,12 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
 
     // copies the TileEntity-specific data, retains the position
     private void copyData(T from, T to) {
-        BlockPosition pos = to.getPosition();
-        NBTTagCompound nbtTagCompound = from.save(new NBTTagCompound());
-        to.load(nbtTagCompound);
+        BlockPos pos = to.getPos();
+        NBTTagCompound nbtTagCompound = from.writeToNBT(new NBTTagCompound());
+        to.readFromNBT(nbtTagCompound);
 
         // reset the original position:
-        to.setPosition(pos);
+        to.setPos(pos);
     }
 
     // gets the wrapped TileEntity
@@ -81,7 +84,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
         // update snapshot
         applyTo(snapshot);
 
-        return snapshot.save(new NBTTagCompound());
+        return snapshot.writeToNBT(new NBTTagCompound());
     }
 
     // copies the data of the given tile entity to this block state
@@ -111,7 +114,7 @@ public class CraftBlockEntityState<T extends TileEntity> extends CraftBlockState
 
             if (isApplicable(tile)) {
                 applyTo(tileEntityClass.cast(tile));
-                tile.update();
+                tile.markDirty();
             }
         }
 

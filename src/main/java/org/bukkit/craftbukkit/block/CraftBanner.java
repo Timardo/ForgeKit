@@ -2,16 +2,18 @@ package org.bukkit.craftbukkit.block;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.EnumColor;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.NBTTagList;
-import net.minecraft.server.TileEntityBanner;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntityBanner;
 
 public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> implements Banner {
 
@@ -26,17 +28,18 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
         super(material, te);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void load(TileEntityBanner banner) {
         super.load(banner);
 
-        base = DyeColor.getByDyeData((byte) banner.color.getInvColorIndex());
+        base = DyeColor.getByDyeData((byte) banner.baseColor.getDyeDamage()); //TODO AT
         patterns = new ArrayList<Pattern>();
 
-        if (banner.patterns != null) {
-            for (int i = 0; i < banner.patterns.size(); i++) {
-                NBTTagCompound p = (NBTTagCompound) banner.patterns.get(i);
-                patterns.add(new Pattern(DyeColor.getByDyeData((byte) p.getInt("Color")), PatternType.getByIdentifier(p.getString("Pattern"))));
+        if (banner.patterns != null) { //TODO AT
+            for (int i = 0; i < banner.patterns.size(); i++) { //TODO AT
+                NBTTagCompound p = (NBTTagCompound) banner.patterns.get(i); //TODO AT
+                patterns.add(new Pattern(DyeColor.getByDyeData((byte) p.getInteger("Color")), PatternType.getByIdentifier(p.getString("Pattern"))));
             }
         }
     }
@@ -86,20 +89,21 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
         return patterns.size();
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void applyTo(TileEntityBanner banner) {
         super.applyTo(banner);
 
-        banner.color = EnumColor.fromInvColorIndex(base.getDyeData());
+        banner.baseColor = EnumDyeColor.byDyeDamage(base.getDyeData()); //TODO AT
 
         NBTTagList newPatterns = new NBTTagList();
 
         for (Pattern p : patterns) {
             NBTTagCompound compound = new NBTTagCompound();
-            compound.setInt("Color", p.getColor().getDyeData());
+            compound.setInteger("Color", p.getColor().getDyeData());
             compound.setString("Pattern", p.getPattern().getIdentifier());
-            newPatterns.add(compound);
+            newPatterns.appendTag(compound);
         }
-        banner.patterns = newPatterns;
+        banner.patterns = newPatterns; //TODO AT
     }
 }

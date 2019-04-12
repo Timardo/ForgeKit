@@ -1,9 +1,10 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.TileEntityComparator;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Comparator;
+
+import net.minecraft.tileentity.TileEntityComparator;
 
 public class CraftComparator extends CraftBlockEntityState<TileEntityComparator> implements Comparator {
 

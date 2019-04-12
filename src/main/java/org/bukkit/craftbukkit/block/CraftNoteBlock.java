@@ -1,8 +1,5 @@
 package org.bukkit.craftbukkit.block;
 
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.TileEntityNote;
-
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
@@ -10,6 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.NoteBlock;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+
+import net.minecraft.tileentity.TileEntityNote;
+import net.minecraft.util.math.BlockPos;
 
 public class CraftNoteBlock extends CraftBlockEntityState<TileEntityNote> implements NoteBlock {
 
@@ -31,7 +31,8 @@ public class CraftNoteBlock extends CraftBlockEntityState<TileEntityNote> implem
         return this.getSnapshot().note;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setNote(Note note) {
         this.getSnapshot().note = note.getId();
     }
@@ -48,7 +49,7 @@ public class CraftNoteBlock extends CraftBlockEntityState<TileEntityNote> implem
         if (block.getType() == Material.NOTE_BLOCK) {
             TileEntityNote note = (TileEntityNote) this.getTileEntityFromWorld();
             CraftWorld world = (CraftWorld) this.getWorld();
-            note.play(world.getHandle(), new BlockPosition(getX(), getY(), getZ()));
+            note.triggerNote(world.getHandle(), new BlockPos(getX(), getY(), getZ()));
             return true;
         } else {
             return false;
@@ -61,20 +62,21 @@ public class CraftNoteBlock extends CraftBlockEntityState<TileEntityNote> implem
 
         if (block.getType() == Material.NOTE_BLOCK) {
             CraftWorld world = (CraftWorld) this.getWorld();
-            world.getHandle().playBlockAction(new BlockPosition(getX(), getY(), getZ()), CraftMagicNumbers.getBlock(block), instrument, note);
+            world.getHandle().addBlockEvent(new BlockPos(getX(), getY(), getZ()), CraftMagicNumbers.getBlock(block), instrument, note);
             return true;
         } else {
             return false;
         }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean play(Instrument instrument, Note note) {
         Block block = getBlock();
 
         if (block.getType() == Material.NOTE_BLOCK) {
             CraftWorld world = (CraftWorld) this.getWorld();
-            world.getHandle().playBlockAction(new BlockPosition(getX(), getY(), getZ()), CraftMagicNumbers.getBlock(block), instrument.getType(), note.getId());
+            world.getHandle().addBlockEvent(new BlockPos(getX(), getY(), getZ()), CraftMagicNumbers.getBlock(block), instrument.getType(), note.getId());
             return true;
         } else {
             return false;
