@@ -2,10 +2,13 @@ package org.bukkit.craftbukkit.boss;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.server.BossBattle;
-import net.minecraft.server.BossBattleServer;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.PacketPlayOutBoss;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.SPacketUpdateBossInfo;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.BossInfoServer;
+
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -20,7 +23,7 @@ import java.util.Set;
 
 public class CraftBossBar implements BossBar {
 
-    private final BossBattleServer handle;
+    private final BossInfoServer handle;
     private final Set<BarFlag> flags;
     private BarColor color;
     private BarStyle style;
@@ -30,7 +33,7 @@ public class CraftBossBar implements BossBar {
         this.color = color;
         this.style = style;
 
-        handle = new BossBattleServer(
+        handle = new BossInfoServer(
                 CraftChatMessage.fromString(title, true)[0],
                 convertColor(color),
                 convertStyle(style)
@@ -39,42 +42,42 @@ public class CraftBossBar implements BossBar {
         updateFlags();
     }
 
-    private BossBattle.BarColor convertColor(BarColor color) {
-        BossBattle.BarColor nmsColor = BossBattle.BarColor.valueOf(color.name());
-        return (nmsColor == null) ? BossBattle.BarColor.WHITE : nmsColor;
+    private Color convertColor(BarColor color) {
+    	Color nmsColor = BossInfo.Color.valueOf(color.name());
+        return (nmsColor == null) ? BossInfo.Color.WHITE : nmsColor;
     }
 
-    private BossBattle.BarStyle convertStyle(BarStyle style) {
+    private BossInfo.Overlay convertStyle(BarStyle style) {
         switch (style) {
             default:
             case SOLID:
-                return BossBattle.BarStyle.PROGRESS;
+                return BossInfo.Overlay.PROGRESS;
             case SEGMENTED_6:
-                return BossBattle.BarStyle.NOTCHED_6;
+                return BossInfo.Overlay.NOTCHED_6;
             case SEGMENTED_10:
-                return BossBattle.BarStyle.NOTCHED_10;
+                return BossInfo.Overlay.NOTCHED_10;
             case SEGMENTED_12:
-                return BossBattle.BarStyle.NOTCHED_12;
+                return BossInfo.Overlay.NOTCHED_12;
             case SEGMENTED_20:
-                return BossBattle.BarStyle.NOTCHED_20;
+                return BossInfo.Overlay.NOTCHED_20;
         }
     }
 
     private void updateFlags() {
-        handle.a(hasFlag(BarFlag.DARKEN_SKY));
-        handle.b(hasFlag(BarFlag.PLAY_BOSS_MUSIC));
-        handle.c(hasFlag(BarFlag.CREATE_FOG));
+        handle.setDarkenSky(hasFlag(BarFlag.DARKEN_SKY));
+        handle.setPlayEndBossMusic(hasFlag(BarFlag.PLAY_BOSS_MUSIC));
+        handle.setCreateFog(hasFlag(BarFlag.CREATE_FOG));
     }
 
     @Override
     public String getTitle() {
-        return CraftChatMessage.fromComponent(handle.e());
+        return CraftChatMessage.fromComponent(handle.getName());
     }
 
     @Override
     public void setTitle(String title) {
-        handle.title = CraftChatMessage.fromString(title, true)[0];
-        handle.sendUpdate(PacketPlayOutBoss.Action.UPDATE_NAME);
+        handle.setName(CraftChatMessage.fromString(title, true)[0]);
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_NAME); //TODO AT
     }
 
     @Override
@@ -85,8 +88,8 @@ public class CraftBossBar implements BossBar {
     @Override
     public void setColor(BarColor color) {
         this.color = color;
-        handle.color = convertColor(color);
-        handle.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+        handle.setColor(convertColor(color));
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE); //TODO AT
     }
 
     @Override
@@ -97,8 +100,8 @@ public class CraftBossBar implements BossBar {
     @Override
     public void setStyle(BarStyle style) {
         this.style = style;
-        handle.style = convertStyle(style);
-        handle.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+        handle.setOverlay(convertStyle(style));
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE); //TODO AT
     }
 
     @Override
@@ -121,12 +124,12 @@ public class CraftBossBar implements BossBar {
     @Override
     public void setProgress(double progress) {
     	Preconditions.checkArgument(progress >= 0.0 && progress <= 1.0, "Progress must be between 0.0 and 1.0 (%s)", progress);
-        handle.setProgress((float) progress);
+        handle.setPercent((float) progress);
     }
 
     @Override
     public double getProgress() {
-        return handle.getProgress();
+        return handle.getPercent();
     }
 
     @Override
@@ -142,8 +145,8 @@ public class CraftBossBar implements BossBar {
     @Override
     public List<Player> getPlayers() {
         ImmutableList.Builder<Player> players = ImmutableList.builder();
-        for (EntityPlayer p : handle.getPlayers()) {
-            players.add(p.getBukkitEntity());
+        for (EntityPlayerMP p : handle.getPlayers()) {
+            players.add(p.getBukkitEntity()); //TODO impl
         }
         return players.build();
     }
@@ -155,7 +158,7 @@ public class CraftBossBar implements BossBar {
 
     @Override
     public boolean isVisible() {
-        return handle.visible;
+        return handle.visible; //TODO AT
     }
 
     @Override
