@@ -1,20 +1,21 @@
 package org.bukkit.craftbukkit.command;
 
-import net.minecraft.server.IChatBaseComponent;
-import net.minecraft.server.ICommandListener;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+
+import net.minecraft.command.ICommandSender;
+import net.minecraft.util.text.ITextComponent;
 
 public class CraftFunctionCommandSender extends ServerCommandSender {
 
-    private final ICommandListener handle;
+    private final ICommandSender handle;
 
-    public CraftFunctionCommandSender(ICommandListener handle) {
+    public CraftFunctionCommandSender(ICommandSender handle) {
         this.handle = handle;
     }
 
     @Override
     public void sendMessage(String message) {
-        for (IChatBaseComponent component : CraftChatMessage.fromString(message)) {
+        for (ITextComponent component : CraftChatMessage.fromString(message)) {
             handle.sendMessage(component);
         }
     }
@@ -41,7 +42,7 @@ public class CraftFunctionCommandSender extends ServerCommandSender {
         throw new UnsupportedOperationException("Cannot change operator status of server function sender");
     }
 
-    public ICommandListener getHandle() {
+    public ICommandSender getHandle() {
         return handle;
     }
 }

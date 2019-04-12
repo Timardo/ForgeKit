@@ -20,7 +20,8 @@ public class ConsoleCommandCompleter implements Completer {
 
     public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
         Waitable<List<String>> waitable = new Waitable<List<String>>() {
-            @Override
+            @SuppressWarnings("unchecked")
+			@Override
             protected List<String> evaluate() {
                 List<String> offers = server.getCommandMap().tabComplete(server.getConsoleSender(), buffer);
 
@@ -30,7 +31,7 @@ public class ConsoleCommandCompleter implements Completer {
                 return tabEvent.isCancelled() ? Collections.EMPTY_LIST : tabEvent.getCompletions();
             }
         };
-        this.server.getServer().processQueue.add(waitable);
+        this.server.getServer().processQueue.add(waitable); //TODO impl
         try {
             List<String> offers = waitable.get();
             if (offers == null) {
