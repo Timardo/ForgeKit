@@ -1,13 +1,14 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityComplexPart;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
 
+import net.minecraft.entity.MultiPartEntityPart;
+
 public class CraftEnderDragonPart extends CraftComplexPart implements EnderDragonPart {
-    public CraftEnderDragonPart(CraftServer server, EntityComplexPart entity) {
+    public CraftEnderDragonPart(CraftServer server, MultiPartEntityPart entity) {
         super(server, entity);
     }
 
@@ -17,8 +18,8 @@ public class CraftEnderDragonPart extends CraftComplexPart implements EnderDrago
     }
 
     @Override
-    public EntityComplexPart getHandle() {
-        return (EntityComplexPart) entity;
+    public MultiPartEntityPart getHandle() {
+        return (MultiPartEntityPart) entity;
     }
 
     @Override
@@ -42,15 +43,18 @@ public class CraftEnderDragonPart extends CraftComplexPart implements EnderDrago
         getParent().setHealth(health);
     }
 
-    public double getMaxHealth() {
+    @SuppressWarnings("deprecation")
+	public double getMaxHealth() {
         return getParent().getMaxHealth();
     }
 
-    public void setMaxHealth(double health) {
+    @SuppressWarnings("deprecation")
+	public void setMaxHealth(double health) {
         getParent().setMaxHealth(health);
     }
 
-    public void resetMaxHealth() {
+    @SuppressWarnings("deprecation")
+	public void resetMaxHealth() {
         getParent().resetMaxHealth();
     }
 }

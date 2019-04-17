@@ -1,9 +1,9 @@
 package org.bukkit.craftbukkit.entity;
-
-import net.minecraft.server.EntitySpectralArrow;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.SpectralArrow;
+
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 
 public class CraftSpectralArrow extends CraftArrow implements SpectralArrow {
 
@@ -28,11 +28,11 @@ public class CraftSpectralArrow extends CraftArrow implements SpectralArrow {
 
     @Override
     public int getGlowingTicks() {
-        return getHandle().duration;
+        return getHandle().duration; //TODO AT
     }
 
     @Override
     public void setGlowingTicks(int duration) {
-        getHandle().duration = duration;
+        getHandle().duration = duration; //TODO AT
     }
 }

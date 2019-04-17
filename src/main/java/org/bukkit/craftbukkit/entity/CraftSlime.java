@@ -1,11 +1,11 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntitySlime;
-
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Slime;
+
+import net.minecraft.entity.monster.EntitySlime;
 
 public class CraftSlime extends CraftLivingEntity implements Slime {
 
@@ -14,25 +14,25 @@ public class CraftSlime extends CraftLivingEntity implements Slime {
     }
 
     public int getSize() {
-        return getHandle().getSize();
+        return getHandle().getSlimeSize();
     }
 
     public void setSize(int size) {
-        getHandle().setSize(size, true);
+        getHandle().setSlimeSize(size, true); //TODO AT
     }
 
     @Override
     public void setTarget(LivingEntity target) {
         if (target == null) {
-            getHandle().setGoalTarget(null, null, false);
+            getHandle().setAttackTarget(null, null, false); //TODO impl
         } else if (target instanceof CraftLivingEntity) {
-            getHandle().setGoalTarget(((CraftLivingEntity) target).getHandle(), null, false);
+            getHandle().setAttackTarget(((CraftLivingEntity) target).getHandle(), null, false); //TODO impl
         }
     }
 
     @Override
     public LivingEntity getTarget() {
-        return getHandle().getGoalTarget() == null ? null : (LivingEntity)getHandle().getGoalTarget().getBukkitEntity();
+        return getHandle().getAttackTarget() == null ? null : (LivingEntity)getHandle().getAttackTarget().getBukkitEntity(); //TODO impl
     }
 
     @Override

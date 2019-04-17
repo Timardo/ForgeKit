@@ -1,12 +1,12 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityZombie;
-import net.minecraft.server.EntityZombieVillager;
-
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
+
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 
 public class CraftZombie extends CraftMonster implements Zombie {
 
@@ -29,11 +29,11 @@ public class CraftZombie extends CraftMonster implements Zombie {
     }
 
     public boolean isBaby() {
-        return getHandle().isBaby();
+        return getHandle().isChild();
     }
 
     public void setBaby(boolean flag) {
-        getHandle().setBaby(flag);
+        getHandle().setChild(flag);
     }
 
     public boolean isVillager() {

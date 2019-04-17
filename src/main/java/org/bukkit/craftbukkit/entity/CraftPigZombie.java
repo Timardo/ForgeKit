@@ -1,10 +1,10 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityPigZombie;
-
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PigZombie;
+
+import net.minecraft.entity.monster.EntityPigZombie;
 
 public class CraftPigZombie extends CraftZombie implements PigZombie {
 
@@ -13,11 +13,11 @@ public class CraftPigZombie extends CraftZombie implements PigZombie {
     }
 
     public int getAnger() {
-        return getHandle().angerLevel;
+        return getHandle().angerLevel; //TODO AT
     }
 
     public void setAnger(int level) {
-        getHandle().angerLevel = level;
+        getHandle().angerLevel = level; //TODO AT
     }
 
     public void setAngry(boolean angry) {

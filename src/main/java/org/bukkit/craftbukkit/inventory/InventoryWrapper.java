@@ -2,12 +2,11 @@ package org.bukkit.craftbukkit.inventory;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
+
+import net.minecraft.inventory.IInventory;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.IChatBaseComponent;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.util.CraftChatMessage;

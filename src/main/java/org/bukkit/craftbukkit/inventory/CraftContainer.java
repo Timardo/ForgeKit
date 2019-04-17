@@ -1,28 +1,14 @@
 package org.bukkit.craftbukkit.inventory;
 
-import net.minecraft.server.ChatComponentText;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
-import net.minecraft.server.Container;
-import net.minecraft.server.ContainerAnvil;
-import net.minecraft.server.ContainerBeacon;
-import net.minecraft.server.ContainerBrewingStand;
-import net.minecraft.server.ContainerChest;
-import net.minecraft.server.ContainerDispenser;
-import net.minecraft.server.ContainerEnchantTable;
-import net.minecraft.server.ContainerFurnace;
-import net.minecraft.server.ContainerHopper;
-import net.minecraft.server.ContainerShulkerBox;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.PacketPlayOutOpenWindow;
-import net.minecraft.server.PlayerInventory;
-import net.minecraft.server.Slot;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 
 public class CraftContainer extends Container {
 
@@ -32,7 +18,7 @@ public class CraftContainer extends Container {
     private Container delegate;
     private final int cachedSize;
 
-    public CraftContainer(InventoryView view, EntityHuman player, int id) {
+    public CraftContainer(InventoryView view, EntityPlayer player, int id) {
         this.view = view;
         this.windowId = id;
         // TODO: Do we need to check that it really is a CraftInventory?
@@ -44,7 +30,7 @@ public class CraftContainer extends Container {
         setupSlots(top, bottom, player);
     }
 
-    public CraftContainer(final Inventory inventory, final EntityHuman player, int id) {
+    public CraftContainer(final Inventory inventory, final EntityPlayer player, int id) {
         this(new InventoryView() {
             @Override
             public Inventory getTopInventory() {

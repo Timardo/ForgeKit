@@ -1,7 +1,8 @@
 package org.bukkit.craftbukkit.entity;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.server.EntityArrow;
+
+import net.minecraft.entity.projectile.EntityArrow;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.Block;
@@ -23,33 +24,33 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
     }
 
     public int getKnockbackStrength() {
-        return getHandle().knockbackStrength;
+        return getHandle().knockbackStrength; //TODO AT
     }
 
     public boolean isCritical() {
-        return getHandle().isCritical();
+        return getHandle().getIsCritical();
     }
 
     public void setCritical(boolean critical) {
-        getHandle().setCritical(critical);
+        getHandle().setIsCritical(critical);
     }
 
     public ProjectileSource getShooter() {
-        return getHandle().projectileSource;
+        return getHandle().projectileSource; //TODO impl
     }
 
     public void setShooter(ProjectileSource shooter) {
         if (shooter instanceof LivingEntity) {
-            getHandle().shooter = ((CraftLivingEntity) shooter).getHandle();
+            getHandle().shootingEntity = ((CraftLivingEntity) shooter).getHandle();
         } else {
-            getHandle().shooter = null;
+            getHandle().shootingEntity = null;
         }
         getHandle().projectileSource = shooter;
     }
 
     @Override
     public boolean isInBlock() {
-        return getHandle().inGround;
+        return getHandle().inGround; //TODO AT
     }
 
     @Override
@@ -59,18 +60,18 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
         }
 
         EntityArrow handle = getHandle();
-        return getWorld().getBlockAt(handle.h, handle.at, handle.au); // PAIL: rename tileX, tileY, tileZ
+        return getWorld().getBlockAt(handle.xTile, handle.yTile, handle.zTile); //TODO AT
     }
 
     @Override
     public PickupStatus getPickupStatus() {
-        return PickupStatus.values()[getHandle().fromPlayer.ordinal()];
+        return PickupStatus.values()[getHandle().pickupStatus.ordinal()];
     }
 
     @Override
     public void setPickupStatus(PickupStatus status) {
         Preconditions.checkNotNull(status, "status");
-        getHandle().fromPlayer = EntityArrow.PickupStatus.a(status.ordinal());
+        getHandle().pickupStatus = EntityArrow.PickupStatus.getByOrdinal(status.ordinal());
     }
 
     @Override

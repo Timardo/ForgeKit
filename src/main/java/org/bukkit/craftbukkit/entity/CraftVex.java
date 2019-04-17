@@ -1,9 +1,10 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityVex;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Vex;
+
+import net.minecraft.entity.monster.EntityVex;
 
 public class CraftVex extends CraftMonster implements Vex {
 

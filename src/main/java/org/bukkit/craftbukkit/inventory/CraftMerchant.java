@@ -2,11 +2,11 @@ package org.bukkit.craftbukkit.inventory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
+import net.minecraft.entity.IMerchant;
+
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.IMerchant;
-import net.minecraft.server.MerchantRecipeList;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;

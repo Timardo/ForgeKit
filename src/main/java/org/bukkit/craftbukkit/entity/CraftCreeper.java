@@ -1,7 +1,8 @@
 package org.bukkit.craftbukkit.entity;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.server.EntityCreeper;
+
+import net.minecraft.entity.monster.EntityCreeper;
 
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Creeper;
@@ -15,26 +16,26 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     }
 
     public boolean isPowered() {
-        return getHandle().isPowered();
+        return getHandle().getPowered();
     }
 
     public void setPowered(boolean powered) {
         CraftServer server = this.server;
-        Creeper entity = (Creeper) this.getHandle().getBukkitEntity();
+        Creeper entity = (Creeper) this.getHandle().getBukkitEntity(); //TODO impl
 
         if (powered) {
             CreeperPowerEvent event = new CreeperPowerEvent(entity, CreeperPowerEvent.PowerCause.SET_ON);
             server.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                getHandle().setPowered(true);
+                getHandle().setPowered(true); //TODO impl
             }
         } else {
             CreeperPowerEvent event = new CreeperPowerEvent(entity, CreeperPowerEvent.PowerCause.SET_OFF);
             server.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                getHandle().setPowered(false);
+                getHandle().setPowered(false); //TODO impl
             }
         }
     }
@@ -43,12 +44,12 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     public void setMaxFuseTicks(int ticks) {
         Preconditions.checkArgument(ticks >= 0, "ticks < 0");
 
-        getHandle().maxFuseTicks = ticks;
+        getHandle().fuseTime = ticks; //TODO AT
     }
 
     @Override
     public int getMaxFuseTicks() {
-        return getHandle().maxFuseTicks;
+        return getHandle().fuseTime; //TODO AT
     }
 
     @Override

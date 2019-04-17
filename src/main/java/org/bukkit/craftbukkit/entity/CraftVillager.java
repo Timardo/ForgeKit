@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
-import net.minecraft.server.EntityVillager;
 import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
@@ -15,6 +14,8 @@ import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.MerchantRecipe;
+
+import net.minecraft.entity.passive.EntityVillager;
 
 public class CraftVillager extends CraftAgeable implements Villager, InventoryHolder {
 
@@ -39,11 +40,13 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
         return EntityType.VILLAGER;
     }
 
-    public Profession getProfession() {
+    @SuppressWarnings("deprecation")
+	public Profession getProfession() {
         return Profession.values()[getHandle().getProfession() + 1]; // Offset by 1 from the zombie types
     }
 
-    public void setProfession(Profession profession) {
+    @SuppressWarnings("deprecation")
+	public void setProfession(Profession profession) {
         Validate.notNull(profession);
         Validate.isTrue(!profession.isZombie(), "Profession is reserved for Zombies: ", profession);
         getHandle().setProfession(profession.ordinal() - 1);
@@ -51,7 +54,7 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
 
     @Override
     public Career getCareer() {
-        return getCareer(getProfession(), getHandle().bK);
+        return getCareer(getProfession(), getHandle().careerId); //TODO AT
     }
 
     @Override
@@ -62,21 +65,21 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
     @Override
     public void setCareer(Career career, boolean resetTrades) {
         if (career == null) {
-            getHandle().bK = 0; // reset career
+            getHandle().careerId = 0; //TODO AT
         } else {
             Validate.isTrue(career.getProfession() == getProfession(), "Career assignment mismatch. Found (" + getProfession() + ") Required (" + career.getProfession() + ")");
-            getHandle().bK = getCareerID(career);
+            getHandle().careerId = getCareerID(career); //TODO AT
         }
 
         if (resetTrades) {
-            getHandle().trades = null;
-            getHandle().dx();
+            getHandle().buyingList = null; //TODO AT
+            getHandle().populateBuyingList(); //TODO AT
         }
     }
 
     @Override
     public Inventory getInventory() {
-        return new CraftInventory(getHandle().inventory);
+        return new CraftInventory(getHandle().getVillagerInventory());
     }
 
     private CraftMerchant getMerchant() {
@@ -120,12 +123,12 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
 
     @Override
     public int getRiches() {
-        return getHandle().riches;
+        return getHandle().wealth; //TODO AT
     }
 
     @Override
     public void setRiches(int riches) {
-        getHandle().riches = riches;
+        getHandle().wealth = riches; //TODO AT
     }
 
     @Nullable

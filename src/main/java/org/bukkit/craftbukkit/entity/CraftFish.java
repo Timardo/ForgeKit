@@ -1,26 +1,27 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.EntityFishingHook;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.MathHelper;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fish;
 import org.bukkit.projectiles.ProjectileSource;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+
+@SuppressWarnings("deprecation")
 public class CraftFish extends AbstractProjectile implements Fish {
     private double biteChance = -1;
 
-    public CraftFish(CraftServer server, EntityFishingHook entity) {
+    public CraftFish(CraftServer server, EntityFishHook entity) {
         super(server, entity);
     }
 
     public ProjectileSource getShooter() {
-        if (getHandle().owner != null) {
-            return getHandle().owner.getBukkitEntity();
+        if (getHandle().getAngler() != null) {
+            return getHandle().getAngler().getBukkitEntity(); //TODO impl
         }
 
         return null;
@@ -28,13 +29,13 @@ public class CraftFish extends AbstractProjectile implements Fish {
 
     public void setShooter(ProjectileSource shooter) {
         if (shooter instanceof CraftHumanEntity) {
-            getHandle().owner = (EntityHuman) ((CraftHumanEntity) shooter).entity;
+            getHandle().angler = (EntityPlayer) ((CraftHumanEntity) shooter).entity; //TODO AT
         }
     }
 
     @Override
-    public EntityFishingHook getHandle() {
-        return (EntityFishingHook) entity;
+    public EntityFishHook getHandle() {
+        return (EntityFishHook) entity;
     }
 
     @Override
@@ -47,10 +48,10 @@ public class CraftFish extends AbstractProjectile implements Fish {
     }
 
     public double getBiteChance() {
-        EntityFishingHook hook = getHandle();
+    	EntityFishHook hook = getHandle();
 
         if (this.biteChance == -1) {
-            if (hook.world.isRainingAt(new BlockPosition(MathHelper.floor(hook.locX), MathHelper.floor(hook.locY) + 1, MathHelper.floor(hook.locZ)))) {
+            if (hook.world.isRainingAt(new BlockPos(MathHelper.floor(hook.posX), MathHelper.floor(hook.posY) + 1, MathHelper.floor(hook.posZ)))) {
                 return 1/300.0;
             }
             return 1/500.0;

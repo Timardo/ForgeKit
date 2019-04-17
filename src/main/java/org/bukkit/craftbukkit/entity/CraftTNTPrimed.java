@@ -1,12 +1,12 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityLiving;
-import net.minecraft.server.EntityTNTPrimed;
-
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityTNTPrimed;
 
 public class CraftTNTPrimed extends CraftEntity implements TNTPrimed {
 
@@ -15,27 +15,27 @@ public class CraftTNTPrimed extends CraftEntity implements TNTPrimed {
     }
 
     public float getYield() {
-        return getHandle().yield;
+        return getHandle().yield; //TODO impl (probably useless)
     }
 
     public boolean isIncendiary() {
-        return getHandle().isIncendiary;
+        return getHandle().isIncendiary; //TODO impl (probably useless)
     }
 
     public void setIsIncendiary(boolean isIncendiary) {
-        getHandle().isIncendiary = isIncendiary;
+        getHandle().isIncendiary = isIncendiary; //TODO impl (probably useless)
     }
 
     public void setYield(float yield) {
-        getHandle().yield = yield;
+        getHandle().yield = yield; //TODO impl (probably useless)
     }
 
     public int getFuseTicks() {
-        return getHandle().getFuseTicks();
+        return getHandle().getFuse();
     }
 
     public void setFuseTicks(int fuseTicks) {
-        getHandle().setFuseTicks(fuseTicks);
+        getHandle().setFuse(fuseTicks);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class CraftTNTPrimed extends CraftEntity implements TNTPrimed {
     }
 
     public Entity getSource() {
-        EntityLiving source = getHandle().getSource();
+    	EntityLivingBase source = getHandle().getTntPlacedBy();
 
-        return (source != null) ? source.getBukkitEntity() : null;
+        return (source != null) ? source.getBukkitEntity() : null; //TODO impl
     }
 }

@@ -1,9 +1,10 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityPolarBear;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.PolarBear;
+
+import net.minecraft.entity.monster.EntityPolarBear;
 
 public class CraftPolarBear extends CraftAnimals implements PolarBear {
 

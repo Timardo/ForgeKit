@@ -264,7 +264,7 @@ public class CraftWorld implements World {
     }
 
     public Chunk getChunkAt(int x, int z) {
-        return this.world.getChunkProvider().provideChunk(x, z).bukkitChunk; //TODO
+        return this.world.getChunkProvider().provideChunk(x, z).bukkitChunk; //TODO impl
     }
 
     public Chunk getChunkAt(Block block) {
@@ -281,7 +281,7 @@ public class CraftWorld implements World {
 
         for (int i = 0; i < chunks.length; i++) {
             net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) chunks[i];
-            craftChunks[i] = chunk.bukkitChunk; //TODO
+            craftChunks[i] = chunk.bukkitChunk; //TODO impl
         }
 
         return craftChunks;

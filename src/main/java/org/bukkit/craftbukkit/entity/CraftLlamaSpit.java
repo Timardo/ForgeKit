@@ -1,10 +1,11 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityLlamaSpit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LlamaSpit;
 import org.bukkit.projectiles.ProjectileSource;
+
+import net.minecraft.entity.projectile.EntityLlamaSpit;
 
 public class CraftLlamaSpit extends AbstractProjectile implements LlamaSpit {
 
@@ -29,11 +30,11 @@ public class CraftLlamaSpit extends AbstractProjectile implements LlamaSpit {
 
     @Override
     public ProjectileSource getShooter() {
-        return (getHandle().shooter != null) ? (ProjectileSource) getHandle().shooter.getBukkitEntity() : null;
+        return (getHandle().owner != null) ? (ProjectileSource) getHandle().owner.getBukkitEntity() : null; //TODO impl
     }
 
     @Override
     public void setShooter(ProjectileSource source) {
-        getHandle().shooter = (source != null) ? ((CraftLivingEntity) source).getHandle() : null;
+        getHandle().owner = (source != null) ? ((CraftLivingEntity) source).getHandle() : null; //TODO ?
     }
 }

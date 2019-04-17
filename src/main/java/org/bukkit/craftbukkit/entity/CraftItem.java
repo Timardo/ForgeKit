@@ -26,15 +26,15 @@ public class CraftItem extends CraftEntity implements Item {
     }
 
     public void setItemStack(ItemStack stack) {
-        item.setItemStack(CraftItemStack.asNMSCopy(stack));
+        item.setItem(CraftItemStack.asNMSCopy(stack));
     }
 
     public int getPickupDelay() {
-        return item.pickupDelay;
+        return item.pickupDelay; //TODO AT
     }
 
     public void setPickupDelay(int delay) {
-        item.pickupDelay = Math.min(delay, Short.MAX_VALUE);
+        item.pickupDelay = Math.min(delay, Short.MAX_VALUE); //TODO AT
     }
 
     @Override

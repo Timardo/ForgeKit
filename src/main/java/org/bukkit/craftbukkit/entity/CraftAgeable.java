@@ -1,9 +1,9 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityAgeable;
-
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Ageable;
+
+import net.minecraft.entity.EntityAgeable;
 
 public class CraftAgeable extends CraftCreature implements Ageable {
     public CraftAgeable(CraftServer server, EntityAgeable entity) {
@@ -11,19 +11,19 @@ public class CraftAgeable extends CraftCreature implements Ageable {
     }
 
     public int getAge() {
-        return getHandle().getAge();
+        return getHandle().getGrowingAge();
     }
 
     public void setAge(int age) {
-        getHandle().setAgeRaw(age);
+        getHandle().setGrowingAge(age);
     }
 
     public void setAgeLock(boolean lock) {
-        getHandle().ageLocked = lock;
+        getHandle().ageLocked = lock; //TODO impl
     }
 
     public boolean getAgeLock() {
-        return getHandle().ageLocked;
+        return getHandle().ageLocked; //TODO impl
     }
 
     public void setBaby() {

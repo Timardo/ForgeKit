@@ -1,13 +1,14 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityZombieHusk;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
 
+import net.minecraft.entity.monster.EntityHusk;
+
 public class CraftHusk extends CraftZombie implements Husk {
 
-    public CraftHusk(CraftServer server, EntityZombieHusk entity) {
+    public CraftHusk(CraftServer server, EntityHusk entity) {
         super(server, entity);
     }
 

@@ -1,10 +1,11 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityZombieVillager;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.ZombieVillager;
+
+import net.minecraft.entity.monster.EntityZombieVillager;
 
 public class CraftVillagerZombie extends CraftZombie implements ZombieVillager {
 
@@ -27,7 +28,8 @@ public class CraftVillagerZombie extends CraftZombie implements ZombieVillager {
         return EntityType.ZOMBIE_VILLAGER;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Villager.Profession getVillagerProfession() {
         return Villager.Profession.values()[getHandle().getProfession() + Villager.Profession.FARMER.ordinal()];
     }

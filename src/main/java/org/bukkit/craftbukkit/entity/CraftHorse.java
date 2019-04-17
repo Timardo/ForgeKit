@@ -1,12 +1,13 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityHorse;
 import org.apache.commons.lang.Validate;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryHorse;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.inventory.HorseInventory;
+
+import net.minecraft.entity.passive.EntityHorse;
 
 public class CraftHorse extends CraftAbstractHorse implements Horse {
 
@@ -19,31 +20,32 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
         return (EntityHorse) super.getHandle();
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Variant getVariant() {
         return Variant.HORSE;
     }
 
     @Override
     public Color getColor() {
-        return Color.values()[getHandle().getVariant() & 0xFF];
+        return Color.values()[getHandle().getHorseVariant() & 0xFF];
     }
 
     @Override
     public void setColor(Color color) {
         Validate.notNull(color, "Color cannot be null");
-        getHandle().setVariant(color.ordinal() & 0xFF | getStyle().ordinal() << 8);
+        getHandle().setHorseVariant(color.ordinal() & 0xFF | getStyle().ordinal() << 8);
     }
 
     @Override
     public Style getStyle() {
-        return Style.values()[getHandle().getVariant() >>> 8];
+        return Style.values()[getHandle().getHorseVariant() >>> 8];
     }
 
     @Override
     public void setStyle(Style style) {
         Validate.notNull(style, "Style cannot be null");
-        getHandle().setVariant(getColor().ordinal() & 0xFF | style.ordinal() << 8);
+        getHandle().setHorseVariant(getColor().ordinal() & 0xFF | style.ordinal() << 8);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
 
     @Override
     public HorseInventory getInventory() {
-        return new CraftInventoryHorse(getHandle().inventoryChest);
+        return new CraftInventoryHorse(getHandle().horseChest); //TODO AT
     }
 
     @Override

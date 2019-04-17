@@ -1,13 +1,14 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntitySkeletonWither;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.WitherSkeleton;
 
+import net.minecraft.entity.monster.EntityWitherSkeleton;
+
 public class CraftWitherSkeleton extends CraftSkeleton implements WitherSkeleton {
 
-    public CraftWitherSkeleton(CraftServer server, EntitySkeletonWither entity) {
+    public CraftWitherSkeleton(CraftServer server, EntityWitherSkeleton entity) {
         super(server, entity);
     }
 
@@ -21,7 +22,8 @@ public class CraftWitherSkeleton extends CraftSkeleton implements WitherSkeleton
         return EntityType.WITHER_SKELETON;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public SkeletonType getSkeletonType() {
         return SkeletonType.WITHER;
     }

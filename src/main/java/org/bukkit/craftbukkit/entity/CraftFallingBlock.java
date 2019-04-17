@@ -1,12 +1,12 @@
 package org.bukkit.craftbukkit.entity;
 
-import net.minecraft.server.EntityFallingBlock;
-
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
+
+import net.minecraft.entity.item.EntityFallingBlock;
 
 public class CraftFallingBlock extends CraftEntity implements FallingBlock {
 
@@ -28,34 +28,36 @@ public class CraftFallingBlock extends CraftEntity implements FallingBlock {
         return EntityType.FALLING_BLOCK;
     }
 
-    public Material getMaterial() {
+    @SuppressWarnings("deprecation")
+	public Material getMaterial() {
         return Material.getMaterial(getBlockId());
     }
 
-    public int getBlockId() {
+    @SuppressWarnings("deprecation")
+	public int getBlockId() {
         return CraftMagicNumbers.getId(getHandle().getBlock().getBlock());
     }
 
     public byte getBlockData() {
-        return (byte) getHandle().getBlock().getBlock().toLegacyData(getHandle().getBlock());
+        return (byte) getHandle().getBlock().getBlock().getMetaFromState(getHandle().getBlock());
     }
 
     public boolean getDropItem() {
-        return getHandle().dropItem;
+        return getHandle().shouldDropItem;
     }
 
     public void setDropItem(boolean drop) {
-        getHandle().dropItem = drop;
+        getHandle().shouldDropItem = drop;
     }
 
     @Override
     public boolean canHurtEntities() {
-        return getHandle().hurtEntities;
+        return getHandle().hurtEntities; //TODO AT
     }
 
     @Override
     public void setHurtEntities(boolean hurtEntities) {
-        getHandle().hurtEntities = hurtEntities;
+        getHandle().setHurtEntities(hurtEntities);
     }
 
     @Override
@@ -63,6 +65,6 @@ public class CraftFallingBlock extends CraftEntity implements FallingBlock {
         super.setTicksLived(value);
 
         // Second field for EntityFallingBlock
-        getHandle().ticksLived = value;
+        getHandle().ticksExisted = value;
     }
 }
