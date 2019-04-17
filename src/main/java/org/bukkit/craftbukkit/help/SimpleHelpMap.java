@@ -19,11 +19,12 @@ public class SimpleHelpMap implements HelpMap {
 
     private HelpTopic defaultTopic;
     private final Map<String, HelpTopic> helpTopics;
-    private final Map<Class, HelpTopicFactory<Command>> topicFactoryMap;
+    @SuppressWarnings("rawtypes")
+	private final Map<Class, HelpTopicFactory<Command>> topicFactoryMap;
     private final CraftServer server;
     private HelpYamlReader yaml;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public SimpleHelpMap(CraftServer server) {
         this.helpTopics = new TreeMap<String, HelpTopic>(HelpTopicComparator.topicNameComparatorInstance()); // Using a TreeMap for its explicit sorting on key
         this.topicFactoryMap = new HashMap<Class, HelpTopicFactory<Command>>();
@@ -95,7 +96,8 @@ public class SimpleHelpMap implements HelpMap {
     /**
      * Processes all the commands registered in the server and creates help topics for them.
      */
-    public synchronized void initializeCommands() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public synchronized void initializeCommands() {
         // ** Load topics from highest to lowest priority order **
         Set<String> ignoredPlugins = new HashSet<String>(yaml.getIgnoredPlugins());
 
@@ -202,7 +204,8 @@ public class SimpleHelpMap implements HelpMap {
         return false;
     }
 
-    public void registerHelpTopicFactory(Class commandClass, HelpTopicFactory factory) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void registerHelpTopicFactory(Class commandClass, HelpTopicFactory factory) {
         if (!Command.class.isAssignableFrom(commandClass) && !CommandExecutor.class.isAssignableFrom(commandClass)) {
             throw new IllegalArgumentException("commandClass must implement either Command or CommandExecutor!");
         }
