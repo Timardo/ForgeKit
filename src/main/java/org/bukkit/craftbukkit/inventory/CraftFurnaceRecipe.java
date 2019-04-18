@@ -1,12 +1,13 @@
 package org.bukkit.craftbukkit.inventory;
 
-import net.minecraft.server.RecipesFurnace;
-
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
+import net.minecraft.item.crafting.FurnaceRecipes;
+
 public class CraftFurnaceRecipe extends FurnaceRecipe implements CraftRecipe {
-    public CraftFurnaceRecipe(ItemStack result, ItemStack source) {
+    @SuppressWarnings("deprecation")
+	public CraftFurnaceRecipe(ItemStack result, ItemStack source) {
         super(result, source.getType(), source.getDurability());
     }
 
@@ -21,6 +22,6 @@ public class CraftFurnaceRecipe extends FurnaceRecipe implements CraftRecipe {
     public void addToCraftingManager() {
         ItemStack result = this.getResult();
         ItemStack input = this.getInput();
-        RecipesFurnace.getInstance().registerRecipe(CraftItemStack.asNMSCopy(input), CraftItemStack.asNMSCopy(result), getExperience());
+        FurnaceRecipes.instance().addSmeltingRecipe(CraftItemStack.asNMSCopy(input), CraftItemStack.asNMSCopy(result), getExperience());
     }
 }

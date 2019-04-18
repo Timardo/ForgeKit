@@ -2,12 +2,14 @@ package org.bukkit.craftbukkit.inventory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap.Builder;
+
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import java.util.Map;
-import net.minecraft.server.DataConverterTypes;
-import net.minecraft.server.MinecraftKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.NBTBase;
-import net.minecraft.server.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
 import org.bukkit.entity.EntityType;
@@ -34,35 +36,38 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
         this.spawnedType = egg.spawnedType;
     }
 
-    CraftMetaSpawnEgg(NBTTagCompound tag) {
+    @SuppressWarnings("deprecation")
+	CraftMetaSpawnEgg(NBTTagCompound tag) {
         super(tag);
 
         if (tag.hasKey(ENTITY_TAG.NBT)) {
-            entityTag = tag.getCompound(ENTITY_TAG.NBT);
+            entityTag = tag.getCompoundTag(ENTITY_TAG.NBT);
 
             if (entityTag.hasKey(ENTITY_ID.NBT)) {
-                this.spawnedType = EntityType.fromName(new MinecraftKey(entityTag.getString(ENTITY_ID.NBT)).getKey());
+                this.spawnedType = EntityType.fromName(new ResourceLocation(entityTag.getString(ENTITY_ID.NBT)).getResourcePath());
             }
         }
     }
 
-    CraftMetaSpawnEgg(Map<String, Object> map) {
+    @SuppressWarnings("deprecation")
+	CraftMetaSpawnEgg(Map<String, Object> map) {
         super(map);
 
         String entityType = SerializableMeta.getString(map, ENTITY_ID.BUKKIT, true);
         setSpawnedType(EntityType.fromName(entityType));
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     void deserializeInternal(NBTTagCompound tag) {
         super.deserializeInternal(tag);
 
         if (tag.hasKey(ENTITY_TAG.NBT)) {
-            entityTag = tag.getCompound(ENTITY_TAG.NBT);
-            MinecraftServer.getServer().dataConverterManager.a(DataConverterTypes.ENTITY, entityTag); // PAIL: convert
+            entityTag = tag.getCompoundTag(ENTITY_TAG.NBT);
+            FMLCommonHandler.instance().getMinecraftServerInstance().getDataFixer().process(FixTypes.ENTITY, entityTag);
 
             if (entityTag.hasKey(ENTITY_ID.NBT)) {
-                this.spawnedType = EntityType.fromName(new MinecraftKey(entityTag.getString(ENTITY_ID.NBT)).getKey());
+                this.spawnedType = EntityType.fromName(new ResourceLocation(entityTag.getString(ENTITY_ID.NBT)).getResourcePath());
             }
         }
     }
@@ -74,7 +79,8 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
         }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     void applyToItem(NBTTagCompound tag) {
         super.applyToItem(tag);
 
@@ -83,11 +89,11 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
         }
 
         if (hasSpawnedType()) {
-            entityTag.setString(ENTITY_ID.NBT, new MinecraftKey(spawnedType.getName()).toString());
+            entityTag.setString(ENTITY_ID.NBT, new ResourceLocation(spawnedType.getName()).toString());
         }
 
         if (entityTag != null) {
-            tag.set(ENTITY_TAG.NBT, entityTag);
+            tag.setTag(ENTITY_TAG.NBT, entityTag);
         }
     }
 
@@ -119,7 +125,8 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
         return spawnedType;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setSpawnedType(EntityType type) {
         Preconditions.checkArgument(type == null || type.getName() != null, "Spawn egg type must have name (%s)", type);
 
@@ -160,7 +167,8 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
         return original != hash ? CraftMetaSpawnEgg.class.hashCode() ^ hash : hash;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     Builder<String, Object> serialize(Builder<String, Object> builder) {
         super.serialize(builder);
 
@@ -177,7 +185,7 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
 
         clone.spawnedType = spawnedType;
         if (entityTag != null) {
-            clone.entityTag = entityTag.g();
+            clone.entityTag = entityTag.copy();
         }
 
         return clone;

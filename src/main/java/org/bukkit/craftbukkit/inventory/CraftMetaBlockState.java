@@ -2,32 +2,34 @@ package org.bukkit.craftbukkit.inventory;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
+
+import net.minecraft.block.BlockJukebox;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.tileentity.TileEntityBeacon;
+import net.minecraft.tileentity.TileEntityBrewingStand;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityComparator;
+import net.minecraft.tileentity.TileEntityDaylightDetector;
+import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.tileentity.TileEntityEnchantmentTable;
+import net.minecraft.tileentity.TileEntityEndGateway;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.tileentity.TileEntityFlowerPot;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntityNote;
+import net.minecraft.tileentity.TileEntityShulkerBox;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.tileentity.TileEntityStructure;
+
 import java.util.Map;
-import net.minecraft.server.BlockJukeBox;
-import net.minecraft.server.NBTBase;
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.TileEntity;
-import net.minecraft.server.TileEntityBanner;
-import net.minecraft.server.TileEntityBeacon;
-import net.minecraft.server.TileEntityBrewingStand;
-import net.minecraft.server.TileEntityChest;
-import net.minecraft.server.TileEntityCommand;
-import net.minecraft.server.TileEntityComparator;
-import net.minecraft.server.TileEntityDispenser;
-import net.minecraft.server.TileEntityDropper;
-import net.minecraft.server.TileEntityEnchantTable;
-import net.minecraft.server.TileEntityEndGateway;
-import net.minecraft.server.TileEntityEnderChest;
-import net.minecraft.server.TileEntityFlowerPot;
-import net.minecraft.server.TileEntityFurnace;
-import net.minecraft.server.TileEntityHopper;
-import net.minecraft.server.TileEntityLightDetector;
-import net.minecraft.server.TileEntityMobSpawner;
-import net.minecraft.server.TileEntityNote;
-import net.minecraft.server.TileEntityShulkerBox;
-import net.minecraft.server.TileEntitySign;
-import net.minecraft.server.TileEntitySkull;
-import net.minecraft.server.TileEntityStructure;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -85,8 +87,8 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         super(tag);
         this.material = material;
 
-        if (tag.hasKeyOfType(BLOCK_ENTITY_TAG.NBT, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
-            blockEntityTag = tag.getCompound(BLOCK_ENTITY_TAG.NBT);
+        if (tag.hasKey(BLOCK_ENTITY_TAG.NBT, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
+            blockEntityTag = tag.getCompoundTag(BLOCK_ENTITY_TAG.NBT);
         } else {
             blockEntityTag = null;
         }
@@ -108,14 +110,14 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         super.applyToItem(tag);
 
         if (blockEntityTag != null) {
-            tag.set(BLOCK_ENTITY_TAG.NBT, blockEntityTag);
+            tag.setTag(BLOCK_ENTITY_TAG.NBT, blockEntityTag);
         }
     }
 
     @Override
     void deserializeInternal(NBTTagCompound tag) {
-        if (tag.hasKeyOfType(BLOCK_ENTITY_TAG.NBT, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
-            blockEntityTag = tag.getCompound(BLOCK_ENTITY_TAG.NBT);
+        if (tag.hasKey(BLOCK_ENTITY_TAG.NBT, CraftMagicNumbers.NBT.TAG_COMPOUND)) {
+            blockEntityTag = tag.getCompoundTag(BLOCK_ENTITY_TAG.NBT);
         }
     }
 
@@ -166,7 +168,8 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         return super.isEmpty() && blockEntityTag == null;
     }
 
-    @Override
+    @SuppressWarnings("incomplete-switch")
+	@Override
     boolean applicableTo(Material type) {
         switch(type){
             case FURNACE:
@@ -217,7 +220,7 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
     public CraftMetaBlockState clone() {
         CraftMetaBlockState meta = (CraftMetaBlockState) super.clone();
         if (blockEntityTag != null) {
-            meta.blockEntityTag = blockEntityTag.g();
+            meta.blockEntityTag = blockEntityTag.copy();
         }
         return meta;
     }
@@ -227,7 +230,8 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         return blockEntityTag != null;
     }
 
-    @Override
+    @SuppressWarnings("incomplete-switch")
+	@Override
     public BlockState getBlockState() {
         if (blockEntityTag != null) {
             switch (material) {
@@ -308,9 +312,9 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
             return new CraftNoteBlock(material, (TileEntityNote) te);
         case JUKEBOX:
             if (te == null) {
-                te = new BlockJukeBox.TileEntityRecordPlayer();
+                te = new BlockJukebox.TileEntityJukebox();
             }
-            return new CraftJukebox(material, (BlockJukeBox.TileEntityRecordPlayer) te);
+            return new CraftJukebox(material, (BlockJukebox.TileEntityJukebox) te);
         case BREWING_STAND_ITEM:
             if (te == null) {
                 te = new TileEntityBrewingStand();
@@ -325,9 +329,9 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         case COMMAND_REPEATING:
         case COMMAND_CHAIN:
             if (te == null) {
-                te = new TileEntityCommand();
+                te = new TileEntityCommandBlock();
             }
-            return new CraftCommandBlock(material, (TileEntityCommand) te);
+            return new CraftCommandBlock(material, (TileEntityCommandBlock) te);
         case BEACON:
             if (te == null) {
                 te = new TileEntityBeacon();
@@ -373,9 +377,9 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
             return new CraftShulkerBox(material, (TileEntityShulkerBox) te);
         case ENCHANTMENT_TABLE:
             if (te == null) {
-                te = new TileEntityEnchantTable();
+                te = new TileEntityEnchantmentTable();
             }
-            return new CraftEnchantingTable(material, (TileEntityEnchantTable) te);
+            return new CraftEnchantingTable(material, (TileEntityEnchantmentTable) te);
         case ENDER_CHEST:
             if (te == null){
                 te = new TileEntityEnderChest();
@@ -384,9 +388,9 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         case DAYLIGHT_DETECTOR:
         case DAYLIGHT_DETECTOR_INVERTED:
             if (te == null){
-                te = new TileEntityLightDetector();
+                te = new TileEntityDaylightDetector();
             }
-            return new CraftDaylightDetector(material, (TileEntityLightDetector) te);
+            return new CraftDaylightDetector(material, (TileEntityDaylightDetector) te);
         case REDSTONE_COMPARATOR:
             if (te == null){
                 te = new TileEntityComparator();
@@ -398,7 +402,8 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
         }
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public void setBlockState(BlockState blockState) {
         Validate.notNull(blockState, "blockState must not be null");
 

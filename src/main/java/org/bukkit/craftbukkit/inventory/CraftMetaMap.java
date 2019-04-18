@@ -2,10 +2,6 @@ package org.bukkit.craftbukkit.inventory;
 
 import java.util.Map;
 
-import net.minecraft.server.NBTTagCompound;
-import net.minecraft.server.NBTTagInt;
-import net.minecraft.server.NBTTagString;
-
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
@@ -13,6 +9,10 @@ import org.bukkit.craftbukkit.inventory.CraftMetaItem.SerializableMeta;
 import org.bukkit.inventory.meta.MapMeta;
 
 import com.google.common.collect.ImmutableMap;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagString;
 
 @DelegateDeserialization(SerializableMeta.class)
 class CraftMetaMap extends CraftMetaItem implements MapMeta {
@@ -48,14 +48,14 @@ class CraftMetaMap extends CraftMetaItem implements MapMeta {
         }
 
         if (tag.hasKey(DISPLAY.NBT)) {
-            NBTTagCompound display = tag.getCompound(DISPLAY.NBT);
+            NBTTagCompound display = tag.getCompoundTag(DISPLAY.NBT);
 
             if (display.hasKey(MAP_LOC_NAME.NBT)) {
                 locName = display.getString(MAP_LOC_NAME.NBT);
             }
 
             if (display.hasKey(MAP_COLOR.NBT)) {
-                color = Color.fromRGB(display.getInt(MAP_COLOR.NBT));
+                color = Color.fromRGB(display.getInteger(MAP_COLOR.NBT));
             }
         }
     }

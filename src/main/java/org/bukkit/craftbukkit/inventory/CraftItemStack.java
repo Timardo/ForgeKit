@@ -48,7 +48,7 @@ public final class CraftItemStack extends ItemStack {
         return stack;
     }
 
-    public static net.minecraft.server.ItemStack copyNMSStack(net.minecraft.server.ItemStack original, int amount) {
+    public static net.minecraft.item.ItemStack copyNMSStack(net.minecraft.item.ItemStack original, int amount) {
         net.minecraft.server.ItemStack stack = original.cloneItemStack();
         stack.setCount(amount);
         return stack;
