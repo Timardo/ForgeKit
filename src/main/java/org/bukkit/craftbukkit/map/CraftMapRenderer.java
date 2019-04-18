@@ -1,8 +1,5 @@
 package org.bukkit.craftbukkit.map;
 
-import net.minecraft.server.WorldMap;
-import net.minecraft.server.MapIcon;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
@@ -10,16 +7,20 @@ import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import net.minecraft.world.storage.MapData;
+import net.minecraft.world.storage.MapDecoration;
+
 public class CraftMapRenderer extends MapRenderer {
 
-    private final WorldMap worldMap;
+    private final MapData worldMap;
 
-    public CraftMapRenderer(CraftMapView mapView, WorldMap worldMap) {
+    public CraftMapRenderer(CraftMapView mapView, MapData worldMap) {
         super(false);
         this.worldMap = worldMap;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void render(MapView map, MapCanvas canvas, Player player) {
         // Map
         for (int x = 0; x < 128; ++x) {
@@ -34,15 +35,15 @@ public class CraftMapRenderer extends MapRenderer {
             cursors.removeCursor(cursors.getCursor(0));
         }
 
-        for (Object key : worldMap.decorations.keySet()) {
+        for (Object key : worldMap.mapDecorations.keySet()) {
             // If this cursor is for a player check visibility with vanish system
             Player other = Bukkit.getPlayerExact((String) key);
             if (other != null && !player.canSee(other)) {
                 continue;
             }
 
-            MapIcon decoration = (MapIcon) worldMap.decorations.get(key);
-            cursors.addCursor(decoration.getX(), decoration.getY(), (byte) (decoration.getRotation() & 15), decoration.getType());
+            MapDecoration decoration = (MapDecoration) worldMap.mapDecorations.get(key);
+            cursors.addCursor(decoration.getX(), decoration.getY(), (byte) (decoration.getRotation() & 15), decoration.getImage());
         }
     }
 
