@@ -56,12 +56,12 @@ public class CraftCreeper extends CraftMonster implements Creeper {
     public void setExplosionRadius(int radius) {
         Preconditions.checkArgument(radius >= 0, "radius < 0");
 
-        getHandle().explosionRadius = radius;
+        getHandle().explosionRadius = radius; //TODO AT
     }
 
     @Override
     public int getExplosionRadius() {
-        return getHandle().explosionRadius;
+        return getHandle().explosionRadius; //TODO AT
     }
 
     @Override

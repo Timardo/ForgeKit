@@ -17,7 +17,6 @@ public class CraftInventoryView extends InventoryView {
     private final CraftInventory viewing;
 
     public CraftInventoryView(HumanEntity player, Inventory viewing, Container container) {
-        // TODO: Should we make sure it really IS a CraftHumanEntity first? And a CraftInventory?
         this.player = (CraftHumanEntity) player;
         this.viewing = (CraftInventory) viewing;
         this.container = container;
@@ -51,9 +50,9 @@ public class CraftInventoryView extends InventoryView {
     public void setItem(int slot, ItemStack item) {
         net.minecraft.item.ItemStack stack = CraftItemStack.asNMSCopy(item);
         if (slot != -999) {
-            container.getSlot(slot).set(stack);
+            container.getSlot(slot).putStack(stack);
         } else {
-            player.getHandle().drop(stack, false);
+            player.getHandle().dropItem(stack, false);
         }
     }
 
@@ -62,7 +61,7 @@ public class CraftInventoryView extends InventoryView {
         if (slot == -999) {
             return null;
         }
-        return CraftItemStack.asCraftMirror(container.getSlot(slot).getItem());
+        return CraftItemStack.asCraftMirror(container.getSlot(slot).getStack());
     }
 
     public boolean isInTop(int rawSlot) {
@@ -122,18 +121,17 @@ public class CraftInventoryView extends InventoryView {
                 }
                 break;
             default:
-                // Nothing to do, it's a CONTAINER slot
             }
         } else {
             if (slot == -999 || slot == -1) {
                 type = SlotType.OUTSIDE;
-            } else if (inventory.getType() == InventoryType.CRAFTING) { // Also includes creative inventory
+            } else if (inventory.getType() == InventoryType.CRAFTING) {
                 if (slot < 9) {
                     type = SlotType.ARMOR;
                 } else if (slot > 35) {
                     type = SlotType.QUICKBAR;
                 }
-            } else if (slot >= (inventory.countSlots() - (9 + 4 + 1))) { // Quickbar, Armor, Offhand
+            } else if (slot >= (inventory.countSlots() - (9 + 4 + 1))) {
                 type = SlotType.QUICKBAR;
             }
         }

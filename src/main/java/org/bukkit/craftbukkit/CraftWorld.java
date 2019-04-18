@@ -335,7 +335,7 @@ public class CraftWorld implements World {
         }
 
         // If chunk had previously been queued to save, must do save to avoid loss of that data
-        return world.getChunkProvider().unloadChunk(chunk, chunk.mustSave || save); //TODO
+        return world.getChunkProvider().unloadChunk(chunk, chunk.mustSave || save); //TODO impl
     }
 
     public boolean regenerateChunk(int x, int z) {
@@ -358,7 +358,7 @@ public class CraftWorld implements World {
             world.getChunkProvider().id2ChunkMap.put(chunkKey, chunk);
 
             chunk.onLoad();
-            chunk.populate(world.getChunkProvider(), world.getChunkProvider().chunkGenerator, true); //TODO
+            chunk.populate(world.getChunkProvider(), world.getChunkProvider().chunkGenerator, true); //TODO impl
 
             refreshChunk(x, z);
         }
@@ -387,7 +387,7 @@ public class CraftWorld implements World {
     }
 
     public boolean isChunkInUse(int x, int z) {
-        return world.getPlayerChunkMap().isChunkInUse(x, z); //TODO
+        return world.getPlayerChunkMap().isChunkInUse(x, z); //TODO impl
     }
 
     public boolean loadChunk(int x, int z, boolean generate) {
@@ -406,7 +406,7 @@ public class CraftWorld implements World {
 
     public void loadChunk(Chunk chunk) {
         loadChunk(chunk.getX(), chunk.getZ());
-        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().bukkitChunk = chunk; //TODO
+        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().bukkitChunk = chunk; //TODO impl
     }
 
     public WorldServer getHandle() {
@@ -418,10 +418,10 @@ public class CraftWorld implements World {
         Validate.isTrue(item.getTypeId() != 0, "Cannot drop AIR.");
         EntityItem entity = new EntityItem(world, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         entity.setPickupDelay(10);
-        world.spawnEntity(entity, SpawnReason.CUSTOM); //TODO
+        world.spawnEntity(entity, SpawnReason.CUSTOM); //TODO impl
         // TODO this is inconsistent with how Entity.getBukkitEntity() works.
         // However, this entity is not at the moment backed by a server entity class so it may be left.
-        return new CraftItem(world.getServer(), entity); //TODO
+        return new CraftItem(world.getServer(), entity); //TODO impl
     }
 
     private static void randomLocationWithinBlock(Location loc, double xs, double ys, double zs) {
@@ -472,7 +472,7 @@ public class CraftWorld implements World {
         EntityArrow arrow;
         if (TippedArrow.class.isAssignableFrom(clazz)) {
             arrow = new EntityTippedArrow(world);
-            ((EntityTippedArrow) arrow).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false))); //TODO
+            ((EntityTippedArrow) arrow).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false))); //TODO impl
         } else if (SpectralArrow.class.isAssignableFrom(clazz)) {
             arrow = new EntitySpectralArrow(world);
         } else {
@@ -482,7 +482,7 @@ public class CraftWorld implements World {
         arrow.setLocationAndAngles(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         arrow.shoot(velocity.getX(), velocity.getY(), velocity.getZ(), speed, spread);
         world.spawnEntity(arrow);
-        return (T) arrow.getBukkitEntity(); //TODO
+        return (T) arrow.getBukkitEntity(); //TODO impl
     }
 
     public Entity spawnEntity(Location loc, EntityType entityType) {
@@ -572,13 +572,13 @@ public class CraftWorld implements World {
     }
 
     public boolean generateTree(Location loc, TreeType type, BlockChangeDelegate delegate) {
-        world.captureTreeGeneration = true;  //TODO
-        world.captureBlockStates = true; //TODO
+        world.captureTreeGeneration = true;  //TODO impl
+        world.captureBlockStates = true; //TODO impl
         boolean grownTree = generateTree(loc, type);
-        world.captureBlockStates = false; //TODO
-        world.captureTreeGeneration = false; //TODO
+        world.captureBlockStates = false; //TODO impl
+        world.captureTreeGeneration = false; //TODO impl
         if (grownTree) { // Copy block data to delegate
-            for (BlockState blockstate : world.capturedBlockStates) { //TODO
+            for (BlockState blockstate : world.capturedBlockStates) { //TODO impl
                 int x = blockstate.getX();
                 int y = blockstate.getY();
                 int z = blockstate.getZ();
@@ -591,10 +591,10 @@ public class CraftWorld implements World {
                 IBlockState newBlock = world.getBlockState(position);
                 world.markAndNotifyBlock(position, null, oldBlock, newBlock, flag);
             }
-            world.capturedBlockStates.clear(); //TODO
+            world.capturedBlockStates.clear(); //TODO impl
             return true;
         } else {
-            world.capturedBlockStates.clear(); //TODO
+            world.capturedBlockStates.clear(); //TODO impl
             return false;
         }
     }
@@ -613,7 +613,7 @@ public class CraftWorld implements World {
     }
 
     public UUID getUID() {
-        return world.getSaveHandler().getUUID(); //TODO
+        return world.getSaveHandler().getUUID(); //TODO impl
     }
 
     @Override
@@ -640,12 +640,11 @@ public class CraftWorld implements World {
     public void setFullTime(long time) {
         world.setWorldTime(time);
 
-        // Forces the client to update to the new time immediately
         for (Player p : getPlayers()) {
             CraftPlayer cp = (CraftPlayer) p;
             if (cp.getHandle().connection == null) continue;
 
-            cp.getHandle().connection.sendPacket(new SPacketTimeUpdate(cp.getHandle().world.getWorldTime(), cp.getHandle().getPlayerTime(), cp.getHandle().world.getGameRules().getBoolean("doDaylightCycle"))); //TODO
+            cp.getHandle().connection.sendPacket(new SPacketTimeUpdate(cp.getHandle().world.getWorldTime(), cp.getHandle().getPlayerTime(), cp.getHandle().world.getGameRules().getBoolean("doDaylightCycle"))); //TODO impl
         }
     }
 
@@ -658,7 +657,7 @@ public class CraftWorld implements World {
     }
 
     public boolean createExplosion(double x, double y, double z, float power, boolean setFire, boolean breakBlocks) {
-        return !world.newExplosion(null, x, y, z, power, setFire, breakBlocks).wasCanceled; //TODO
+        return !world.newExplosion(null, x, y, z, power, setFire, breakBlocks).wasCanceled; //TODO impl
     }
 
     public boolean createExplosion(Location loc, float power) {
@@ -678,13 +677,13 @@ public class CraftWorld implements World {
             environment = env;
             switch (env) {
                 case NORMAL:
-                    world.provider = new WorldProviderSurface(); //TODO
+                    world.provider = new WorldProviderSurface(); //TODO AT -f
                     break;
                 case NETHER:
-                    world.provider = new WorldProviderHell(); //TODO
+                    world.provider = new WorldProviderHell(); //TODO AT -f
                     break;
                 case THE_END:
-                    world.provider = new WorldProviderEnd(); //TODO
+                    world.provider = new WorldProviderEnd(); //TODO AT -f
                     break;
             }
         }
@@ -754,7 +753,7 @@ public class CraftWorld implements World {
         for (Object o : world.loadedEntityList) {
             if (o instanceof net.minecraft.entity.Entity) {
                 net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
-                Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO
+                Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO impl
 
                 // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null) {
@@ -772,7 +771,7 @@ public class CraftWorld implements World {
         for (Object o : world.loadedEntityList) {
             if (o instanceof net.minecraft.entity.Entity) {
                 net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
-                Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO
+                Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO impl
 
                 // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null && bukkitEntity instanceof LivingEntity) {
@@ -796,7 +795,7 @@ public class CraftWorld implements World {
 
         for (Object entity: world.loadedEntityList) {
             if (entity instanceof net.minecraft.entity.Entity) {
-                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity(); //TODO
+                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity(); //TODO impl
 
                 if (bukkitEntity == null) {
                     continue;
@@ -818,7 +817,7 @@ public class CraftWorld implements World {
 
         for (Object entity: world.loadedEntityList) {
             if (entity instanceof net.minecraft.entity.Entity) {
-                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity(); //TODO
+                Entity bukkitEntity = ((net.minecraft.entity.Entity) entity).getBukkitEntity(); //TODO impl
 
                 if (bukkitEntity == null) {
                     continue;
@@ -848,7 +847,7 @@ public class CraftWorld implements World {
         List<net.minecraft.entity.Entity> entityList = getHandle().getEntitiesInAABBexcluding((net.minecraft.entity.Entity) null, bb, null);
         List<Entity> bukkitEntityList = new ArrayList<org.bukkit.entity.Entity>(entityList.size());
         for (Object entity : entityList) {
-            bukkitEntityList.add(((net.minecraft.entity.Entity) entity).getBukkitEntity()); //TODO
+            bukkitEntityList.add(((net.minecraft.entity.Entity) entity).getBukkitEntity()); //TODO impl
         }
         return bukkitEntityList;
     }
@@ -857,7 +856,7 @@ public class CraftWorld implements World {
         List<Player> list = new ArrayList<Player>(world.playerEntities.size());
 
         for (EntityPlayer human : world.playerEntities) {
-            HumanEntity bukkitEntity = human.getBukkitEntity(); //TODO
+            HumanEntity bukkitEntity = human.getBukkitEntity(); //TODO impl
 
             if ((bukkitEntity != null) && (bukkitEntity instanceof Player)) {
                 list.add((Player) bukkitEntity);
@@ -890,7 +889,7 @@ public class CraftWorld implements World {
     }
 
     public void setDifficulty(Difficulty difficulty) {
-        this.getHandle().worldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getValue())); //TODO
+        this.getHandle().worldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getValue())); //TODO AT
     }
 
     public Difficulty getDifficulty() {
@@ -906,8 +905,8 @@ public class CraftWorld implements World {
     }
 
     public void setStorm(boolean hasStorm) {
-        world.worldInfo.setStorm(hasStorm); //TODO
-        setWeatherDuration(0); // Reset weather duration (legacy behavior)
+        world.worldInfo.setStorm(hasStorm); //TODO AT
+        setWeatherDuration(0);
     }
 
     public int getWeatherDuration() {
@@ -915,7 +914,7 @@ public class CraftWorld implements World {
     }
 
     public void setWeatherDuration(int duration) {
-        world.worldInfo.setWeatherDuration(duration); //TODO
+        world.worldInfo.setWeatherDuration(duration); //TODO AT
     }
 
     public boolean isThundering() {
@@ -923,8 +922,8 @@ public class CraftWorld implements World {
     }
 
     public void setThundering(boolean thundering) {
-        world.worldInfo.setThundering(thundering); //TODO
-        setThunderDuration(0); // Reset weather duration (legacy behaviour)
+        world.worldInfo.setThundering(thundering); //TODO AT
+        setThunderDuration(0);
     }
 
     public int getThunderDuration() {
@@ -932,7 +931,7 @@ public class CraftWorld implements World {
     }
 
     public void setThunderDuration(int duration) {
-        world.worldInfo.setThunderDuration(duration); //TODO
+        world.worldInfo.setThunderDuration(duration); //TODO AT
     }
 
     public long getSeed() {
@@ -940,11 +939,11 @@ public class CraftWorld implements World {
     }
 
     public boolean getPVP() {
-        return world.pvpMode; //TODO
+        return world.pvpMode; //TODO impl
     }
 
     public void setPVP(boolean pvp) {
-        world.pvpMode = pvp; //TODO
+        world.pvpMode = pvp; //TODO impl
     }
 
     public void playEffect(Player player, Effect effect, int data) {
@@ -1013,8 +1012,8 @@ public class CraftWorld implements World {
         EntityFallingBlock entity = new EntityFallingBlock(world, location.getX(), location.getY(), location.getZ(), CraftMagicNumbers.getBlock(material).fromLegacyData(data));
         entity.ticksExisted = 1;
 
-        world.spawnEntity(entity, SpawnReason.CUSTOM); //TODO
-        return (FallingBlock) entity.getBukkitEntity(); //TODO
+        world.spawnEntity(entity, SpawnReason.CUSTOM); //TODO impl
+        return (FallingBlock) entity.getBukkitEntity(); //TODO impl
     }
 
     public FallingBlock spawnFallingBlock(Location location, int blockId, byte blockData) throws IllegalArgumentException {
@@ -1049,7 +1048,7 @@ public class CraftWorld implements World {
             } else if (Arrow.class.isAssignableFrom(clazz)) {
                 if (TippedArrow.class.isAssignableFrom(clazz)) {
                     entity = new EntityTippedArrow(world);
-                    ((EntityTippedArrow) entity).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false))); //TODO
+                    ((EntityTippedArrow) entity).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false))); //TODO impl
                 } else if (SpectralArrow.class.isAssignableFrom(clazz)) {
                     entity = new EntitySpectralArrow(world);
                 } else {
@@ -1080,7 +1079,7 @@ public class CraftWorld implements World {
                 }
                 entity.setPositionAndRotation(x, y, z, yaw, pitch);
                 Vector direction = location.getDirection().multiply(10);
-                ((EntityFireball) entity).setDirection(direction.getX(), direction.getY(), direction.getZ()); //TODO
+                ((EntityFireball) entity).setDirection(direction.getX(), direction.getY(), direction.getZ()); //TODO impl
             } else if (ShulkerBullet.class.isAssignableFrom(clazz)) {
                 entity = new EntityShulkerBullet(world);
                 entity.setPositionAndRotation(x, y, z, yaw, pitch);
@@ -1267,7 +1266,7 @@ public class CraftWorld implements World {
                 net.minecraft.block.Block nmsBlock = CraftMagicNumbers.getBlock(block.getRelative(dir));
                 if (nmsBlock.getDefaultState().getMaterial().isSolid() || BlockRedstoneDiode.isDiode(nmsBlock.getDefaultState())) {
                     boolean taken = false;
-                    AxisAlignedBB bb = EntityHanging.calculateBoundingBox(null, pos, CraftBlock.blockFaceToNotch(dir).getOpposite(), width, height); //TODO
+                    AxisAlignedBB bb = EntityHanging.calculateBoundingBox(null, pos, CraftBlock.blockFaceToNotch(dir).getOpposite(), width, height); //TODO impl
                     List<net.minecraft.entity.Entity> list = (List<net.minecraft.entity.Entity>) world.getEntitiesWithinAABB(null, bb);
                     for (Iterator<net.minecraft.entity.Entity> it = list.iterator(); !taken && it.hasNext();) {
                         net.minecraft.entity.Entity e = it.next();
@@ -1340,11 +1339,11 @@ public class CraftWorld implements World {
         }
 
         if (function != null) {
-            function.accept((T) entity.getBukkitEntity()); //TODO
+            function.accept((T) entity.getBukkitEntity()); //TODO impl
         }
 
-        world.spawnEntity(entity, reason); //TODO
-        return (T) entity.getBukkitEntity(); //TODO
+        world.spawnEntity(entity, reason); //TODO impl
+        return (T) entity.getBukkitEntity(); //TODO impl
     }
 
     public <T extends Entity> T spawn(Location location, Class<T> clazz, Consumer<T> function, SpawnReason reason) throws IllegalArgumentException {
@@ -1378,11 +1377,11 @@ public class CraftWorld implements World {
     }
 
     public boolean getKeepSpawnInMemory() {
-        return world.keepSpawnInMemory; //TODO
+        return world.keepSpawnInMemory; //TODO impl
     }
 
     public void setKeepSpawnInMemory(boolean keepLoaded) {
-        world.keepSpawnInMemory = keepLoaded; //TODO
+        world.keepSpawnInMemory = keepLoaded; //TODO impl
         // Grab the worlds spawn chunk
         BlockPos chunkcoordinates = this.world.getSpawnPoint();
         int chunkCoordX = chunkcoordinates.getX() >> 4;
@@ -1451,19 +1450,19 @@ public class CraftWorld implements World {
     }
 
     public long getTicksPerAnimalSpawns() {
-        return world.ticksPerAnimalSpawns; //TODO
+        return world.ticksPerAnimalSpawns; //TODO impl
     }
 
     public void setTicksPerAnimalSpawns(int ticksPerAnimalSpawns) {
-        world.ticksPerAnimalSpawns = ticksPerAnimalSpawns; //TODO
+        world.ticksPerAnimalSpawns = ticksPerAnimalSpawns; //TODO impl
     }
 
     public long getTicksPerMonsterSpawns() {
-        return world.ticksPerMonsterSpawns; //TODO
+        return world.ticksPerMonsterSpawns; //TODO impl
     }
 
     public void setTicksPerMonsterSpawns(int ticksPerMonsterSpawns) {
-        world.ticksPerMonsterSpawns = ticksPerMonsterSpawns; //TODO
+        world.ticksPerMonsterSpawns = ticksPerMonsterSpawns; //TODO impl
     }
 
     public void setMetadata(String metadataKey, MetadataValue newMetadataValue) {
@@ -1558,7 +1557,7 @@ public class CraftWorld implements World {
         double z = loc.getZ();
 
         SPacketCustomSound packet = new SPacketCustomSound(sound, SoundCategory.valueOf(category.name()), x, y, z, volume, pitch);
-        world.getMinecraftServer().getPlayerList().sendPacketNearby(null, x, y, z, volume > 1.0F ? 16.0F * volume : 16.0D, this.world.dimension, packet); //TODO
+        world.getMinecraftServer().getPlayerList().sendPacketNearby(null, x, y, z, volume > 1.0F ? 16.0F * volume : 16.0D, this.world.dimension, packet); //TODO impl
     }
 
     public String getGameRuleValue(String rule) {
@@ -1652,7 +1651,7 @@ public class CraftWorld implements World {
         if (data != null && !particle.getDataType().isInstance(data)) {
             throw new IllegalArgumentException("data should be " + particle.getDataType() + " got " + data.getClass());
         }
-        getHandle().sendParticles( //TODO
+        getHandle().sendParticles( //TODO impl
                 null, // Sender
                 CraftParticle.toNMS(particle), // Particle
                 true, // Extended range
@@ -1685,7 +1684,7 @@ public class CraftWorld implements World {
             }
 
             // Already unloading?
-            if (cps.droppedChunksSet.contains(ChunkPos.asLong(chunk.x, chunk.z))) { //TODO
+            if (cps.droppedChunksSet.contains(ChunkPos.asLong(chunk.x, chunk.z))) { //TODO AT
                 continue;
             }
 

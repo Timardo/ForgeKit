@@ -69,7 +69,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         if (index < InventoryPlayer.getHotbarSize()) {
             index += 36;
         } else if (index > 39) {
-            index += 5; // Off hand
+            index += 5;
         } else if (index > 35) {
             index = 8 - (index - 36);
         }

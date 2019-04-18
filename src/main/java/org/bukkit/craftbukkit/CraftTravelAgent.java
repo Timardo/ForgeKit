@@ -17,7 +17,7 @@ public class CraftTravelAgent extends Teleporter implements TravelAgent {
 
     public CraftTravelAgent(WorldServer worldserver) {
         super(worldserver);
-        if (DEFAULT == null && worldserver.dimension == 0) { //TODO
+        if (DEFAULT == null && worldserver.dimension == 0) { //TODO impl
             DEFAULT = this;
         }
     }
@@ -29,7 +29,7 @@ public class CraftTravelAgent extends Teleporter implements TravelAgent {
             if (this.getCanCreatePortal() && this.createPortal(target)) {
                 found = this.findPortal(target);
             } else {
-                found = target; // fallback to original if unable to find or create
+                found = target;
             }
         }
 
@@ -39,14 +39,14 @@ public class CraftTravelAgent extends Teleporter implements TravelAgent {
     @Override
     public Location findPortal(Location location) {
     	Teleporter pta = ((CraftWorld) location.getWorld()).getHandle().getDefaultTeleporter();
-        BlockPos found = pta.findPortal(location.getX(), location.getY(), location.getZ(), this.getSearchRadius()); //TODO
+        BlockPos found = pta.findPortal(location.getX(), location.getY(), location.getZ(), this.getSearchRadius()); //TODO impl
         return found != null ? new Location(location.getWorld(), found.getX(), found.getY(), found.getZ(), location.getYaw(), location.getPitch()) : null;
     }
 
     @Override
     public boolean createPortal(Location location) {
     	Teleporter pta = ((CraftWorld) location.getWorld()).getHandle().getDefaultTeleporter();
-        return pta.createPortal(location.getX(), location.getY(), location.getZ(), this.getCreationRadius()); //TODO
+        return pta.createPortal(location.getX(), location.getY(), location.getZ(), this.getCreationRadius()); //TODO impl
     }
 
     @Override

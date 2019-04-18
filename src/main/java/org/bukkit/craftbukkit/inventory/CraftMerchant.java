@@ -46,7 +46,7 @@ public class CraftMerchant implements Merchant {
 
     @Override
     public MerchantRecipe getRecipe(int i) {
-        return merchant.getRecipes(null).get(i).asBukkit();
+        return merchant.getRecipes(null).get(i).asBukkit(); //TODO impl
     }
 
     @Override

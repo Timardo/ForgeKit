@@ -45,7 +45,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
         } else {
             getHandle().shootingEntity = null;
         }
-        getHandle().projectileSource = shooter;
+        getHandle().projectileSource = shooter; //TODO impl
     }
 
     @Override

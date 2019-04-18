@@ -20,8 +20,8 @@ public final class CraftIpBanEntry implements org.bukkit.BanEntry {
     public CraftIpBanEntry(String target, UserListIPBansEntry entry, UserListIPBans list) {
         this.list = list;
         this.target = target;
-        this.created = entry.getCreated() != null ? new Date(entry.getCreated().getTime()) : null; //TODO
-        this.source = entry.getSource(); //TODO
+        this.created = entry.getCreated() != null ? new Date(entry.getCreated().getTime()) : null; //TODO MD
+        this.source = entry.getSource(); //TODO MD
         this.expiration = entry.getBanEndDate() != null ? new Date(entry.getBanEndDate().getTime()) : null;
         this.reason = entry.getBanReason();
     }

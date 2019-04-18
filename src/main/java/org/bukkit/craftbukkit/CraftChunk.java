@@ -39,7 +39,7 @@ public class CraftChunk implements Chunk {
     }
 
     public World getWorld() {
-        return worldServer.getWorld(); //TODO
+        return worldServer.getWorld(); //TODO impl
     }
 
     public CraftWorld getCraftWorld() {
@@ -96,7 +96,7 @@ public class CraftChunk implements Chunk {
                     continue;
                 }
 
-                entities[index++] = CraftEntity.getEntity(((net.minecraft.entity.Entity)obj).world.getServer(), ((net.minecraft.entity.Entity) obj)); //TODO
+                entities[index++] = CraftEntity.getEntity(((net.minecraft.entity.Entity)obj).world.getServer(), ((net.minecraft.entity.Entity) obj)); //TODO impl
             }
         }
 
@@ -115,7 +115,7 @@ public class CraftChunk implements Chunk {
             }
 
             BlockPos position = (BlockPos) obj;
-            entities[index++] = worldServer.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()).getState(); //TODO
+            entities[index++] = worldServer.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()).getState(); //TODO impl
         }
 
         return entities;

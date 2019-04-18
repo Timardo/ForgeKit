@@ -42,7 +42,7 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
 
     @SuppressWarnings("deprecation")
 	public Profession getProfession() {
-        return Profession.values()[getHandle().getProfession() + 1]; // Offset by 1 from the zombie types
+        return Profession.values()[getHandle().getProfession() + 1];
     }
 
     @SuppressWarnings("deprecation")
@@ -150,7 +150,6 @@ public class CraftVillager extends CraftAgeable implements Villager, InventoryHo
     }
 
     static {
-        // build Career -> ID map
         int id = 0;
         for (Profession prof : Profession.values()) {
             List<Career> careers = prof.getCareers();

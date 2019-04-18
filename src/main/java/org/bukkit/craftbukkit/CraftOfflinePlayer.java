@@ -169,7 +169,7 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     private NBTTagCompound getData() {
-        return storage.getPlayerData(getUniqueId().toString()); //TODO
+        return storage.getPlayerData(getUniqueId().toString()); //TODO MD
     }
 
     private NBTTagCompound getBukkitData() {
@@ -186,7 +186,7 @@ public class CraftOfflinePlayer implements OfflinePlayer, ConfigurationSerializa
     }
 
     private File getDataFile() {
-        return new File(storage.getPlayerDir(), getUniqueId() + ".dat"); //TODO
+        return new File(storage.getPlayerDir(), getUniqueId() + ".dat"); //TODO MD
     }
 
     public long getFirstPlayed() {

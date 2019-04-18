@@ -109,6 +109,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("deprecation")
 @DelegateDeserialization(CraftOfflinePlayer.class)
 public class CraftPlayer extends CraftHumanEntity implements Player {
     private long firstPlayed = 0;
@@ -256,8 +257,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setCompassTarget(Location loc) {
         if (getHandle().connection == null) return;
-
-        // Do not directly assign here, from the packethandler we'll assign it.
         getHandle().connection.sendPacket(new SPacketSpawnPosition(new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
     }
 
@@ -474,35 +473,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
         if (getHandle().connection == null) return false;
-
-        /*
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
-
-        int cx = x >> 4;
-        int cz = z >> 4;
-
-        if (sx <= 0 || sy <= 0 || sz <= 0) {
-            return false;
-        }
-
-        if ((x + sx - 1) >> 4 != cx || (z + sz - 1) >> 4 != cz || y < 0 || y + sy > 128) {
-            return false;
-        }
-
-        if (data.length != (sx * sy * sz * 5) / 2) {
-            return false;
-        }
-
-        Packet51MapChunk packet = new Packet51MapChunk(x, y, z, sx, sy, sz, data);
-
-        getHandle().playerConnection.sendPacket(packet);
-
-        return true;
-        */
-
-        throw new NotImplementedException("Chunk changes do not yet work"); // TODO: Chunk changes.
+        throw new NotImplementedException("Chunk changes do not yet work");
     }
 
     @Override
@@ -541,36 +512,26 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             return false;
         }
 
-        // From = Players current Location
         Location from = this.getLocation();
-        // To = Players new Location if Teleport is Successful
         Location to = location;
-        // Create & Call the Teleport Event.
         PlayerTeleportEvent event = new PlayerTeleportEvent(this, from, to, cause);
         server.getPluginManager().callEvent(event);
 
-        // Return False to inform the Plugin that the Teleport was unsuccessful/cancelled.
         if (event.isCancelled()) {
             return false;
         }
 
-        // If this player is riding another entity, we must dismount before teleporting.
         entity.dismountRidingEntity();
 
-        // Update the From Location
         from = event.getFrom();
-        // Grab the new To Location dependent on whether the event was cancelled.
         to = event.getTo();
-        // Grab the To and From World Handles.
         WorldServer fromWorld = ((CraftWorld) from.getWorld()).getHandle();
         WorldServer toWorld = ((CraftWorld) to.getWorld()).getHandle();
 
-        // Close any foreign inventory
         if (getHandle().openContainer != getHandle().inventoryContainer) {
             getHandle().closeScreen();
         }
 
-        // Check if the fromWorld and toWorld are the same.
         if (fromWorld == toWorld) {
             entity.connection.teleport(to); //TODO MD
         } else {
@@ -838,7 +799,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public GameMode getGameMode() {
-        return GameMode.getByValue(getHandle().interactionManager.getGameMode().getId());
+        return GameMode.getByValue(getHandle().interactionManager.getGameType().getID());
     }
 
     @Override
@@ -920,7 +881,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         BlockPos bed = getHandle().getBedLocation();
 
         if (world != null && bed != null) {
-            bed = EntityPlayer.getBed(((CraftWorld) world).getHandle(), bed, getHandle().isSpawnForced());
+            bed = EntityPlayer.getBedSpawnLocation(((CraftWorld) world).getHandle(), bed, getHandle().isSpawnForced());
             if (bed != null) {
                 return new Location(world, bed.getX(), bed.getY(), bed.getZ());
             }
@@ -969,8 +930,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         Set<WeakReference<Plugin>> hidingPlugins = hiddenPlayers.get(player.getUniqueId());
         if (hidingPlugins != null) {
-            // Some plugins are already hiding the player. Just mark that this
-            // plugin wants the player hidden too and end.
             hidingPlugins.add(getPluginWeakReference(plugin));
             return;
         }
@@ -978,7 +937,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         hidingPlugins.add(getPluginWeakReference(plugin));
         hiddenPlayers.put(player.getUniqueId(), hidingPlugins);
 
-        // Remove this player from the hidden player's EntityTrackerEntry
         EntityTracker tracker = ((WorldServer) entity.world).getEntityTracker();
         EntityPlayerMP other = ((CraftPlayer) player).getHandle();
         EntityTrackerEntry entry = tracker.trackedEntityHashTable.get(other.getEntityId()); //TODO AT
@@ -986,7 +944,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             entry.updatePlayerEntity(getHandle());
         }
 
-        // Remove the hidden player from this player user list, if they're on it
         if (other.sentListPacket) { //TODO impl
             getHandle().connection.sendPacket(new SPacketPlayerListItem(SPacketPlayerListItem.Action.REMOVE_PLAYER, other));
         }
@@ -1001,8 +958,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void showPlayer(Plugin plugin, Player player) {
         Validate.notNull(plugin, "Plugin cannot be null");
-        // Don't require that plugin be enabled. A plugin must be allowed to call
-        // showPlayer during its onDisable() method.
         showPlayer0(plugin, player);
     }
 
@@ -1013,11 +968,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         Set<WeakReference<Plugin>> hidingPlugins = hiddenPlayers.get(player.getUniqueId());
         if (hidingPlugins == null) {
-            return; // Player isn't hidden
+            return;
         }
         hidingPlugins.remove(getPluginWeakReference(plugin));
         if (!hidingPlugins.isEmpty()) {
-            return; // Some other plugins still want the player hidden
+            return;
         }
         hiddenPlayers.remove(player.getUniqueId());
 
@@ -1422,7 +1377,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         injectScaledMaxHealth(set, true);
 
-        // SPIGOT-3813: Attributes before health
         if (getHandle().connection != null) {
             getHandle().connection.sendPacket(new SPacketEntityProperties(getHandle().getEntityId(), set));
             sendHealthUpdate();

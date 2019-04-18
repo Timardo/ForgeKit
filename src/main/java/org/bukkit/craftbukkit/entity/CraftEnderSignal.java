@@ -3,8 +3,6 @@ package org.bukkit.craftbukkit.entity;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.item.EntityEnderEye;
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.EntityEnderSignal;
 import net.minecraft.util.math.BlockPos;
 
 import org.bukkit.Location;
@@ -40,7 +38,7 @@ public class CraftEnderSignal extends CraftEntity implements EnderSignal {
     @Override
     public void setTargetLocation(Location location) {
         Preconditions.checkArgument(getWorld().equals(location.getWorld()), "Cannot target EnderSignal across worlds");
-        getHandle().a(new BlockPos(location.getX(), location.getY(), location.getZ()));
+        getHandle().moveTowards(new BlockPos(location.getX(), location.getY(), location.getZ()));
     }
 
     @Override

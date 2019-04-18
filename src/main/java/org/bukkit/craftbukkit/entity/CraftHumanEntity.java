@@ -208,13 +208,12 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
 
-    @SuppressWarnings("incomplete-switch") //TODO open custom inventory
+    @SuppressWarnings("incomplete-switch")
 	public InventoryView openInventory(Inventory inventory) {
         if(!(getHandle() instanceof EntityPlayer)) return null;
         EntityPlayerMP player = (EntityPlayerMP) getHandle();
         InventoryType type = inventory.getType();
         Container formerContainer = getHandle().inventoryContainer;
-
         IInventory iinventory = (inventory instanceof CraftInventory) ? ((CraftInventory) inventory).getInventory() : new org.bukkit.craftbukkit.inventory.InventoryWrapper(inventory);
 
         switch (type) {
@@ -349,7 +348,6 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
             location = getLocation();
         }
 
-        // If there isn't an enchant table we can force create one, won't be very useful though.
         BlockPos pos = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         TileEntity container = getHandle().world.getTileEntity(pos);
         if (container == null && force) {
@@ -366,10 +364,9 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     }
 
     public void openInventory(InventoryView inventory) {
-        if (!(getHandle() instanceof EntityPlayer)) return; // TODO: NPC support?
+        if (!(getHandle() instanceof EntityPlayer)) return;
         if (((EntityPlayerMP) getHandle()).connection == null) return;
         if (getHandle().inventoryContainer != getHandle().inventoryContainer) {
-            // fire INVENTORY_CLOSE if one already open
             ((EntityPlayerMP)getHandle()).connection.processCloseWindow(new CPacketCloseWindow(getHandle().inventoryContainer.windowId));
         }
         EntityPlayerMP player = (EntityPlayerMP) getHandle();
@@ -380,13 +377,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
             container = new CraftContainer(inventory, this.getHandle(), player.getNextWindowIdCB()); //TODO MD
         }
 
-        // Trigger an INVENTORY_OPEN event
         container = CraftEventFactory.callInventoryOpenEvent(player, container);
         if (container == null) {
             return;
         }
 
-        // Now open the window
         InventoryType type = inventory.getType();
         String windowType = CraftContainer.getNotchInventoryType(type);
         String title = inventory.getTitle();
@@ -410,7 +405,6 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         if (!force && merchant.isTrading()) {
             return null;
         } else if (merchant.isTrading()) {
-            // we're not supposed to have multiple people using the same merchant, so we have to close it.
             merchant.getTrader().closeInventory();
         }
 
@@ -454,7 +448,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     public boolean hasCooldown(Material material) {
         Preconditions.checkArgument(material != null, "material");
 
-        return getHandle().getCooldownTracker().a(CraftMagicNumbers.getItem(material));
+        return getHandle().getCooldownTracker().hasCooldown(CraftMagicNumbers.getItem(material));
     }
 
     @Override
@@ -462,7 +456,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         Preconditions.checkArgument(material != null, "material");
 
         CooldownTracker.Cooldown cooldown = getHandle().getCooldownTracker().cooldowns.get(CraftMagicNumbers.getItem(material)); //TODO AT
-        return (cooldown == null) ? 0 : Math.max(0, cooldown.expireTicks - getHandle().getCooldownTracker().ticks);
+        return (cooldown == null) ? 0 : Math.max(0, cooldown.expireTicks - getHandle().getCooldownTracker().ticks); //TODO AT
     }
 
     @Override

@@ -133,7 +133,8 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
         getHandle().setColor(color.asRGB());
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean addCustomEffect(PotionEffect effect, boolean override) {
         int effectId = effect.getType().getId();
         net.minecraft.potion.PotionEffect existing = null;
@@ -149,7 +150,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
             getHandle().effects.remove(existing); //TODO AT
         }
         getHandle().addEffect(CraftPotionUtil.fromBukkit(effect));
-        getHandle().refreshEffects(); //TODO imlp
+        getHandle().refreshEffects(); //TODO impl
         return true;
     }
 
@@ -183,7 +184,8 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
         return !getHandle().effects.isEmpty(); //TODO AT
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean removeCustomEffect(PotionEffectType effect) {
         int effectId = effect.getId();
         net.minecraft.potion.PotionEffect existing = null;

@@ -35,7 +35,6 @@ public class CraftContainer extends Container {
     public CraftContainer(InventoryView view, EntityPlayer player, int id) {
         this.view = view;
         this.windowId = id;
-        // TODO: Do we need to check that it really is a CraftInventory?
         IInventory top = ((CraftInventory) view.getTopInventory()).getInventory();
         InventoryPlayer bottom = (InventoryPlayer) ((CraftInventory) view.getBottomInventory()).getInventory();
         cachedType = view.getType();
@@ -83,9 +82,7 @@ public class CraftContainer extends Container {
         if (cachedType == view.getType() && cachedSize == getSize() && cachedTitle.equals(view.getTitle())) {
             return true;
         }
-        // If the window type has changed for some reason, update the player
-        // This method will be called every tick or something, so it's
-        // as good a place as any to put something like this.
+
         boolean typeChanged = (cachedType != view.getType());
         cachedType = view.getType();
         cachedTitle = view.getTitle();
@@ -137,7 +134,7 @@ public class CraftContainer extends Container {
 	private void setupSlots(IInventory top, InventoryPlayer bottom, EntityPlayer entityhuman) {
         switch (cachedType) {
             case CREATIVE:
-                break; // TODO: This should be an error?
+                break;
             case PLAYER:
             case CHEST:
                 delegate = new ContainerChest(bottom, top, entityhuman);
@@ -149,9 +146,9 @@ public class CraftContainer extends Container {
             case FURNACE:
                 delegate = new ContainerFurnace(bottom, top);
                 break;
-            case CRAFTING: // TODO: This should be an error?
+            case CRAFTING:
             case WORKBENCH:
-                setupWorkbench(top, bottom); // SPIGOT-3812 - manually set up slots so we can use the delegated inventory and not the automatically created one
+                setupWorkbench(top, bottom);
                 break;
             case ENCHANTING:
                 delegate = new ContainerEnchantment(bottom, entityhuman.world, entityhuman.getPosition());
@@ -180,7 +177,6 @@ public class CraftContainer extends Container {
     }
 
     private void setupWorkbench(IInventory top, IInventory bottom) {
-        // This code copied from ContainerWorkbench
         this.addSlotToContainer(new Slot(top, 0, 124, 35));
 
         int row;
@@ -201,7 +197,6 @@ public class CraftContainer extends Container {
         for (col = 0; col < 9; ++col) {
             this.addSlotToContainer(new Slot(bottom, col, 8 + col * 18, 142));
         }
-        // End copy from ContainerWorkbench
     }
 
     @Override

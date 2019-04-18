@@ -18,14 +18,14 @@ public class CraftMerchantRecipe extends MerchantRecipe {
 
     public CraftMerchantRecipe(ItemStack result, int uses, int maxUses, boolean experienceReward) {
         super(result, uses, maxUses, experienceReward);
-        this.handle = new net.minecraft.village.MerchantRecipe(
+        this.handle = new net.minecraft.village.MerchantRecipe( //TODO impl
         		net.minecraft.item.ItemStack.EMPTY,
         		net.minecraft.item.ItemStack.EMPTY,
                 CraftItemStack.asNMSCopy(result),
                 uses,
                 maxUses,
                 this
-        ); //TODO impl
+        );
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CraftMerchantRecipe extends MerchantRecipe {
 
     @Override
     public void setExperienceReward(boolean flag) {
-        handle.rewardsExp = flag; //TODO
+        handle.rewardsExp = flag; //TODO AT
     }
 
     public net.minecraft.village.MerchantRecipe toMinecraft() {

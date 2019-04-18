@@ -41,7 +41,6 @@ public class CraftHanging extends CraftEntity implements Hanging {
                 break;
         }
         if (!force && !hanging.onValidSurface()) {
-            // Revert since it doesn't fit
             hanging.updateFacingWithBoundingBox(dir); //TODO AT
             return false;
         }

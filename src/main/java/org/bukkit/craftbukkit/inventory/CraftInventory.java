@@ -293,59 +293,43 @@ public class CraftInventory implements Inventory {
         Validate.noNullElements(items, "Item cannot be null");
         HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
-        /* TODO: some optimization
-         *  - Create a 'firstPartial' with a 'fromIndex'
-         *  - Record the lastPartial per Material
-         *  - Cache firstEmpty result
-         */
-
         for (int i = 0; i < items.length; i++) {
             ItemStack item = items[i];
             while (true) {
-                // Do we already have a stack of it?
                 int firstPartial = firstPartial(item);
 
-                // Drat! no partial stack
                 if (firstPartial == -1) {
-                    // Find a free spot!
                     int firstFree = firstEmpty();
 
                     if (firstFree == -1) {
-                        // No space at all!
                         leftover.put(i, item);
                         break;
                     } else {
-                        // More than a single stack!
                         if (item.getAmount() > getMaxItemStack()) {
                             CraftItemStack stack = CraftItemStack.asCraftCopy(item);
                             stack.setAmount(getMaxItemStack());
                             setItem(firstFree, stack);
                             item.setAmount(item.getAmount() - getMaxItemStack());
                         } else {
-                            // Just store it
                             setItem(firstFree, item);
                             break;
                         }
                     }
                 } else {
-                    // So, apparently it might only partially fit, well lets do just that
+
                     ItemStack partialItem = getItem(firstPartial);
 
                     int amount = item.getAmount();
                     int partialAmount = partialItem.getAmount();
                     int maxAmount = partialItem.getMaxStackSize();
 
-                    // Check if it fully fits
                     if (amount + partialAmount <= maxAmount) {
                         partialItem.setAmount(amount + partialAmount);
-                        // To make sure the packet is sent to the client
                         setItem(firstPartial, partialItem);
                         break;
                     }
 
-                    // It fits partially
                     partialItem.setAmount(maxAmount);
-                    // To make sure the packet is sent to the client
                     setItem(firstPartial, partialItem);
                     item.setAmount(amount + partialAmount - maxAmount);
                 }
@@ -358,8 +342,6 @@ public class CraftInventory implements Inventory {
         Validate.notNull(items, "Items cannot be null");
         HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
-        // TODO: optimization
-
         for (int i = 0; i < items.length; i++) {
             ItemStack item = items[i];
             int toDelete = item.getAmount();
@@ -367,7 +349,6 @@ public class CraftInventory implements Inventory {
             while (true) {
                 int first = first(item, false);
 
-                // Drat! we don't have this type in the inventory
                 if (first == -1) {
                     item.setAmount(toDelete);
                     leftover.put(i, item);
@@ -378,17 +359,14 @@ public class CraftInventory implements Inventory {
 
                     if (amount <= toDelete) {
                         toDelete -= amount;
-                        // clear the slot, all used up
                         clear(first);
                     } else {
-                        // split the stack and store
                         itemStack.setAmount(amount - toDelete);
                         setItem(first, itemStack);
                         toDelete = 0;
                     }
                 }
 
-                // Bail when done
                 if (toDelete <= 0) {
                     break;
                 }
@@ -442,7 +420,7 @@ public class CraftInventory implements Inventory {
 
     public ListIterator<ItemStack> iterator(int index) {
         if (index < 0) {
-            index += getSize() + 1; // ie, with -1, previous() will return the last element
+            index += getSize() + 1;
         }
         return new InventoryIterator(this, index);
     }
@@ -456,7 +434,6 @@ public class CraftInventory implements Inventory {
     }
 
     public InventoryType getType() {
-        // Thanks to Droppers extending Dispensers, order is important.
         if (inventory instanceof InventoryCrafting) {
             return inventory.getSizeInventory() >= 9 ? InventoryType.WORKBENCH : InventoryType.CRAFTING;
         } else if (inventory instanceof InventoryPlayer) {

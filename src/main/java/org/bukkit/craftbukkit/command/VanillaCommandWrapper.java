@@ -21,6 +21,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
@@ -140,12 +141,12 @@ public final class VanillaCommandWrapper extends BukkitCommand {
             chatmessage3.getStyle().setColor(TextFormatting.RED);
             icommandlistener.sendMessage(chatmessage3);
             if (icommandlistener.getCommandSenderEntity() instanceof EntityMinecartCommandBlock) {
-                MinecraftServer.LOGGER.log(Level.WARN, String.format("MinecartCommandBlock at (%d,%d,%d) failed to handle command", icommandlistener.getPosition().getX(), icommandlistener.getPosition().getY(), icommandlistener.getPosition().getZ()), throwable);
+                FMLCommonHandler.instance().getMinecraftServerInstance().logWarning(String.format("MinecartCommandBlock at (%d,%d,%d) failed to handle command ", icommandlistener.getPosition().getX(), icommandlistener.getPosition().getY(), icommandlistener.getPosition().getZ()) + ExceptionUtils.getStackTrace(throwable));
             } else if(icommandlistener instanceof CommandBlockBaseLogic) {
             	CommandBlockBaseLogic listener = (CommandBlockBaseLogic) icommandlistener;
-                MinecraftServer.LOGGER.log(Level.WARN, String.format("CommandBlock at (%d,%d,%d) failed to handle command", listener.getPosition().getX(), listener.getPosition().getY(), listener.getPosition().getZ()), throwable);
+            	FMLCommonHandler.instance().getMinecraftServerInstance().logWarning(String.format("CommandBlock at (%d,%d,%d) failed to handle command ", listener.getPosition().getX(), listener.getPosition().getY(), listener.getPosition().getZ()) +  ExceptionUtils.getStackTrace(throwable));
             } else {
-                MinecraftServer.LOGGER.log(Level.WARN, String.format("Unknown CommandBlock failed to handle command"), throwable);
+            	FMLCommonHandler.instance().getMinecraftServerInstance().logWarning(String.format("Unknown CommandBlock failed to handle command ") + ExceptionUtils.getStackTrace(throwable));
             }
         } finally {
             icommandlistener.setCommandStat(CommandResultStats.Type.SUCCESS_COUNT, j);

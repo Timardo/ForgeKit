@@ -49,13 +49,11 @@ public final class CraftMagicNumbers implements UnsafeValues {
     }
 
     @Deprecated
-    // A bad method for bad magic.
     public static net.minecraft.block.Block getBlock(int id) {
         return getBlock(Material.getMaterial(id));
     }
 
     @Deprecated
-    // A bad method for bad magic.
     public static int getId(net.minecraft.block.Block block) {
         return net.minecraft.block.Block.getIdFromBlock(block);
     }
@@ -65,25 +63,21 @@ public final class CraftMagicNumbers implements UnsafeValues {
     }
 
     public static net.minecraft.item.Item getItem(Material material) {
-        // TODO: Don't use ID
     	net.minecraft.item.Item item = net.minecraft.item.Item.getItemById(material.getId());
         return item;
     }
 
     @Deprecated
-    // A bad method for bad magic.
     public static Item getItem(int id) {
         return Item.getItemById(id);
     }
 
     @Deprecated
-    // A bad method for bad magic.
     public static int getId(Item item) {
         return Item.getIdFromItem(item);
     }
 
     public static Material getMaterial(Item item) {
-        // TODO: Don't use ID
         Material material = Material.getMaterial(Item.getIdFromItem(item));
 
         if (material == null) {
@@ -97,7 +91,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
         if (material == null) {
             return null;
         }
-        // TODO: Don't use ID
         net.minecraft.block.Block block = net.minecraft.block.Block.getBlockById(material.getId());
 
         if (block == null) {
@@ -196,11 +189,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
         return file.delete();
     }
 
-    /**
-     * This helper class represents the different NBT Tags.
-     * <p>
-     * These should match NBTBase#getTypeId
-     */
     public static class NBT {
 
         public static final int TAG_END = 0;

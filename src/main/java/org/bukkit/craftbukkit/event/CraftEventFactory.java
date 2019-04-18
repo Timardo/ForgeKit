@@ -39,6 +39,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -101,10 +103,9 @@ import org.bukkit.event.vehicle.VehicleCreateEvent;
 public class CraftEventFactory {
     public static final DamageSource MELTING = CraftDamageSource.copyOf(DamageSource.ON_FIRE);
     public static final DamageSource POISON = CraftDamageSource.copyOf(DamageSource.MAGIC);
-    public static org.bukkit.block.Block blockDamage; // For use in EntityDamageByBlockEvent
-    public static Entity entityDamage; // For use in EntityDamageByEntityEvent
+    public static org.bukkit.block.Block blockDamage;
+    public static Entity entityDamage;
 
-    // helper methods
     private static boolean canBuild(CraftWorld world, Player player, int x, int z) {
         WorldServer worldServer = world.getHandle();
         int spawnSize = Bukkit.getServer().getSpawnRadius();
@@ -324,7 +325,7 @@ public class CraftEventFactory {
         org.bukkit.entity.AnimalTamer bukkitTamer = (tamer != null ? tamer.getBukkitEntity() : null); //TODO impl
         CraftServer craftServer = (CraftServer) bukkitEntity.getServer();
 
-        entity.persistenceRequired = true;
+        entity.persistenceRequired = true; //TODO AT
 
         EntityTameEvent event = new EntityTameEvent((LivingEntity) bukkitEntity, bukkitTamer);
         craftServer.getPluginManager().callEvent(event);
@@ -425,7 +426,7 @@ public class CraftEventFactory {
         CraftWorld world = (CraftWorld) entity.getWorld();
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        victim.expToDrop = event.getDroppedExp();
+        victim.expToDrop = event.getDroppedExp(); //TODO impl
 
         for (org.bukkit.inventory.ItemStack stack : event.getDrops()) {
             if (stack == null || stack.getType() == Material.AIR || stack.getAmount() == 0) continue;
@@ -479,7 +480,7 @@ public class CraftEventFactory {
             EntityDamageEvent event;
             if (damager == null) {
                 event = new EntityDamageByBlockEvent(null, entity.getBukkitEntity(), DamageCause.BLOCK_EXPLOSION, modifiers, modifierFunctions); //TODO impl
-            } else if (entity instanceof EntityDragon && /*PAIL FIXME ((EntityEnderDragon) entity).target == damager*/ false) {
+            } else if (entity instanceof EntityDragon && false) {
                 event = new EntityDamageEvent(entity.getBukkitEntity(), DamageCause.ENTITY_EXPLOSION, modifiers, modifierFunctions); //TODO impl
             } else {
                 if (damager instanceof org.bukkit.entity.TNTPrimed) {
@@ -643,7 +644,6 @@ public class CraftEventFactory {
         return handleEntityDamageEvent(damagee, source, modifiers, modifierFunctions);
     }
 
-    // Non-Living Entities such as EntityEnderCrystal and EntityFireball need to call this
     public static boolean handleNonLivingEntityDamageEvent(Entity entity, DamageSource source, double damage) {
         return handleNonLivingEntityDamageEvent(entity, source, damage, true);
     }
@@ -784,7 +784,7 @@ public class CraftEventFactory {
     }
 
     public static Container callInventoryOpenEvent(EntityPlayerMP player, Container container, boolean cancelled) {
-        if (player.openContainer != player.inventoryContainer) { // fire INVENTORY_CLOSE if one already open
+        if (player.openContainer != player.inventoryContainer) {
             player.connection.processCloseWindow(new CPacketCloseWindow(player.openContainer.windowId));
         }
 
@@ -872,7 +872,7 @@ public class CraftEventFactory {
             case DISPENSER:
                 cause = IgniteCause.FLINT_AND_STEEL;
                 break;
-            case FIRE: // Fire or any other unknown block counts as SPREAD.
+            case FIRE:
             default:
                 cause = IgniteCause.SPREAD;
         }
@@ -908,7 +908,7 @@ public class CraftEventFactory {
 
     public static BlockIgniteEvent callBlockIgniteEvent(World world, int x, int y, int z, Explosion explosion) {
         org.bukkit.World bukkitWorld = world.getWorld(); //TODO impl
-        org.bukkit.entity.Entity igniter = explosion.source == null ? null : explosion.source.getBukkitEntity(); //TODO impl
+        org.bukkit.entity.Entity igniter = explosion.source == null ? null : explosion.source.getBukkitEntity();
 
         BlockIgniteEvent event = new BlockIgniteEvent(bukkitWorld.getBlockAt(x, y, z), IgniteCause.EXPLOSION, igniter);
         world.getServer().getPluginManager().callEvent(event);
@@ -934,7 +934,6 @@ public class CraftEventFactory {
         player.world.getServer().getPluginManager().callEvent(editBookEvent);
         ItemStack itemInHand = player.inventory.getItem(itemInHandIndex);
 
-        // If they've got the same item in their hand, it'll need to be updated.
         if (itemInHand != null && itemInHand.getItem() == Items.WRITABLE_BOOK) {
             if (!editBookEvent.isCancelled()) {
                 if (editBookEvent.isSigning()) {
@@ -948,30 +947,29 @@ public class CraftEventFactory {
                 CraftItemStack.setItemMeta(itemInHand, meta);
             }
 
-            // Client will have updated its idea of the book item; we need to overwrite that
             Slot slot = player.activeContainer.getSlot(player.inventory, itemInHandIndex);
             player.playerConnection.sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, slot.rawSlotIndex, itemInHand));
         }
     }
 
-    private static IChatBaseComponent stripEvents(ITextComponent c) {
-        ChatModifier modi = c.getChatModifier();
+    private static ITextComponent stripEvents(ITextComponent c) {
+        Style modi = c.getStyle();
         if (modi != null) {
-            modi.setChatClickable(null);
-            modi.setChatHoverable(null);
+            modi.setClickEvent(null);
+            modi.setHoverEvent(null);
         }
-        c.setChatModifier(modi);
-        if (c instanceof ChatMessage) {
-            ChatMessage cm = (ChatMessage) c;
-            Object[] oo = cm.j();
+        c.setStyle(modi);
+        if (c instanceof TextComponentTranslation) {
+        	TextComponentTranslation cm = (TextComponentTranslation) c;
+            Object[] oo = cm.getFormatArgs();
             for (int i = 0; i < oo.length; i++) {
                 Object o = oo[i];
-                if (o instanceof IChatBaseComponent) {
-                    oo[i] = stripEvents((IChatBaseComponent) o);
+                if (o instanceof ITextComponent) {
+                    oo[i] = stripEvents((ITextComponent) o);
                 }
             }
         }
-        List<IChatBaseComponent> ls = c.a();
+        List<ITextComponent> ls = c.getSiblings();
         if (ls != null) {
             for (int i = 0; i < ls.size(); i++) {
                 ls.set(i, stripEvents(ls.get(i)));
@@ -1017,7 +1015,6 @@ public class CraftEventFactory {
                 case CROUCH_ONE_CM:
                 case TIME_SINCE_DEATH:
                 case SNEAK_TIME:
-                    // Do not process event for these - too spammy
                     return null;
                 default:
             }

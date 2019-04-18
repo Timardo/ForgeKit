@@ -21,8 +21,8 @@ public final class CraftProfileBanEntry implements org.bukkit.BanEntry {
     public CraftProfileBanEntry(GameProfile profile, UserListBansEntry entry, UserListBans list) {
         this.list = list;
         this.profile = profile;
-        this.created = entry.getCreated() != null ? new Date(entry.getCreated().getTime()) : null; //TODO
-        this.source = entry.getSource(); //TODO
+        this.created = entry.getCreated() != null ? new Date(entry.getCreated().getTime()) : null; //TODO MD
+        this.source = entry.getSource(); //TODO MD
         this.expiration = entry.getBanEndDate() != null ? new Date(entry.getBanEndDate().getTime()) : null;
         this.reason = entry.getBanReason();
     }

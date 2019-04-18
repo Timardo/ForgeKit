@@ -45,7 +45,7 @@ public class CraftStructureBlock extends CraftBlockEntityState<TileEntityStructu
 
     @Override
     public String getAuthor() {
-        return getSnapshot().author; //TODO AT use writeToNBT to get all these values?
+        return getSnapshot().author; //TODO AT
     }
 
     @Override

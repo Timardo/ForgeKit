@@ -30,7 +30,6 @@ public class CraftFirework extends CraftEntity implements Firework {
 
         this.item = CraftItemStack.asCraftMirror(item);
 
-        // Ensure the item is a firework...
         if (this.item.getType() != Material.FIREWORK) {
             this.item.setType(Material.FIREWORK);
         }
@@ -59,10 +58,7 @@ public class CraftFirework extends CraftEntity implements Firework {
     @Override
     public void setFireworkMeta(FireworkMeta meta) {
         item.setItemMeta(meta);
-
-        // Copied from EntityFireworks constructor, update firework lifetime/power
         getHandle().lifetime = 10 * (1 + meta.getPower()) + random.nextInt(6) + random.nextInt(7); //TODO AT
-
         getHandle().getDataManager().setDirty(EntityFireworkRocket.FIREWORK_ITEM); //TODO AT
     }
 

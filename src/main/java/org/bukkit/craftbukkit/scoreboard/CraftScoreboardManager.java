@@ -47,13 +47,11 @@ public final class CraftScoreboardManager implements ScoreboardManager {
         return scoreboard;
     }
 
-    // CraftBukkit method
     public CraftScoreboard getPlayerBoard(CraftPlayer player) {
         CraftScoreboard board = playerBoards.get(player);
         return (CraftScoreboard) (board == null ? getMainScoreboard() : board);
     }
 
-    // CraftBukkit method
     public void setPlayerBoard(CraftPlayer player, org.bukkit.scoreboard.Scoreboard bukkitScoreboard) throws IllegalArgumentException {
         Validate.isTrue(bukkitScoreboard instanceof CraftScoreboard, "Cannot set player scoreboard to an unregistered Scoreboard");
 
@@ -72,7 +70,6 @@ public final class CraftScoreboardManager implements ScoreboardManager {
             playerBoards.put(player, (CraftScoreboard) scoreboard);
         }
 
-        // Old objective tracking
         HashSet<ScoreObjective> removed = new HashSet<ScoreObjective>();
         for (int i = 0; i < 3; ++i) {
         	ScoreObjective scoreboardobjective = oldboard.getObjectiveInDisplaySlot(i);
@@ -82,23 +79,19 @@ public final class CraftScoreboardManager implements ScoreboardManager {
             }
         }
 
-        // Old team tracking
         Iterator<?> iterator = oldboard.getTeams().iterator();
         while (iterator.hasNext()) {
         	ScorePlayerTeam scoreboardteam = (ScorePlayerTeam) iterator.next();
             entityplayer.connection.sendPacket(new SPacketTeams(scoreboardteam, 1));
         }
 
-        // The above is the reverse of the below method.
         server.getPlayerList().sendScoreboard((ServerScoreboard) newboard, player.getHandle()); //TODO AT
     }
 
-    // CraftBukkit method
     public void removePlayer(Player player) {
         playerBoards.remove(player);
     }
 
-    // CraftBukkit method
     public Collection<Score> getScoreboardScores(IScoreCriteria criteria, String name, Collection<Score> collection) {
         for (CraftScoreboard scoreboard : scoreboards) {
             Scoreboard board = scoreboard.board;

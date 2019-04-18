@@ -68,9 +68,7 @@ public class CraftBlockProjectileSource implements BlockProjectileSource {
     @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> projectile, Vector velocity) {
         Validate.isTrue(getBlock().getType() == Material.DISPENSER, "Block is no longer dispenser");
-        // Copied from BlockDispenser.dispense()
         IBlockSource isourceblock = new BlockSourceImpl(dispenserBlock.getWorld(), dispenserBlock.getPos());
-        // Copied from DispenseBehaviorProjectile
         IPosition iposition = BlockDispenser.getDispensePosition(isourceblock);
         EnumFacing enumdirection = (EnumFacing) isourceblock.getBlockState().getValue(BlockDispenser.FACING);
         net.minecraft.world.World world = dispenserBlock.getWorld();
@@ -140,15 +138,12 @@ public class CraftBlockProjectileSource implements BlockProjectileSource {
             if (launch instanceof EntityThrowable) {
                 ((EntityThrowable) launch).projectileSource = this; //TODO impl
             }
-            // Values from DispenseBehaviorProjectile
             float a = 6.0F;
             float b = 1.1F;
             if (launch instanceof EntityPotion || launch instanceof ThrownExpBottle) {
-                // Values from respective DispenseBehavior classes
                 a *= 0.5F;
                 b *= 1.25F;
             }
-            // Copied from DispenseBehaviorProjectile
             ((IProjectile) launch).shoot((double) enumdirection.getFrontOffsetX(), (double) ((float) enumdirection.getFrontOffsetY() + 0.1F), (double) enumdirection.getFrontOffsetZ(), b, a);
         }
 

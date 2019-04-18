@@ -5,6 +5,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LlamaSpit;
 import org.bukkit.projectiles.ProjectileSource;
 
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.projectile.EntityLlamaSpit;
 
 public class CraftLlamaSpit extends AbstractProjectile implements LlamaSpit {
@@ -35,6 +36,6 @@ public class CraftLlamaSpit extends AbstractProjectile implements LlamaSpit {
 
     @Override
     public void setShooter(ProjectileSource source) {
-        getHandle().owner = (source != null) ? ((CraftLivingEntity) source).getHandle() : null; //TODO ?
+        getHandle().owner = (source != null) ? (EntityLlama)((CraftLivingEntity) source).getHandle() : null;
     }
 }

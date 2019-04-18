@@ -22,7 +22,8 @@ public abstract class CraftAbstractHorse extends CraftAnimals implements Abstrac
         return (net.minecraft.entity.passive.AbstractHorse) entity;
     }
 
-    public void setVariant(Horse.Variant variant) {
+    @SuppressWarnings("deprecation")
+	public void setVariant(Horse.Variant variant) {
         throw new UnsupportedOperationException("Not supported.");
     }
 

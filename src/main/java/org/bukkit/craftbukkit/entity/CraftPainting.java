@@ -33,7 +33,6 @@ public class CraftPainting extends CraftHanging implements Painting {
         painting.art = CraftArt.BukkitToNotch(art);
         painting.updateFacingWithBoundingBox(painting.facingDirection); //TODO AT
         if (!force && !painting.onValidSurface()) {
-            // Revert painting since it doesn't fit
             painting.art = oldArt;
             painting.updateFacingWithBoundingBox(painting.facingDirection); //TODO AT
             return false;
@@ -58,7 +57,7 @@ public class CraftPainting extends CraftHanging implements Painting {
         painting.art = getHandle().art;
         painting.updateFacingWithBoundingBox(getHandle().facingDirection); //TODO AT
         getHandle().setDead();
-        getHandle().velocityChanged = true; // because this occurs when the painting is broken, so it might be important
+        getHandle().velocityChanged = true;
         world.spawnEntity(painting);
         this.entity = painting;
     }
