@@ -64,7 +64,8 @@ public class HashTreeSet<V> implements Set<V> {
         return hash.toArray();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Object[] toArray(Object[] a) {
         return hash.toArray(a);
     }
@@ -82,24 +83,30 @@ public class HashTreeSet<V> implements Set<V> {
     }
 
     @Override
-    public boolean containsAll(Collection c) {
+    public boolean containsAll(Collection<?> c) {
         return hash.containsAll(c);
     }
 
-    @Override
-    public boolean addAll(Collection c) {
-        tree.addAll(c);
+//    @Override
+//    public boolean addAll(Collection<V> c) {
+//        tree.addAll(c);
+//        return hash.addAll(c);
+//    }
+    
+	@Override //TODO check if this is bad
+	public boolean addAll(Collection<? extends V> c) {
+		tree.addAll(c);
         return hash.addAll(c);
-    }
+	}
 
     @Override
-    public boolean retainAll(Collection c) {
+    public boolean retainAll(Collection<?> c) {
         tree.retainAll(c);
         return hash.retainAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection c) {
+    public boolean removeAll(Collection<?> c) {
         tree.removeAll(c);
         return hash.removeAll(c);
     }

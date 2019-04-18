@@ -15,8 +15,16 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
@@ -49,11 +57,11 @@ public final class CraftMagicNumbers implements UnsafeValues {
     @Deprecated
     // A bad method for bad magic.
     public static int getId(net.minecraft.block.Block block) {
-        return net.minecraft.block.Block.getStateId(block);
+        return net.minecraft.block.Block.getIdFromBlock(block);
     }
 
     public static Material getMaterial(net.minecraft.block.Block block) {
-        return Material.getMaterial(net.minecraft.block.Block.getStateId(block));
+        return Material.getMaterial(net.minecraft.block.Block.getIdFromBlock(block));
     }
 
     public static net.minecraft.item.Item getItem(Material material) {
@@ -65,18 +73,18 @@ public final class CraftMagicNumbers implements UnsafeValues {
     @Deprecated
     // A bad method for bad magic.
     public static Item getItem(int id) {
-        return Item.getById(id);
+        return Item.getItemById(id);
     }
 
     @Deprecated
     // A bad method for bad magic.
     public static int getId(Item item) {
-        return Item.getId(item);
+        return Item.getIdFromItem(item);
     }
 
     public static Material getMaterial(Item item) {
         // TODO: Don't use ID
-        Material material = Material.getMaterial(Item.getId(item));
+        Material material = Material.getMaterial(Item.getIdFromItem(item));
 
         if (material == null) {
             return Material.AIR;
@@ -101,13 +109,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     @Override
     public Material getMaterialFromInternalName(String name) {
-        return getMaterial((Item) Item.REGISTRY.get(new MinecraftKey(name)));
+        return getMaterial((Item) Item.REGISTRY.getObject(new ResourceLocation(name)));
     }
 
     @Override
     public List<String> tabCompleteInternalMaterialName(String token, List<String> completions) {
         ArrayList<String> results = Lists.newArrayList();
-        for (MinecraftKey key : (Set<MinecraftKey>)Item.REGISTRY.keySet()) {
+        for (ResourceLocation key : (Set<ResourceLocation>)Item.REGISTRY.getKeys()) {
             results.add(key.toString());
         }
         return StringUtil.copyPartialMatches(token, results, completions);
@@ -115,11 +123,11 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     @Override
     public ItemStack modifyItemStack(ItemStack stack, String arguments) {
-        net.minecraft.server.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+        net.minecraft.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 
         try {
-            nmsStack.setTag((NBTTagCompound) MojangsonParser.parse(arguments));
-        } catch (MojangsonParseException ex) {
+            nmsStack.setTagCompound((NBTTagCompound) JsonToNBT.getTagFromJson(arguments));
+        } catch (NBTException ex) {
             Logger.getLogger(CraftMagicNumbers.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -138,12 +146,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
         throw new UnsupportedOperationException("Not supported in this Minecraft version.");
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public List<String> tabCompleteInternalStatisticOrAchievementName(String token, List<String> completions) {
         List<String> matches = new ArrayList<String>();
-        Iterator iterator = StatisticList.stats.iterator();
+        Iterator iterator = StatList.ALL_STATS.iterator();
         while (iterator.hasNext()) {
-            String statistic = ((net.minecraft.server.Statistic) iterator.next()).name;
+            String statistic = ((net.minecraft.stats.StatBase) iterator.next()).statId;
             if (statistic.startsWith(token)) {
                 matches.add(statistic);
             }
@@ -157,13 +166,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
             throw new IllegalArgumentException("Advancement " + key + " already exists.");
         }
 
-        net.minecraft.server.Advancement.SerializedAdvancement nms = (net.minecraft.server.Advancement.SerializedAdvancement) ChatDeserializer.a(AdvancementDataWorld.DESERIALIZER, advancement, net.minecraft.server.Advancement.SerializedAdvancement.class);
+        net.minecraft.advancements.Advancement.Builder nms = (net.minecraft.advancements.Advancement.Builder) JsonUtils.gsonDeserialize(AdvancementManager.GSON, advancement, net.minecraft.advancements.Advancement.Builder.class);
         if (nms != null) {
-            AdvancementDataWorld.REGISTRY.a(Maps.newHashMap(Collections.singletonMap(CraftNamespacedKey.toMinecraft(key), nms)));
+        	AdvancementManager.ADVANCEMENT_LIST.loadAdvancements(Maps.newHashMap(Collections.singletonMap(CraftNamespacedKey.toMinecraft(key), nms))); //TODO AT
             Advancement bukkit = Bukkit.getAdvancement(key);
 
             if (bukkit != null) {
-                File file = new File(MinecraftServer.getServer().getAdvancementData().folder, key.getNamespace() + File.separator + key.getKey() + ".json");
+                File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json"); //TODO AT
                 file.getParentFile().mkdirs();
 
                 try {
@@ -172,7 +181,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
                     Bukkit.getLogger().log(Level.SEVERE, "Error saving advancement " + key, ex);
                 }
 
-                MinecraftServer.getServer().getPlayerList().reload();
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().reloadResources();
 
                 return bukkit;
             }
@@ -183,7 +192,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     @Override
     public boolean removeAdvancement(NamespacedKey key) {
-        File file = new File(MinecraftServer.getServer().getAdvancementData().folder, key.getNamespace() + File.separator + key.getKey() + ".json");
+        File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json"); //TODO AT
         return file.delete();
     }
 

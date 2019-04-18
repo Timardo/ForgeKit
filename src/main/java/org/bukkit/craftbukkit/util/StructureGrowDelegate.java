@@ -3,21 +3,22 @@ package org.bukkit.craftbukkit.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.Block;
-import net.minecraft.server.Blocks;
-import net.minecraft.server.World;
-
 import org.bukkit.BlockChangeDelegate;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.material.MaterialData;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+
+@SuppressWarnings("deprecation")
 public class StructureGrowDelegate implements BlockChangeDelegate {
     private final CraftWorld world;
     private final List<BlockState> blocks = new ArrayList<BlockState>();
 
     public StructureGrowDelegate(World world) {
-        this.world = world.getWorld();
+        this.world = world.getWorld(); //TODO impl
     }
 
     public boolean setRawTypeId(int x, int y, int z, int type) {
@@ -61,7 +62,7 @@ public class StructureGrowDelegate implements BlockChangeDelegate {
     public boolean isEmpty(int x, int y, int z) {
         for (BlockState state : blocks) {
             if (state.getX() == x && state.getY() == y && state.getZ() == z) {
-                return Block.getById(state.getTypeId()) == Blocks.AIR;
+                return Block.getBlockById(state.getTypeId()) == Blocks.AIR;
             }
         }
 

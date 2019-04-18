@@ -1,6 +1,5 @@
 package org.bukkit.craftbukkit.util;
 
-import net.minecraft.server.ExceptionWorldConflict;
 import net.minecraft.server.MinecraftServer;
 
 public class ServerShutdownThread extends Thread {
@@ -12,15 +11,15 @@ public class ServerShutdownThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            server.stop();
-        } catch (ExceptionWorldConflict ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                server.reader.getTerminal().restore();
-            } catch (Exception e) {
-            }
-        }
+//        try { //TODO since method MinecraftServer#stopServer() doesn't include bukkit stuff yet, no exception should be raised
+            server.stopServer();
+//        } catch (MinecraftException ex) {
+//            ex.printStackTrace();
+//        } finally {
+//            try {
+//                server.reader.getTerminal().restore();
+//            } catch (Exception e) {
+//            }
+//        }
     }
 }

@@ -8,12 +8,12 @@ import java.util.logging.LogRecord;
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
 import net.minecraft.server.MinecraftServer;
-
+//This whole class is useless
 public class ShortConsoleLogFormatter extends Formatter {
     private final SimpleDateFormat date;
 
     public ShortConsoleLogFormatter(MinecraftServer server) {
-        OptionSet options = server.options;
+        OptionSet options = server.options; //TODO impl
         SimpleDateFormat date = null;
 
         if (options.has("date-format")) {

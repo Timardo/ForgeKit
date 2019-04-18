@@ -157,7 +157,8 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
         return null;
     }
 
-    public void putAll(Map<? extends Long, ? extends V> map) {
+    @SuppressWarnings("rawtypes")
+	public void putAll(Map<? extends Long, ? extends V> map) {
         for (Map.Entry entry : map.entrySet()) {
             put((Long) entry.getKey(), (V) entry.getValue());
         }
@@ -200,7 +201,8 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
         return set;
     }
 
-    public Object clone() throws CloneNotSupportedException {
+    @SuppressWarnings("rawtypes")
+	public Object clone() throws CloneNotSupportedException {
         LongObjectHashMap clone = (LongObjectHashMap) super.clone();
         // Make sure we clear any existing information from the clone
         clone.clear();
@@ -310,7 +312,7 @@ public class LongObjectHashMap<V> implements Cloneable, Serializable {
 
             for (; index < keys.length; index++) {
                 if (keys[index] != null) {
-                    for (; innerIndex < keys[index].length; innerIndex++) {
+                    for (; innerIndex < keys[index].length;) {
                         long key = keys[index][innerIndex];
                         V value = values[index][innerIndex];
                         if (key == EMPTY_KEY) {

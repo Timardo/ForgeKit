@@ -3,12 +3,12 @@ package org.bukkit.craftbukkit.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.Block;
-import net.minecraft.server.BlockPosition;
-import net.minecraft.server.IBlockData;
-
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 
 public class BlockStateListPopulator {
     private final World world;
@@ -23,13 +23,15 @@ public class BlockStateListPopulator {
         this.list = list;
     }
 
-    public void setTypeAndData(int x, int y, int z, Block block, int data, int light) {
+    @SuppressWarnings("deprecation")
+	public void setTypeAndData(int x, int y, int z, Block block, int data, int light) {
         BlockState state = world.getBlockAt(x, y, z).getState();
-        state.setTypeId(Block.getId(block));
+        state.setTypeId(Block.getIdFromBlock(block));
         state.setRawData((byte) data);
         list.add(state);
     }
-    public void setTypeId(int x, int y, int z, int type) {
+    @SuppressWarnings("deprecation")
+	public void setTypeId(int x, int y, int z, int type) {
         BlockState state = world.getBlockAt(x, y, z).getState();
         state.setTypeId(type);
         list.add(state);
@@ -39,14 +41,15 @@ public class BlockStateListPopulator {
         this.setType(x, y, z, block);
     }    
     
-    public void setTypeUpdate(BlockPosition position, IBlockData data) { 
-        setTypeAndData(position.getX(), position.getY(), position.getZ(), data.getBlock(), data.getBlock().toLegacyData(data), 0);
+    public void setTypeUpdate(BlockPos position, IBlockState data) { 
+        setTypeAndData(position.getX(), position.getY(), position.getZ(), data.getBlock(), data.getBlock().getMetaFromState(data), 0);
         
     }
 
-    public void setType(int x, int y, int z, Block block) {
+    @SuppressWarnings("deprecation")
+	public void setType(int x, int y, int z, Block block) {
         BlockState state = world.getBlockAt(x, y, z).getState();
-        state.setTypeId(Block.getId(block));
+        state.setTypeId(Block.getIdFromBlock(block));
         list.add(state);
     }
 
