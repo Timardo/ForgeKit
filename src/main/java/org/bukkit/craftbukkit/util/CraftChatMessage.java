@@ -13,6 +13,7 @@ import net.minecraft.server.EnumChatFormat;
 import net.minecraft.server.ChatClickable.EnumClickAction;
 import net.minecraft.server.IChatBaseComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -22,21 +23,21 @@ import org.bukkit.ChatColor;
 public final class CraftChatMessage {
 
     private static final Pattern LINK_PATTERN = Pattern.compile("((?:(?:https?):\\/\\/)?(?:[-\\w_\\.]{2,}\\.[a-z]{2,4}.*?(?=[\\.\\?!,;:]?(?:[" + String.valueOf(org.bukkit.ChatColor.COLOR_CHAR) + " \\n]|$))))");
-    private static final Map<Character, EnumChatFormat> formatMap;
+    private static final Map<Character, TextFormatting> formatMap;
 
     static {
-        Builder<Character, EnumChatFormat> builder = ImmutableMap.builder();
-        for (EnumChatFormat format : EnumChatFormat.values()) {
+        Builder<Character, TextFormatting> builder = ImmutableMap.builder();
+        for (TextFormatting format : TextFormatting.values()) {
             builder.put(Character.toLowerCase(format.toString().charAt(1)), format);
         }
         formatMap = builder.build();
     }
 
-    public static EnumChatFormat getColor(ChatColor color) {
+    public static TextFormatting getColor(ChatColor color) {
         return formatMap.get(color.getChar());
     }
 
-    public static ChatColor getColor(EnumChatFormat format) {
+    public static ChatColor getColor(TextFormatting format) {
         return ChatColor.getByChar(format.character);
     }
 
