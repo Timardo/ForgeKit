@@ -5,8 +5,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
 import net.minecraft.potion.Potion;
-import net.minecraft.server.MobEffect;
-import net.minecraft.server.MobEffectList;
 
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -102,12 +100,13 @@ public class CraftPotionUtil {
         return new net.minecraft.potion.PotionEffect(type, effect.getDuration(), effect.getAmplifier(), effect.isAmbient(), effect.hasParticles());
     }
 
-    public static PotionEffect toBukkit(net.minecraft.potion.PotionEffect effect) {
-        PotionEffectType type = PotionEffectType.getById(Potion.getId(effect.getMobEffect()));
+    @SuppressWarnings("deprecation")
+	public static PotionEffect toBukkit(net.minecraft.potion.PotionEffect effect) {
+        PotionEffectType type = PotionEffectType.getById(Potion.getIdFromPotion(effect.getPotion()));
         int amp = effect.getAmplifier();
         int duration = effect.getDuration();
-        boolean ambient = effect.isAmbient();
-        boolean particles = effect.isShowParticles();
+        boolean ambient = effect.getIsAmbient();
+        boolean particles = effect.doesShowParticles();
         return new PotionEffect(type, duration, amp, ambient, particles);
     }
 

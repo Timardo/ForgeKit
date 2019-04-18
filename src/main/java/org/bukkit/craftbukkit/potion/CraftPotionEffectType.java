@@ -1,28 +1,29 @@
 package org.bukkit.craftbukkit.potion;
 
-import net.minecraft.server.MobEffectList;
-
 import org.bukkit.Color;
 import org.bukkit.potion.PotionEffectType;
 
-public class CraftPotionEffectType extends PotionEffectType {
-    private final MobEffectList handle;
+import net.minecraft.potion.Potion;
 
-    public CraftPotionEffectType(MobEffectList handle) {
-        super(MobEffectList.getId(handle));
+public class CraftPotionEffectType extends PotionEffectType {
+    private final Potion handle;
+
+    public CraftPotionEffectType(Potion handle) {
+        super(Potion.getIdFromPotion(handle));
         this.handle = handle;
     }
 
     @Override
     public double getDurationModifier() {
-        return handle.durationModifier;
+        return handle.effectiveness; //TODO AT is this ever used somewhere?
     }
 
-    public MobEffectList getHandle() {
+    public Potion getHandle() {
         return handle;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public String getName() {
         switch (getId()) {
         case 1:
@@ -91,6 +92,6 @@ public class CraftPotionEffectType extends PotionEffectType {
 
     @Override
     public Color getColor() {
-        return Color.fromRGB(handle.getColor());
+        return Color.fromRGB(handle.getLiquidColor());
     }
 }
