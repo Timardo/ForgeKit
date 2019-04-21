@@ -405,11 +405,14 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     }
 
     public void setCanPickupItems(boolean pickup) {
-        getHandle().canPickUpLoot = pickup; //TODO impl
+        getHandle().shouldPickupLoot = pickup;
     }
-
+    /*
+     * Moved from EntityLiving to EntityLivingBase, only reason I see is that EntityPlayer and EntityPlayerMP are extending only the LivingBase
+     * potential solution: inject this field under different name, say shouldPickupLoot with ASM to EntityLivingBase TODO
+     */
     public boolean getCanPickupItems() {
-        return getHandle().canPickUpLoot; //TODO impl
+        return getHandle().shouldPickupLoot;
     }
 
     @Override

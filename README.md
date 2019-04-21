@@ -2,7 +2,7 @@
 A mod that emulates Bukkit server software without rewriting tons of MC base code
 
 ## TODO state
- - **AT** - 216
+ - **AT** - 0?
  - **MD** - 23
  - **impl** - 362
  - **other** - 17
@@ -11,8 +11,8 @@ A mod that emulates Bukkit server software without rewriting tons of MC base cod
  - Add all Bukkit classes ✔
  - Add all CraftBukkit classes ✔
  - Resolve all mapping stuff and mark errors as TODO ✔
- - Create AT (Access Transformer) file for all fields/methods Bukkit changes to public/non-final <- Current Goal
- - Implement all (needed) methods and fields and remap them with some JarRemapper (including reflection!)
+ - Create AT (Access Transformer) file for all fields/methods Bukkit changes to public/non-final ✔
+ - Implement all (needed) methods and fields and remap them with some JarRemapper (including reflection!) **<- Current Goal**
  - Some ASM hook with which the ForgeKit would patch base MC classes to be compatible with Bukkit (the least possible amount)
  - Make this actually buildable
  - Get high because it's just not goddamn possible
