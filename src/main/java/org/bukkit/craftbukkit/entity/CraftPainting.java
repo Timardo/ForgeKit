@@ -31,10 +31,10 @@ public class CraftPainting extends CraftHanging implements Painting {
         EntityPainting painting = this.getHandle();
         EnumArt oldArt = painting.art;
         painting.art = CraftArt.BukkitToNotch(art);
-        painting.updateFacingWithBoundingBox(painting.facingDirection); //TODO AT
+        painting.updateFacingWithBoundingBox(painting.facingDirection);
         if (!force && !painting.onValidSurface()) {
             painting.art = oldArt;
-            painting.updateFacingWithBoundingBox(painting.facingDirection); //TODO AT
+            painting.updateFacingWithBoundingBox(painting.facingDirection);
             return false;
         }
         this.update();
@@ -53,9 +53,9 @@ public class CraftPainting extends CraftHanging implements Painting {
     private void update() {
         WorldServer world = ((CraftWorld) getWorld()).getHandle();
         EntityPainting painting = new EntityPainting(world);
-        painting.hangingPosition = getHandle().getHangingPosition(); //TODO AT
+        painting.hangingPosition = getHandle().getHangingPosition();
         painting.art = getHandle().art;
-        painting.updateFacingWithBoundingBox(getHandle().facingDirection); //TODO AT
+        painting.updateFacingWithBoundingBox(getHandle().facingDirection);
         getHandle().setDead();
         getHandle().velocityChanged = true;
         world.spawnEntity(painting);

@@ -24,7 +24,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
     }
 
     public int getKnockbackStrength() {
-        return getHandle().knockbackStrength; //TODO AT
+        return getHandle().knockbackStrength;
     }
 
     public boolean isCritical() {
@@ -50,7 +50,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
 
     @Override
     public boolean isInBlock() {
-        return getHandle().inGround; //TODO AT
+        return getHandle().inGround;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CraftArrow extends AbstractProjectile implements Arrow {
         }
 
         EntityArrow handle = getHandle();
-        return getWorld().getBlockAt(handle.xTile, handle.yTile, handle.zTile); //TODO AT
+        return getWorld().getBlockAt(handle.xTile, handle.yTile, handle.zTile);
     }
 
     @Override

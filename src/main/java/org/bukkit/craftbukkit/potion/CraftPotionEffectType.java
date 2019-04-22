@@ -15,7 +15,7 @@ public class CraftPotionEffectType extends PotionEffectType {
 
     @Override
     public double getDurationModifier() {
-        return handle.effectiveness; //TODO AT is this ever used somewhere?
+        return handle.effectiveness;
     }
 
     public Potion getHandle() {

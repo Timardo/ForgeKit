@@ -235,18 +235,16 @@ public final class CraftServer implements Server {
             }
         }));
         this.serverVersion = CraftServer.class.getPackage().getImplementationVersion();
-        online.value = console.isServerInOnlineMode(); // We don't care about properties file here, because mods can do stuff
+        online.value = console.isServerInOnlineMode(); //ForgeKit - We don't care about properties file here, because mods can do stuff
 
         Bukkit.setServer(this);
 
-        // Register all the Enchantments and PotionTypes now so we can stop new registration immediately after
         Enchantments.SHARPNESS.getClass();
         org.bukkit.enchantments.Enchantment.stopAcceptingRegistrations();
 
         Potion.setPotionBrewer(new CraftPotionBrewer());
         MobEffects.BLINDNESS.getClass();
         PotionEffectType.stopAcceptingRegistrations();
-        // Ugly hack :(
 
         if (!Main.useConsole) {
             getLogger().info("Console input is disabled due to --noconsole command argument");
@@ -581,20 +579,17 @@ public final class CraftServer implements Server {
         return this.getConfigBoolean("white-list", false);
     }
 
-    // NOTE: Temporary calls through to server.properies until its replaced
     private String getConfigString(String variable, String defaultValue) {
         return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).getStringProperty(variable, defaultValue); //TODO idk if this works, same below
     }
 
     private int getConfigInt(String variable, int defaultValue) {
-        return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).getIntProperty(variable, defaultValue);
+        return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).getIntProperty(variable, defaultValue); //
     }
 
     private boolean getConfigBoolean(String variable, boolean defaultValue) {
-        return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).getBooleanProperty(variable, defaultValue);
+        return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).getBooleanProperty(variable, defaultValue); //
     }
-
-    // End Temporary calls
 
     @Override
     public String getUpdateFolder() {
@@ -903,7 +898,7 @@ public final class CraftServer implements Server {
 				public void setLoadingProgress(int progress) {
                     if (System.currentTimeMillis() - this.baseTime >= 1000L) {
                         this.baseTime = System.currentTimeMillis();
-                        FMLCommonHandler.instance().getMinecraftServerInstance().logInfo("Converting... " + progress + "%"); //TODO server logger -> public/getter
+                        FMLCommonHandler.instance().getMinecraftServerInstance().logInfo("Converting... " + progress + "%"); //ForgeKit - this works, so..
                     }
 
                 }
@@ -946,7 +941,7 @@ public final class CraftServer implements Server {
         if (worldSettings != null) {
             internal.initialize(worldSettings);
         }
-        internal.worldScoreboard = getScoreboardManager().getMainScoreboard().getHandle(); //TODO AT
+        internal.worldScoreboard = getScoreboardManager().getMainScoreboard().getHandle(); 
 
         // internal.entityTracker = new EntityTracker(internal);
         internal.addEventListener(new ServerWorldEventHandler(console, internal));
@@ -1145,7 +1140,7 @@ public final class CraftServer implements Server {
     public void resetRecipes() {
         CraftingManager.REGISTRY = new RegistryNamespaced();
         CraftingManager.init();
-        FurnaceRecipes.instance().smeltingList = new FurnaceRecipes().recipes; //TODO AT + impl
+        FurnaceRecipes.instance().smeltingList = new FurnaceRecipes().getSmeltingList();
         FurnaceRecipes.instance().customRecipes.clear(); //TODO impl
         FurnaceRecipes.instance().customExperience.clear(); //TODO impl
     }
@@ -1370,8 +1365,8 @@ public final class CraftServer implements Server {
     public Set<OfflinePlayer> getBannedPlayers() {
         Set<OfflinePlayer> result = new HashSet<OfflinePlayer>();
 
-        for (UserListEntry entry : playerList.getBannedPlayers().getValues().values()) { //TODO AT
-            result.add(getOfflinePlayer((GameProfile) entry.getValue())); //TODO AT
+        for (UserListEntry entry : playerList.getBannedPlayers().getValues().values()) {
+            result.add(getOfflinePlayer((GameProfile) entry.getValue()));
         }        
 
         return result;
@@ -1401,8 +1396,8 @@ public final class CraftServer implements Server {
     public Set<OfflinePlayer> getWhitelistedPlayers() {
         Set<OfflinePlayer> result = new LinkedHashSet<OfflinePlayer>();
 
-        for (UserListEntry entry : playerList.getWhitelistedPlayers().getValues().values()) { //TODO AT
-            result.add(getOfflinePlayer((GameProfile) entry.getValue())); //TODO AT
+        for (UserListEntry entry : playerList.getWhitelistedPlayers().getValues().values()) {
+            result.add(getOfflinePlayer((GameProfile) entry.getValue()));
         }
 
         return result;
@@ -1413,8 +1408,8 @@ public final class CraftServer implements Server {
     public Set<OfflinePlayer> getOperators() {
         Set<OfflinePlayer> result = new HashSet<OfflinePlayer>();
 
-        for (UserListEntry entry : playerList.getOppedPlayers().getValues().values()) { //TODO AT
-            result.add(getOfflinePlayer((GameProfile) entry.getValue())); //TODO AT
+        for (UserListEntry entry : playerList.getOppedPlayers().getValues().values()) {
+            result.add(getOfflinePlayer((GameProfile) entry.getValue()));
         }
 
         return result;
@@ -1435,7 +1430,7 @@ public final class CraftServer implements Server {
         Validate.notNull(mode, "Mode cannot be null");
 
         for (World world : getWorlds()) {
-            ((CraftWorld) world).getHandle().worldInfo.setGameType(GameType.getByID(mode.getValue())); //TODO AT
+            ((CraftWorld) world).getHandle().worldInfo.setGameType(GameType.getByID(mode.getValue()));
         }
     }
 
@@ -1458,8 +1453,8 @@ public final class CraftServer implements Server {
 
     @Override
     public File getWorldContainer() {
-        if (this.getServer().anvilFile != null) { //TODO AT
-            return this.getServer().anvilFile; //TODO AT
+        if (this.getServer().anvilFile != null) {
+            return this.getServer().anvilFile;
         }
 
         if (container == null) {
@@ -1472,7 +1467,7 @@ public final class CraftServer implements Server {
     @Override
     public OfflinePlayer[] getOfflinePlayers() {
     	SaveHandler storage = (SaveHandler) console.worlds[0].getSaveHandler();
-        String[] files = storage.playersDirectory.list(new DatFileFilter()); //TODO AT
+        String[] files = storage.playersDirectory.list(new DatFileFilter());
         Set<OfflinePlayer> players = new HashSet<OfflinePlayer>();
 
         for (String file : files) {
@@ -1515,7 +1510,6 @@ public final class CraftServer implements Server {
 
     @Override
     public Inventory createInventory(InventoryHolder owner, InventoryType type) {
-        // TODO: Create the appropriate type, rather than Custom?
         return new CraftInventoryCustom(owner, type);
     }
 
@@ -1738,7 +1732,7 @@ public final class CraftServer implements Server {
 
     @Override
     public Iterator<org.bukkit.advancement.Advancement> advancementIterator() {
-        return Iterators.unmodifiableIterator(Iterators.transform(console.getAdvancementManager().getAdvancements().iterator(), new Function<Advancement, org.bukkit.advancement.Advancement>() { // PAIL: rename
+        return Iterators.unmodifiableIterator(Iterators.transform(console.getAdvancementManager().getAdvancements().iterator(), new Function<Advancement, org.bukkit.advancement.Advancement>() {
             @Override
             public org.bukkit.advancement.Advancement apply(Advancement advancement) {
                 return advancement.bukkit; //TODO impl

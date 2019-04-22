@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -161,11 +159,11 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
         net.minecraft.advancements.Advancement.Builder nms = (net.minecraft.advancements.Advancement.Builder) JsonUtils.gsonDeserialize(AdvancementManager.GSON, advancement, net.minecraft.advancements.Advancement.Builder.class);
         if (nms != null) {
-        	AdvancementManager.ADVANCEMENT_LIST.loadAdvancements(Maps.newHashMap(Collections.singletonMap(CraftNamespacedKey.toMinecraft(key), nms))); //TODO AT
+        	AdvancementManager.ADVANCEMENT_LIST.loadAdvancements(Maps.newHashMap(Collections.singletonMap(CraftNamespacedKey.toMinecraft(key), nms)));
             Advancement bukkit = Bukkit.getAdvancement(key);
 
             if (bukkit != null) {
-                File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json"); //TODO AT
+                File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json");
                 file.getParentFile().mkdirs();
 
                 try {
@@ -185,7 +183,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     @Override
     public boolean removeAdvancement(NamespacedKey key) {
-        File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json"); //TODO AT
+        File file = new File(FMLCommonHandler.instance().getMinecraftServerInstance().getAdvancementManager().advancementsDir, key.getNamespace() + File.separator + key.getKey() + ".json");
         return file.delete();
     }
 

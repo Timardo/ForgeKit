@@ -1,6 +1,5 @@
 package org.bukkit.craftbukkit.entity;
 
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
@@ -28,20 +27,20 @@ public class CraftHanging extends CraftEntity implements Hanging {
         switch (face) {
             case SOUTH:
             default:
-                getHandle().updateFacingWithBoundingBox(EnumFacing.SOUTH); //TODO AT
+                getHandle().updateFacingWithBoundingBox(EnumFacing.SOUTH); 
                 break;
             case WEST:
-                getHandle().updateFacingWithBoundingBox(EnumFacing.WEST); //TODO AT
+                getHandle().updateFacingWithBoundingBox(EnumFacing.WEST); 
                 break;
             case NORTH:
-                getHandle().updateFacingWithBoundingBox(EnumFacing.NORTH); //TODO AT
+                getHandle().updateFacingWithBoundingBox(EnumFacing.NORTH); 
                 break;
             case EAST:
-                getHandle().updateFacingWithBoundingBox(EnumFacing.EAST); //TODO AT
+                getHandle().updateFacingWithBoundingBox(EnumFacing.EAST); 
                 break;
         }
         if (!force && !hanging.onValidSurface()) {
-            hanging.updateFacingWithBoundingBox(dir); //TODO AT
+            hanging.updateFacingWithBoundingBox(dir); 
             return false;
         }
         return true;

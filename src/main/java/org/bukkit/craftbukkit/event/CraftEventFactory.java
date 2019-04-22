@@ -325,7 +325,7 @@ public class CraftEventFactory {
         org.bukkit.entity.AnimalTamer bukkitTamer = (tamer != null ? tamer.getBukkitEntity() : null); //TODO impl
         CraftServer craftServer = (CraftServer) bukkitEntity.getServer();
 
-        entity.persistenceRequired = true; //TODO AT
+        entity.persistenceRequired = true;
 
         EntityTameEvent event = new EntityTameEvent((LivingEntity) bukkitEntity, bukkitTamer);
         craftServer.getPluginManager().callEvent(event);

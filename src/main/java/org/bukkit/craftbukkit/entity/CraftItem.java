@@ -30,11 +30,11 @@ public class CraftItem extends CraftEntity implements Item {
     }
 
     public int getPickupDelay() {
-        return item.pickupDelay; //TODO AT
+        return item.pickupDelay;
     }
 
     public void setPickupDelay(int delay) {
-        item.pickupDelay = Math.min(delay, Short.MAX_VALUE); //TODO AT
+        item.pickupDelay = Math.min(delay, Short.MAX_VALUE);
     }
 
     @Override

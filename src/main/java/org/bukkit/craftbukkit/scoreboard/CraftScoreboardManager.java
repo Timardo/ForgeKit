@@ -1,11 +1,9 @@
 package org.bukkit.craftbukkit.scoreboard;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -85,7 +83,7 @@ public final class CraftScoreboardManager implements ScoreboardManager {
             entityplayer.connection.sendPacket(new SPacketTeams(scoreboardteam, 1));
         }
 
-        server.getPlayerList().sendScoreboard((ServerScoreboard) newboard, player.getHandle()); //TODO AT
+        server.getPlayerList().sendScoreboard((ServerScoreboard) newboard, player.getHandle()); 
     }
 
     public void removePlayer(Player player) {

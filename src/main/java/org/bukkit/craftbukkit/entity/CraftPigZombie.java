@@ -13,11 +13,11 @@ public class CraftPigZombie extends CraftZombie implements PigZombie {
     }
 
     public int getAnger() {
-        return getHandle().angerLevel; //TODO AT
+        return getHandle().angerLevel;
     }
 
     public void setAnger(int level) {
-        getHandle().angerLevel = level; //TODO AT
+        getHandle().angerLevel = level;
     }
 
     public void setAngry(boolean angry) {

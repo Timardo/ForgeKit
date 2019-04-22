@@ -31,7 +31,7 @@ public class CraftEvoker extends CraftSpellcaster implements Evoker {
     @SuppressWarnings("deprecation")
 	@Override
     public Evoker.Spell getCurrentSpell() {
-        return Evoker.Spell.values()[getHandle().getSpellType().ordinal()]; //TODO AT
+        return Evoker.Spell.values()[getHandle().getSpellType().ordinal()]; 
     }
 
     @SuppressWarnings("deprecation")

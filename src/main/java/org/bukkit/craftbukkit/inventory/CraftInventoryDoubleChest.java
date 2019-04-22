@@ -22,15 +22,15 @@ public class CraftInventoryDoubleChest extends CraftInventory implements DoubleC
 
     public CraftInventoryDoubleChest(InventoryLargeChest largeChest) {
         super(largeChest);
-        if (largeChest.upperChest instanceof InventoryLargeChest) { //TODO AT
-            left = new CraftInventoryDoubleChest((InventoryLargeChest) largeChest.upperChest); //TODO AT
+        if (largeChest.upperChest instanceof InventoryLargeChest) {
+            left = new CraftInventoryDoubleChest((InventoryLargeChest) largeChest.upperChest);
         } else {
-            left = new CraftInventory(largeChest.upperChest); //TODO AT
+            left = new CraftInventory(largeChest.upperChest);
         }
         if (largeChest.lowerChest instanceof InventoryLargeChest) {
-            right = new CraftInventoryDoubleChest((InventoryLargeChest) largeChest.lowerChest); //TODO AT
+            right = new CraftInventoryDoubleChest((InventoryLargeChest) largeChest.lowerChest);
         } else {
-            right = new CraftInventory(largeChest.lowerChest); //TODO AT
+            right = new CraftInventory(largeChest.lowerChest);
         }
     }
 

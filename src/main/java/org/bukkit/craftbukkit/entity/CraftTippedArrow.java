@@ -44,7 +44,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
     public boolean addCustomEffect(PotionEffect effect, boolean override) {
         int effectId = effect.getType().getId();
         net.minecraft.potion.PotionEffect existing = null;
-        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().customPotionEffects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().customPotionEffects) {
             if (Potion.getIdFromPotion(mobEffect.getPotion()) == effectId) {
                 existing = mobEffect;
             }
@@ -53,7 +53,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
             if (!override) {
                 return false;
             }
-            getHandle().customPotionEffects.remove(existing); //TODO AT
+            getHandle().customPotionEffects.remove(existing);
         }
         getHandle().addEffect(CraftPotionUtil.fromBukkit(effect));
         getHandle().refreshEffects(); //TODO MD
@@ -63,14 +63,14 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
     @Override
     public void clearCustomEffects() {
         Validate.isTrue(getBasePotionData().getType() != PotionType.UNCRAFTABLE, "Tipped Arrows must have at least 1 effect");
-        getHandle().customPotionEffects.clear(); //TODO AT
+        getHandle().customPotionEffects.clear();
         getHandle().refreshEffects(); //TODO MD
     }
 
     @Override
     public List<PotionEffect> getCustomEffects() {
         ImmutableList.Builder<PotionEffect> builder = ImmutableList.builder();
-        for (net.minecraft.potion.PotionEffect effect : getHandle().customPotionEffects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect effect : getHandle().customPotionEffects) {
             builder.add(CraftPotionUtil.toBukkit(effect));
         }
         return builder.build();
@@ -78,7 +78,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
 
     @Override
     public boolean hasCustomEffect(PotionEffectType type) {
-        for (net.minecraft.potion.PotionEffect effect : getHandle().customPotionEffects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect effect : getHandle().customPotionEffects) {
             if (CraftPotionUtil.equals(effect.getPotion(), type)) {
                 return true;
             }
@@ -88,7 +88,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
 
     @Override
     public boolean hasCustomEffects() {
-        return !getHandle().customPotionEffects.isEmpty(); //TODO AT
+        return !getHandle().customPotionEffects.isEmpty();
     }
 
     @SuppressWarnings("deprecation")
@@ -96,7 +96,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
     public boolean removeCustomEffect(PotionEffectType effect) {
         int effectId = effect.getId();
         net.minecraft.potion.PotionEffect existing = null;
-        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().customPotionEffects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().customPotionEffects) {
             if (Potion.getIdFromPotion(mobEffect.getPotion()) == effectId) {
                 existing = mobEffect;
             }
@@ -104,8 +104,8 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
         if (existing == null) {
             return false;
         }
-        Validate.isTrue(getBasePotionData().getType() != PotionType.UNCRAFTABLE || !getHandle().customPotionEffects.isEmpty(), "Tipped Arrows must have at least 1 effect"); //TODO AT
-        getHandle().customPotionEffects.remove(existing); //TODO AT
+        Validate.isTrue(getBasePotionData().getType() != PotionType.UNCRAFTABLE || !getHandle().customPotionEffects.isEmpty(), "Tipped Arrows must have at least 1 effect");
+        getHandle().customPotionEffects.remove(existing);
         getHandle().refreshEffects(); //TODO MD
         return true;
     }
@@ -113,7 +113,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
     @Override
     public void setBasePotionData(PotionData data) {
         Validate.notNull(data, "PotionData cannot be null");
-        Validate.isTrue(data.getType() != PotionType.UNCRAFTABLE || !getHandle().customPotionEffects.isEmpty(), "Tipped Arrows must have at least 1 effect"); //TODO AT
+        Validate.isTrue(data.getType() != PotionType.UNCRAFTABLE || !getHandle().customPotionEffects.isEmpty(), "Tipped Arrows must have at least 1 effect");
         getHandle().setType(CraftPotionUtil.fromBukkit(data)); //TODO MD
     }
 
@@ -124,7 +124,7 @@ public class CraftTippedArrow extends CraftArrow implements TippedArrow {
 
     @Override
     public void setColor(Color color) {
-        getHandle().setFixedColor(color.asRGB()); //TODO AT
+        getHandle().setFixedColor(color.asRGB());
     }
 
     @Override

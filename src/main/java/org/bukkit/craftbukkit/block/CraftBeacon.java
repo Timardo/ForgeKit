@@ -56,7 +56,6 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
             return bukkit;
         }
 
-        // block is no longer a beacon
         return new ArrayList<LivingEntity>();
     }
 
@@ -73,7 +72,7 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
     @SuppressWarnings("deprecation")
 	@Override
     public void setPrimaryEffect(PotionEffectType effect) {
-        this.getSnapshot().primaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null; //TODO impl
+        this.getSnapshot().primaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null;
     }
 
     @Override
@@ -84,7 +83,7 @@ public class CraftBeacon extends CraftContainer<TileEntityBeacon> implements Bea
     @SuppressWarnings("deprecation")
 	@Override
     public void setSecondaryEffect(PotionEffectType effect) {
-        this.getSnapshot().secondaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null; //TODO impl
+        this.getSnapshot().secondaryEffect = (effect != null) ? Potion.getPotionById(effect.getId()) : null;
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListBans;
 import net.minecraft.server.management.UserListBansEntry;
 import net.minecraft.server.management.UserListEntry;
@@ -71,8 +70,8 @@ public class CraftProfileBanList implements org.bukkit.BanList {
     public Set<org.bukkit.BanEntry> getBanEntries() {
         ImmutableSet.Builder<org.bukkit.BanEntry> builder = ImmutableSet.builder();
         
-        for (UserListEntry entry : list.getValues()) { //TODO AT
-            GameProfile profile = (GameProfile) entry.getValue(); //TODO AT
+        for (UserListEntry entry : list.getValues().values()) {
+            GameProfile profile = (GameProfile) entry.getValue();
             builder.add(new CraftProfileBanEntry(profile, (UserListBansEntry) entry, list));
         }
 

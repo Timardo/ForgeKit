@@ -57,7 +57,7 @@ public class CraftDispenser extends CraftLootable<TileEntityDispenser> implement
             CraftWorld world = (CraftWorld) this.getWorld();
             BlockDispenser dispense = (BlockDispenser) Blocks.DISPENSER;
 
-            dispense.dispense(world.getHandle(), new BlockPos(getX(), getY(), getZ())); //TODO AT
+            dispense.dispense(world.getHandle(), new BlockPos(getX(), getY(), getZ())); 
             return true;
         } else {
             return false;

@@ -77,7 +77,7 @@ public class CraftBossBar implements BossBar {
     @Override
     public void setTitle(String title) {
         handle.setName(CraftChatMessage.fromString(title, true)[0]);
-        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_NAME); //TODO AT
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_NAME);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CraftBossBar implements BossBar {
     public void setColor(BarColor color) {
         this.color = color;
         handle.setColor(convertColor(color));
-        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE); //TODO AT
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CraftBossBar implements BossBar {
     public void setStyle(BarStyle style) {
         this.style = style;
         handle.setOverlay(convertStyle(style));
-        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE); //TODO AT
+        handle.sendUpdate(SPacketUpdateBossInfo.Operation.UPDATE_STYLE);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CraftBossBar implements BossBar {
 
     @Override
     public boolean isVisible() {
-        return handle.visible; //TODO AT
+        return handle.visible;
     }
 
     @Override

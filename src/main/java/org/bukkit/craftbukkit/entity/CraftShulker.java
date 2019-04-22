@@ -30,9 +30,10 @@ public class CraftShulker extends CraftGolem implements Shulker {
         return (EntityShulker) entity;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public DyeColor getColor() {
-        return DyeColor.getByWoolData(getHandle().getDataManager().get(EntityShulker.COLOR)); //TODO AT
+        return DyeColor.getByWoolData(getHandle().getDataManager().get(EntityShulker.COLOR));
     }
 
     @SuppressWarnings("deprecation")
@@ -40,6 +41,6 @@ public class CraftShulker extends CraftGolem implements Shulker {
     public void setColor(DyeColor color) {
         Preconditions.checkArgument(color != null, "color");
 
-        getHandle().getDataManager().set(EntityShulker.COLOR, color.getWoolData()); //TODO AT
+        getHandle().getDataManager().set(EntityShulker.COLOR, color.getWoolData());
     }
 }

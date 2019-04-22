@@ -44,7 +44,7 @@ public class CraftDropper extends CraftLootable<TileEntityDropper> implements Dr
             CraftWorld world = (CraftWorld) this.getWorld();
             BlockDropper drop = (BlockDropper) Blocks.DROPPER;
 
-            drop.dispense(world.getHandle(), new BlockPos(getX(), getY(), getZ())); //TODO AT
+            drop.dispense(world.getHandle(), new BlockPos(getX(), getY(), getZ())); 
         }
     }
 }

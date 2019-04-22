@@ -84,7 +84,7 @@ public class CraftJukebox extends CraftBlockEntityState<TileEntityJukebox> imple
         TileEntityJukebox jukebox = (TileEntityJukebox) tileEntity;
         boolean result = !jukebox.getRecord().isEmpty();
         CraftWorld world = (CraftWorld) this.getWorld();
-        ((BlockJukebox) Blocks.JUKEBOX).dropRecord(world.getHandle(), new BlockPos(getX(), getY(), getZ()), null); //TODO AT
+        ((BlockJukebox) Blocks.JUKEBOX).dropRecord(world.getHandle(), new BlockPos(getX(), getY(), getZ()), null); 
         return result;
     }
 }

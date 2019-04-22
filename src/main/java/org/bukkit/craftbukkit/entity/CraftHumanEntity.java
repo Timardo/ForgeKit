@@ -302,12 +302,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         Container container = new CraftContainer(inventory, this.getHandle(), player.getNextWindowIdCB()); //TODO MD
 
         container = CraftEventFactory.callInventoryOpenEvent(player, container);
-        if(container == null) return;
+        if (container == null) return;
 
         String title = container.getBukkitView().getTitle(); //TODO impl
         int size = container.getBukkitView().getTopInventory().getSize(); //TODO impl
 
-        // Special cases
         if (windowType.equals("minecraft:crafting_table") 
                 || windowType.equals("minecraft:anvil")
                 || windowType.equals("minecraft:enchanting_table")
@@ -455,8 +454,8 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     public int getCooldown(Material material) {
         Preconditions.checkArgument(material != null, "material");
 
-        CooldownTracker.Cooldown cooldown = getHandle().getCooldownTracker().cooldowns.get(CraftMagicNumbers.getItem(material)); //TODO AT
-        return (cooldown == null) ? 0 : Math.max(0, cooldown.expireTicks - getHandle().getCooldownTracker().ticks); //TODO AT
+        CooldownTracker.Cooldown cooldown = getHandle().getCooldownTracker().cooldowns.get(CraftMagicNumbers.getItem(material));
+        return (cooldown == null) ? 0 : Math.max(0, cooldown.expireTicks - getHandle().getCooldownTracker().ticks);
     }
 
     @Override
@@ -480,7 +479,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
 
     @Override
     public void setShoulderEntityLeft(org.bukkit.entity.Entity entity) {
-        getHandle().setLeftShoulderEntity(entity == null ? new NBTTagCompound() : ((CraftEntity) entity).save()); //TODO AT
+        getHandle().setLeftShoulderEntity(entity == null ? new NBTTagCompound() : ((CraftEntity) entity).save());
         if (entity != null) {
             entity.remove();
         }
@@ -499,7 +498,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
 
     @Override
     public void setShoulderEntityRight(org.bukkit.entity.Entity entity) {
-        getHandle().setRightShoulderEntity(entity == null ? new NBTTagCompound() : ((CraftEntity) entity).save()); //TODO AT
+        getHandle().setRightShoulderEntity(entity == null ? new NBTTagCompound() : ((CraftEntity) entity).save());
         if (entity != null) {
             entity.remove();
         }

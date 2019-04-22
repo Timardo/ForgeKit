@@ -562,12 +562,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void loadData() {
-        server.getHandle().playerDataManager.readPlayerData(getHandle()); //TODO AT
+        server.getHandle().playerDataManager.readPlayerData(getHandle());
     }
 
     @Override
     public void saveData() {
-        server.getHandle().playerDataManager.writePlayerData(getHandle()); //TODO AT
+        server.getHandle().playerDataManager.writePlayerData(getHandle());
     }
 
     @Deprecated
@@ -821,7 +821,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     public void setExp(float exp) {
         Preconditions.checkArgument(exp >= 0.0 && exp <= 1.0, "Experience progress must be between 0.0 and 1.0 (%s)", exp);
         getHandle().experience = exp;
-        getHandle().lastExperience = -1; //TODO AT
+        getHandle().lastExperience = -1;
     }
 
     @Override
@@ -832,7 +832,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setLevel(int level) {
         getHandle().experienceLevel = level;
-        getHandle().lastExperience = -1; //TODO AT
+        getHandle().lastExperience = -1;
     }
 
     @Override
@@ -847,12 +847,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public float getExhaustion() {
-        return getHandle().getFoodStats().foodExhaustionLevel; //TODO AT
+        return getHandle().getFoodStats().foodExhaustionLevel;
     }
 
     @Override
     public void setExhaustion(float value) {
-        getHandle().getFoodStats().foodExhaustionLevel = value; //TODO AT
+        getHandle().getFoodStats().foodExhaustionLevel = value;
     }
 
     @Override
@@ -939,7 +939,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         EntityTracker tracker = ((WorldServer) entity.world).getEntityTracker();
         EntityPlayerMP other = ((CraftPlayer) player).getHandle();
-        EntityTrackerEntry entry = tracker.trackedEntityHashTable.get(other.getEntityId()); //TODO AT
+        EntityTrackerEntry entry = tracker.trackedEntityHashTable.get(other.getEntityId());
         if (entry != null) {
             entry.updatePlayerEntity(getHandle());
         }
@@ -981,7 +981,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         getHandle().connection.sendPacket(new SPacketPlayerListItem(SPacketPlayerListItem.Action.ADD_PLAYER, other));
 
-        EntityTrackerEntry entry = tracker.trackedEntityHashTable.get(other.getEntityId()); //TODO AT
+        EntityTrackerEntry entry = tracker.trackedEntityHashTable.get(other.getEntityId()); 
         if (entry != null && !entry.trackingPlayers.contains(getHandle())) {
             entry.updatePlayerEntity(getHandle());
         }
@@ -1255,8 +1255,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public int getNoDamageTicks() {
-        if (getHandle().respawnInvulnerabilityTicks > 0) { //TODO AT
-            return Math.max(getHandle().respawnInvulnerabilityTicks, getHandle().hurtResistantTime); //TODO AT
+        if (getHandle().respawnInvulnerabilityTicks > 0) {
+            return Math.max(getHandle().respawnInvulnerabilityTicks, getHandle().hurtResistantTime);
         } else {
             return getHandle().hurtResistantTime;
         }
@@ -1381,7 +1381,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             getHandle().connection.sendPacket(new SPacketEntityProperties(getHandle().getEntityId(), set));
             sendHealthUpdate();
         }
-        getHandle().getDataManager().set(EntityLivingBase.HEALTH, (float) getScaledHealth()); //TODO AT
+        getHandle().getDataManager().set(EntityLivingBase.HEALTH, (float) getScaledHealth());
 
         getHandle().maxHealthCache = getMaxHealth(); //TODO impl
     }
@@ -1520,6 +1520,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public String getLocale() {
-        return getHandle().language; //TODO AT
+        return getHandle().language;
     }
 }

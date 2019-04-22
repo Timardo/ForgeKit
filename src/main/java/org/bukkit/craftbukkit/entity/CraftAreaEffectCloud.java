@@ -55,7 +55,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public int getWaitTime() {
-        return getHandle().waitTime; //TODO AT
+        return getHandle().waitTime;
     }
 
     @Override
@@ -65,22 +65,22 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public int getReapplicationDelay() {
-        return getHandle().reapplicationDelay; //TODO AT
+        return getHandle().reapplicationDelay;
     }
 
     @Override
     public void setReapplicationDelay(int delay) {
-        getHandle().reapplicationDelay = delay; //TODO AT
+        getHandle().reapplicationDelay = delay;
     }
 
     @Override
     public int getDurationOnUse() {
-        return getHandle().durationOnUse; //TODO AT
+        return getHandle().durationOnUse;
     }
 
     @Override
     public void setDurationOnUse(int duration) {
-        getHandle().durationOnUse = duration; //TODO AT
+        getHandle().durationOnUse = duration;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public float getRadiusOnUse() {
-        return getHandle().radiusOnUse; //TODO AT
+        return getHandle().radiusOnUse;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public float getRadiusPerTick() {
-        return getHandle().radiusPerTick; //TODO AT
+        return getHandle().radiusPerTick;
     }
 
     @Override
@@ -138,7 +138,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
     public boolean addCustomEffect(PotionEffect effect, boolean override) {
         int effectId = effect.getType().getId();
         net.minecraft.potion.PotionEffect existing = null;
-        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().effects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().effects) {
             if (Potion.getIdFromPotion(mobEffect.getPotion()) == effectId) {
                 existing = mobEffect;
             }
@@ -147,7 +147,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
             if (!override) {
                 return false;
             }
-            getHandle().effects.remove(existing); //TODO AT
+            getHandle().effects.remove(existing);
         }
         getHandle().addEffect(CraftPotionUtil.fromBukkit(effect));
         getHandle().refreshEffects(); //TODO impl
@@ -156,14 +156,14 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public void clearCustomEffects() {
-        getHandle().effects.clear(); //TODO AT
+        getHandle().effects.clear();
         getHandle().refreshEffects(); //TODO impl
     }
 
     @Override
     public List<PotionEffect> getCustomEffects() {
         ImmutableList.Builder<PotionEffect> builder = ImmutableList.builder();
-        for (net.minecraft.potion.PotionEffect effect : getHandle().effects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect effect : getHandle().effects) {
             builder.add(CraftPotionUtil.toBukkit(effect));
         }
         return builder.build();
@@ -171,7 +171,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public boolean hasCustomEffect(PotionEffectType type) {
-        for (net.minecraft.potion.PotionEffect effect : getHandle().effects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect effect : getHandle().effects) {
             if (CraftPotionUtil.equals(effect.getPotion(), type)) {
                 return true;
             }
@@ -181,7 +181,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
 
     @Override
     public boolean hasCustomEffects() {
-        return !getHandle().effects.isEmpty(); //TODO AT
+        return !getHandle().effects.isEmpty();
     }
 
     @SuppressWarnings("deprecation")
@@ -189,7 +189,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
     public boolean removeCustomEffect(PotionEffectType effect) {
         int effectId = effect.getId();
         net.minecraft.potion.PotionEffect existing = null;
-        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().effects) { //TODO AT
+        for (net.minecraft.potion.PotionEffect mobEffect : getHandle().effects) {
             if (Potion.getIdFromPotion(mobEffect.getPotion()) == effectId) {
                 existing = mobEffect;
             }
@@ -197,7 +197,7 @@ public class CraftAreaEffectCloud extends CraftEntity implements AreaEffectCloud
         if (existing == null) {
             return false;
         }
-        getHandle().effects.remove(existing); //TODO AT
+        getHandle().effects.remove(existing);
         getHandle().refreshEffects(); //TODO impl
         return true;
     }

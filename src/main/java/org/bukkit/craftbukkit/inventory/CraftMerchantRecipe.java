@@ -35,7 +35,7 @@ public class CraftMerchantRecipe extends MerchantRecipe {
 
     @Override
     public void setUses(int uses) {
-        handle.toolUses = uses; //TODO AT
+        handle.toolUses = uses;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CraftMerchantRecipe extends MerchantRecipe {
 
     @Override
     public void setMaxUses(int maxUses) {
-        handle.maxTradeUses = maxUses; //TODO AT
+        handle.maxTradeUses = maxUses;
     }
 
     @Override
@@ -55,15 +55,15 @@ public class CraftMerchantRecipe extends MerchantRecipe {
 
     @Override
     public void setExperienceReward(boolean flag) {
-        handle.rewardsExp = flag; //TODO AT
+        handle.rewardsExp = flag;
     }
 
     public net.minecraft.village.MerchantRecipe toMinecraft() {
         List<ItemStack> ingredients = getIngredients();
         Preconditions.checkState(!ingredients.isEmpty(), "No offered ingredients");
-        handle.itemToBuy = CraftItemStack.asNMSCopy(ingredients.get(0)); //TODO AT
+        handle.itemToBuy = CraftItemStack.asNMSCopy(ingredients.get(0));
         if (ingredients.size() > 1) {
-            handle.secondItemToBuy = CraftItemStack.asNMSCopy(ingredients.get(1)); //TODO AT
+            handle.secondItemToBuy = CraftItemStack.asNMSCopy(ingredients.get(1));
         }
         return handle;
     }

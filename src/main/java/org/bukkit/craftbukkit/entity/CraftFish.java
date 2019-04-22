@@ -29,7 +29,7 @@ public class CraftFish extends AbstractProjectile implements Fish {
 
     public void setShooter(ProjectileSource shooter) {
         if (shooter instanceof CraftHumanEntity) {
-            getHandle().angler = (EntityPlayer) ((CraftHumanEntity) shooter).entity; //TODO AT
+            getHandle().angler = (EntityPlayer) ((CraftHumanEntity) shooter).entity;
         }
     }
 

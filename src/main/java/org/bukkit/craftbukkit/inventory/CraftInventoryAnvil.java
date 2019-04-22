@@ -60,7 +60,7 @@ public class CraftInventoryAnvil extends CraftInventory implements AnvilInventor
 
     @Override
     public String getRenameText() {
-        return container.repairedItemName; //TODO AT
+        return container.repairedItemName;
     }
 
     @Override

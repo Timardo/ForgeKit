@@ -3,7 +3,6 @@ package org.bukkit.craftbukkit.block;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntityStructure;
 import net.minecraft.util.Rotation;
@@ -45,7 +44,7 @@ public class CraftStructureBlock extends CraftBlockEntityState<TileEntityStructu
 
     @Override
     public String getAuthor() {
-        return getSnapshot().author; //TODO AT
+        return getSnapshot().author;
     }
 
     @Override

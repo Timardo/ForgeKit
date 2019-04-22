@@ -35,7 +35,7 @@ public final class CraftChatMessage {
     }
 
     public static ChatColor getColor(TextFormatting format) {
-        return ChatColor.getByChar(format.formattingCode); //TODO AT is this ever used somewhere?
+        return ChatColor.getByChar(format.formattingCode);
     }
 
     private static class StringMessage {

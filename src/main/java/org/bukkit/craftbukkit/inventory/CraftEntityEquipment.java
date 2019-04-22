@@ -176,7 +176,7 @@ public class CraftEntityEquipment implements EntityEquipment {
     }
 
     private void setDropChance(EntityEquipmentSlot slot, float chance) {
-    	((EntityLiving) entity.getHandle()).setDropChance(slot, chance);
+    	((EntityLiving) entity.getHandle()).setDropChance(slot, chance); //ForgeKit - move the code to existing method
 //        if (slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) {
 //            ((EntityLiving) entity.getHandle()).inventoryHandsDropChances[slot.getIndex()] = chance - 0.1F;
 //        } else {
@@ -186,9 +186,9 @@ public class CraftEntityEquipment implements EntityEquipment {
 
     private float getDropChance(EntityEquipmentSlot slot) {
         if (slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) {
-            return ((EntityLiving) entity.getHandle()).inventoryHandsDropChances[slot.getIndex()] + 0.1F; //TODO AT
+            return ((EntityLiving) entity.getHandle()).inventoryHandsDropChances[slot.getIndex()] + 0.1F;
         } else {
-            return ((EntityLiving) entity.getHandle()).inventoryArmorDropChances[slot.getIndex()] + 0.1F; //TODO AT
+            return ((EntityLiving) entity.getHandle()).inventoryArmorDropChances[slot.getIndex()] + 0.1F;
         }
     }
 }

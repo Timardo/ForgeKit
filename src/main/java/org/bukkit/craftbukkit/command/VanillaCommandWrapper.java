@@ -69,7 +69,7 @@ public final class VanillaCommandWrapper extends BukkitCommand {
         return (List<String>) vanillaCommand.getTabCompletions(FMLCommonHandler.instance().getMinecraftServerInstance(), getListener(sender), args, (location) == null ? null : new BlockPos(location.getX(), location.getY(), location.getZ()));
     }
 
-    public static CommandSender lastSender = null; // Nasty :(
+    public static CommandSender lastSender = null;
 
     public final int dispatchVanillaCommand(CommandSender bSender, ICommandSender icommandlistener, String[] as) throws CommandException {
         // Copied from net.minecraft.server.CommandHandler
@@ -166,7 +166,7 @@ public final class VanillaCommandWrapper extends BukkitCommand {
             return ((EntityMinecartCommandBlock) ((CraftMinecartCommand) sender).getHandle()).getCommandBlockLogic();
         }
         if (sender instanceof RemoteConsoleCommandSender) {
-            return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).rconConsoleSource; //TODO AT
+            return ((DedicatedServer)FMLCommonHandler.instance().getMinecraftServerInstance()).rconConsoleSource;
         }
         if (sender instanceof ConsoleCommandSender) {
             return ((CraftServer) sender.getServer()).getServer();

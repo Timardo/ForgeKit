@@ -112,7 +112,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.SPacketCustomSound;
 import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.network.play.server.SPacketTimeUpdate;
-import net.minecraft.server.*;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -251,9 +250,8 @@ public class CraftWorld implements World {
     public boolean setSpawnLocation(int x, int y, int z) {
         try {
             Location previousLocation = getSpawnLocation();
-            world.worldInfo.setSpawn(new BlockPos(x, y, z)); //TODO AT
+            world.worldInfo.setSpawn(new BlockPos(x, y, z));
 
-            // Notify anyone who's listening.
             SpawnChangeEvent event = new SpawnChangeEvent(this, previousLocation);
             server.getPluginManager().callEvent(event);
 
@@ -334,7 +332,6 @@ public class CraftWorld implements World {
             return true;
         }
 
-        // If chunk had previously been queued to save, must do save to avoid loss of that data
         return world.getChunkProvider().unloadChunk(chunk, chunk.mustSave || save); //TODO impl
     }
 
@@ -344,14 +341,14 @@ public class CraftWorld implements World {
         }
 
         final long chunkKey = ChunkPos.asLong(x, z);
-        world.getChunkProvider().droppedChunksSet.remove(chunkKey); //TODO AT
+        world.getChunkProvider().droppedChunksSet.remove(chunkKey);
 
         net.minecraft.world.chunk.Chunk chunk = null;
 
         chunk = world.getChunkProvider().chunkGenerator.generateChunk(x, z);
         PlayerChunkMapEntry playerChunk = world.getPlayerChunkMap().getEntry(x, z);
         if (playerChunk != null) {
-            playerChunk.chunk = chunk; //TODO AT
+            playerChunk.chunk = chunk;
         }
 
         if (chunk != null) {
@@ -374,9 +371,6 @@ public class CraftWorld implements World {
         int px = x << 4;
         int pz = z << 4;
 
-        // If there are more than 64 updates to a chunk at once, it will update all 'touched' sections within the chunk
-        // And will include biome data if all sections have been 'touched'
-        // This flags 65 blocks distributed across all the sections of the chunk, so that everything is sent, including biomes
         int height = getMaxHeight() / 16;
         for (int idx = 0; idx < 64; idx++) {
             world.notifyBlockUpdate(new BlockPos(px + (idx / height), ((idx % height) * 16), pz), Blocks.AIR.getDefaultState(), Blocks.STONE.getDefaultState(), 3);
@@ -393,7 +387,6 @@ public class CraftWorld implements World {
     public boolean loadChunk(int x, int z, boolean generate) {
         chunkLoadCount++;
         if (generate) {
-            // Use the default variant of loadChunk when generate == true.
             return world.getChunkProvider().provideChunk(x, z) != null;
         }
 
@@ -419,8 +412,6 @@ public class CraftWorld implements World {
         EntityItem entity = new EntityItem(world, loc.getX(), loc.getY(), loc.getZ(), CraftItemStack.asNMSCopy(item));
         entity.setPickupDelay(10);
         world.spawnEntity(entity, SpawnReason.CUSTOM); //TODO impl
-        // TODO this is inconsistent with how Entity.getBukkitEntity() works.
-        // However, this entity is not at the moment backed by a server entity class so it may be left.
         return new CraftItem(world.getServer(), entity); //TODO impl
     }
 
@@ -454,8 +445,6 @@ public class CraftWorld implements World {
         double ys = world.rand.nextFloat() * 0.7F - 0.35D;
         double zs = world.rand.nextFloat() * 0.7F - 0.35D;
         loc = loc.clone();
-        // Makes sure the new item is created within the block the location points to.
-        // This prevents item spill in 1-block wide farms.
         randomLocationWithinBlock(loc, xs, ys, zs);
         return dropItem(loc, item);
     }
@@ -677,13 +666,13 @@ public class CraftWorld implements World {
             environment = env;
             switch (env) {
                 case NORMAL:
-                    world.provider = new WorldProviderSurface(); //TODO AT -f
+                    world.provider = new WorldProviderSurface();
                     break;
                 case NETHER:
-                    world.provider = new WorldProviderHell(); //TODO AT -f
+                    world.provider = new WorldProviderHell();
                     break;
                 case THE_END:
-                    world.provider = new WorldProviderEnd(); //TODO AT -f
+                    world.provider = new WorldProviderEnd();
                     break;
             }
         }
@@ -755,7 +744,6 @@ public class CraftWorld implements World {
                 net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
                 Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO impl
 
-                // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null) {
                     list.add(bukkitEntity);
                 }
@@ -773,7 +761,6 @@ public class CraftWorld implements World {
                 net.minecraft.entity.Entity mcEnt = (net.minecraft.entity.Entity) o;
                 Entity bukkitEntity = mcEnt.getBukkitEntity(); //TODO impl
 
-                // Assuming that bukkitEntity isn't null
                 if (bukkitEntity != null && bukkitEntity instanceof LivingEntity) {
                     list.add((LivingEntity) bukkitEntity);
                 }
@@ -889,7 +876,7 @@ public class CraftWorld implements World {
     }
 
     public void setDifficulty(Difficulty difficulty) {
-        this.getHandle().worldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getValue())); //TODO AT
+        this.getHandle().worldInfo.setDifficulty(EnumDifficulty.getDifficultyEnum(difficulty.getValue()));
     }
 
     public Difficulty getDifficulty() {
@@ -905,7 +892,7 @@ public class CraftWorld implements World {
     }
 
     public void setStorm(boolean hasStorm) {
-        world.worldInfo.setStorm(hasStorm); //TODO AT
+        world.worldInfo.setRaining(hasStorm);
         setWeatherDuration(0);
     }
 
@@ -914,7 +901,7 @@ public class CraftWorld implements World {
     }
 
     public void setWeatherDuration(int duration) {
-        world.worldInfo.setWeatherDuration(duration); //TODO AT
+        world.worldInfo.setRainTime(duration);
     }
 
     public boolean isThundering() {
@@ -922,7 +909,7 @@ public class CraftWorld implements World {
     }
 
     public void setThundering(boolean thundering) {
-        world.worldInfo.setThundering(thundering); //TODO AT
+        world.worldInfo.setThundering(thundering);
         setThunderDuration(0);
     }
 
@@ -931,7 +918,7 @@ public class CraftWorld implements World {
     }
 
     public void setThunderDuration(int duration) {
-        world.worldInfo.setThunderDuration(duration); //TODO AT
+        world.worldInfo.setThunderTime(duration);
     }
 
     public long getSeed() {
@@ -1034,7 +1021,6 @@ public class CraftWorld implements World {
         float pitch = location.getPitch();
         float yaw = location.getYaw();
 
-        // order is important for some of these
         if (Boat.class.isAssignableFrom(clazz)) {
             entity = new EntityBoat(world, x, y, z);
             entity.setPositionAndRotation(x, y, z, yaw, pitch);
@@ -1100,7 +1086,7 @@ public class CraftWorld implements World {
                 entity = new EntityMinecartMobSpawner(world, x, y, z);
             } else if (CommandMinecart.class.isAssignableFrom(clazz)) {
                 entity = new EntityMinecartCommandBlock(world, x, y, z);
-            } else { // Default to rideable minecart for pre-rideable compatibility
+            } else {
                 entity = new EntityMinecartEmpty(world, x, y, z);
             }
         } else if (EnderSignal.class.isAssignableFrom(clazz)) {
@@ -1132,7 +1118,6 @@ public class CraftWorld implements World {
             } else if (Pig.class.isAssignableFrom(clazz)) {
                 entity = new EntityPig(world);
             } else if (Player.class.isAssignableFrom(clazz)) {
-                // need a net server handler for this one
             } else if (Sheep.class.isAssignableFrom(clazz)) {
                 entity = new EntitySheep(world);
             } else if (AbstractHorse.class.isAssignableFrom(clazz)) {
@@ -1305,10 +1290,10 @@ public class CraftWorld implements World {
         } else if (ExperienceOrb.class.isAssignableFrom(clazz)) {
             entity = new EntityXPOrb(world, x, y, z, 0);
         } else if (Weather.class.isAssignableFrom(clazz)) {
-            // not sure what this can do
+
             if (LightningStrike.class.isAssignableFrom(clazz)) {
                 entity = new EntityLightningBolt(world, x, y, z, false);
-                // what is this, I don't even
+
             }
         } else if (Firework.class.isAssignableFrom(clazz)) {
             entity = new EntityFireworkRocket(world, x, y, z, net.minecraft.item.ItemStack.EMPTY);
@@ -1361,11 +1346,11 @@ public class CraftWorld implements World {
     }
 
     public boolean getAllowAnimals() {
-        return world.spawnPeacefulMobs; //TODO AT
+        return world.spawnPeacefulMobs;
     }
 
     public boolean getAllowMonsters() {
-        return world.spawnHostileMobs; //TODO AT
+        return world.spawnHostileMobs;
     }
 
     public int getMaxHeight() {
@@ -1382,11 +1367,10 @@ public class CraftWorld implements World {
 
     public void setKeepSpawnInMemory(boolean keepLoaded) {
         world.keepSpawnInMemory = keepLoaded; //TODO impl
-        // Grab the worlds spawn chunk
         BlockPos chunkcoordinates = this.world.getSpawnPoint();
         int chunkCoordX = chunkcoordinates.getX() >> 4;
         int chunkCoordZ = chunkcoordinates.getZ() >> 4;
-        // Cycle through the 25x25 Chunks around it to load/unload the chunks.
+
         for (int x = -12; x <= 12; x++) {
             for (int z = -12; z <= 12; z++) {
                 if (keepLoaded) {
@@ -1545,7 +1529,7 @@ public class CraftWorld implements World {
         double y = loc.getY();
         double z = loc.getZ();
 
-        getHandle().playSound(null, x, y, z, CraftSound.getSoundEffect(CraftSound.getSound(sound)), SoundCategory.valueOf(category.name()), volume, pitch); // PAIL: rename
+        getHandle().playSound(null, x, y, z, CraftSound.getSoundEffect(CraftSound.getSound(sound)), SoundCategory.valueOf(category.name()), volume, pitch);
     }
 
     @Override
@@ -1678,17 +1662,14 @@ public class CraftWorld implements World {
 
         ChunkProviderServer cps = world.getChunkProvider();
         for (net.minecraft.world.chunk.Chunk chunk : cps.id2ChunkMap.values()) {
-            // If in use, skip it
             if (isChunkInUse(chunk.x, chunk.z)) {
                 continue;
             }
 
-            // Already unloading?
-            if (cps.droppedChunksSet.contains(ChunkPos.asLong(chunk.x, chunk.z))) { //TODO AT
+            if (cps.droppedChunksSet.contains(ChunkPos.asLong(chunk.x, chunk.z))) {
                 continue;
             }
 
-            // Add unload request
             cps.queueUnload(chunk);
         }
     }

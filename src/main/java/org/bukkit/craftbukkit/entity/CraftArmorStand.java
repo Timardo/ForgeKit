@@ -149,7 +149,7 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
 
     @Override
     public void setBasePlate(boolean basePlate) {
-        getHandle().setNoBasePlate(!basePlate); //TODO AT
+        getHandle().setNoBasePlate(!basePlate); 
     }
 
     @Override
@@ -175,7 +175,7 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
 
     @Override
     public void setArms(boolean arms) {
-        getHandle().setShowArms(arms); //TODO AT
+        getHandle().setShowArms(arms); 
     }
 
     @Override
@@ -185,7 +185,7 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
 
     @Override
     public void setSmall(boolean small) {
-        getHandle().setSmall(small); //TODO AT
+        getHandle().setSmall(small); 
     }
 
     private static EulerAngle fromNMS(Rotations old) {
@@ -211,6 +211,6 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
 
     @Override
     public void setMarker(boolean marker) {
-        getHandle().setMarker(marker); //TODO AT
+        getHandle().setMarker(marker); 
     }
 }

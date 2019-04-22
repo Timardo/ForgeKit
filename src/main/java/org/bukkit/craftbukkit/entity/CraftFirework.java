@@ -21,11 +21,11 @@ public class CraftFirework extends CraftEntity implements Firework {
     public CraftFirework(CraftServer server, EntityFireworkRocket entity) {
         super(server, entity);
 
-        ItemStack item = getHandle().getDataManager().get(EntityFireworkRocket.FIREWORK_ITEM); //TODO AT
+        ItemStack item = getHandle().getDataManager().get(EntityFireworkRocket.FIREWORK_ITEM);
 
         if (item.isEmpty()) {
             item = new ItemStack(Items.FIREWORKS);
-            getHandle().getDataManager().set(EntityFireworkRocket.FIREWORK_ITEM, item); //TODO AT
+            getHandle().getDataManager().set(EntityFireworkRocket.FIREWORK_ITEM, item);
         }
 
         this.item = CraftItemStack.asCraftMirror(item);
@@ -58,12 +58,12 @@ public class CraftFirework extends CraftEntity implements Firework {
     @Override
     public void setFireworkMeta(FireworkMeta meta) {
         item.setItemMeta(meta);
-        getHandle().lifetime = 10 * (1 + meta.getPower()) + random.nextInt(6) + random.nextInt(7); //TODO AT
-        getHandle().getDataManager().setDirty(EntityFireworkRocket.FIREWORK_ITEM); //TODO AT
+        getHandle().lifetime = 10 * (1 + meta.getPower()) + random.nextInt(6) + random.nextInt(7);
+        getHandle().getDataManager().setDirty(EntityFireworkRocket.FIREWORK_ITEM);
     }
 
     @Override
     public void detonate() {
-        getHandle().lifetime = 0; //TODO AT
+        getHandle().lifetime = 0;
     }
 }

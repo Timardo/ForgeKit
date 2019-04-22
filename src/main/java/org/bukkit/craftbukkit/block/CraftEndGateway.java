@@ -21,37 +21,37 @@ public class CraftEndGateway extends CraftBlockEntityState<TileEntityEndGateway>
 
     @Override
     public Location getExitLocation() {
-        BlockPos pos = this.getSnapshot().exitPortal; //TODO AT
+        BlockPos pos = this.getSnapshot().exitPortal; 
         return pos == null ? null : new Location(this.isPlaced() ? this.getWorld() : null, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
     public void setExitLocation(Location location) {
         if (location == null) {
-            this.getSnapshot().exitPortal = null; //TODO AT
+            this.getSnapshot().exitPortal = null; 
         } else if (!Objects.equals(location.getWorld(), this.isPlaced() ? this.getWorld() : null)) {
             throw new IllegalArgumentException("Cannot set exit location to different world");
         } else {
-            this.getSnapshot().exitPortal = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()); //TODO AT
+            this.getSnapshot().exitPortal = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()); 
         }
     }
 
     @Override
     public boolean isExactTeleport() {
-        return this.getSnapshot().exactTeleport; //TODO AT
+        return this.getSnapshot().exactTeleport; 
     }
 
     @Override
     public void setExactTeleport(boolean exact) {
-        this.getSnapshot().exactTeleport = exact; //TODO AT
+        this.getSnapshot().exactTeleport = exact; 
     }
 
     @Override
     public void applyTo(TileEntityEndGateway endGateway) {
         super.applyTo(endGateway);
 
-        if (this.getSnapshot().exitPortal == null) { //TODO AT
-            endGateway.exitPortal = null; //TODO AT
+        if (this.getSnapshot().exitPortal == null) { 
+            endGateway.exitPortal = null; 
         }
     }
 }

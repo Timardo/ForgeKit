@@ -52,7 +52,7 @@ public class CraftFallingBlock extends CraftEntity implements FallingBlock {
 
     @Override
     public boolean canHurtEntities() {
-        return getHandle().hurtEntities; //TODO AT
+        return getHandle().hurtEntities;
     }
 
     @Override
@@ -63,8 +63,6 @@ public class CraftFallingBlock extends CraftEntity implements FallingBlock {
     @Override
     public void setTicksLived(int value) {
         super.setTicksLived(value);
-
-        // Second field for EntityFallingBlock
         getHandle().ticksExisted = value;
     }
 }

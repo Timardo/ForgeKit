@@ -25,7 +25,7 @@ public class CraftSpellcaster extends CraftIllager implements Spellcaster {
 
     @Override
     public Spell getSpell() {
-        return Spell.valueOf(getHandle().getSpellType().name()); //TODO AT
+        return Spell.valueOf(getHandle().getSpellType().name()); 
     }
 
     @Override

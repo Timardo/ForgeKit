@@ -217,11 +217,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     }
 
     public double getLastDamage() {
-        return getHandle().lastDamage; //TODO AT
+        return getHandle().lastDamage;
     }
 
     public void setLastDamage(double damage) {
-        getHandle().lastDamage = (float) damage; //TODO AT
+        getHandle().lastDamage = (float) damage;
     }
 
     public int getNoDamageTicks() {
@@ -247,7 +247,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     }
 
     public Player getKiller() {
-        return getHandle().attackingPlayer == null ? null : (Player) getHandle().attackingPlayer.getBukkitEntity(); //TODO AT + impl
+        return getHandle().attackingPlayer == null ? null : (Player) getHandle().attackingPlayer.getBukkitEntity(); //TODO impl
     }
 
     public boolean addPotionEffect(PotionEffect effect) {
@@ -396,7 +396,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     public void setRemoveWhenFarAway(boolean remove) {
         if (getHandle() instanceof EntityLiving) {
-            ((EntityLiving) getHandle()).persistenceRequired = !remove; //TODO AT
+            ((EntityLiving) getHandle()).persistenceRequired = !remove;
         }
     }
 
@@ -466,12 +466,12 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public boolean isGliding() {
-        return getHandle().getFlag(7); //TODO AT
+        return getHandle().getFlag(7);
     }
 
     @Override
     public void setGliding(boolean gliding) {
-        getHandle().setFlag(7, gliding); //TODO AT
+        getHandle().setFlag(7, gliding);
     }
 
     @Override

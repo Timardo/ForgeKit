@@ -33,12 +33,12 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
     public void load(TileEntityBanner banner) {
         super.load(banner);
 
-        base = DyeColor.getByDyeData((byte) banner.baseColor.getDyeDamage()); //TODO AT
+        base = DyeColor.getByDyeData((byte) banner.baseColor.getDyeDamage()); 
         patterns = new ArrayList<Pattern>();
 
-        if (banner.patterns != null) { //TODO AT
-            for (int i = 0; i < banner.patterns.size(); i++) { //TODO AT
-                NBTTagCompound p = (NBTTagCompound) banner.patterns.get(i); //TODO AT
+        if (banner.patterns != null) { 
+            for (int i = 0; i < banner.patterns.tagCount(); i++) { 
+                NBTTagCompound p = (NBTTagCompound) banner.patterns.get(i); 
                 patterns.add(new Pattern(DyeColor.getByDyeData((byte) p.getInteger("Color")), PatternType.getByIdentifier(p.getString("Pattern"))));
             }
         }
@@ -94,7 +94,7 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
     public void applyTo(TileEntityBanner banner) {
         super.applyTo(banner);
 
-        banner.baseColor = EnumDyeColor.byDyeDamage(base.getDyeData()); //TODO AT
+        banner.baseColor = EnumDyeColor.byDyeDamage(base.getDyeData()); 
 
         NBTTagList newPatterns = new NBTTagList();
 
@@ -104,6 +104,6 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
             compound.setString("Pattern", p.getPattern().getIdentifier());
             newPatterns.appendTag(compound);
         }
-        banner.patterns = newPatterns; //TODO AT
+        banner.patterns = newPatterns; 
     }
 }

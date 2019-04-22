@@ -249,7 +249,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             if (entity instanceof EntityEgg) { return new CraftEgg(server, (EntityEgg) entity); }
             else if (entity instanceof EntitySnowball) { return new CraftSnowball(server, (EntitySnowball) entity); }
             else if (entity instanceof EntityPotion) {
-                if (!((EntityPotion) entity).isLingering()) { return new CraftSplashPotion(server, (EntityPotion) entity); } //TODO AT
+                if (!((EntityPotion) entity).isLingering()) { return new CraftSplashPotion(server, (EntityPotion) entity); } 
             	else { return new CraftLingeringPotion(server, (EntityPotion) entity); }
             }
             else if (entity instanceof EntityEnderPearl) { return new CraftEnderPearl(server, (EntityEnderPearl) entity); }
@@ -390,15 +390,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     }
 
     public int getFireTicks() {
-        return entity.fire; //TODO AT
+        return entity.fire;
     }
 
     public int getMaxFireTicks() {
-        return entity.getFireImmuneTicks(); //TODO AT
+        return entity.getFireImmuneTicks();
     }
 
     public void setFireTicks(int ticks) {
-        entity.fire = ticks; //TODO AT
+        entity.fire = ticks;
     }
 
     public void remove() {
@@ -699,16 +699,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public void setGlowing(boolean flag) {
-        getHandle().glowing = flag; //TODO AT
+        getHandle().glowing = flag;
         Entity e = getHandle();
-        if (e.getFlag(6) != flag) { //TODO AT
-            e.setFlag(6, flag); //TODO AT
+        if (e.getFlag(6) != flag) {
+            e.setFlag(6, flag);
         }
     }
 
     @Override
     public boolean isGlowing() {
-        return getHandle().glowing; //TODO AT
+        return getHandle().glowing;
     }
 
     @Override
@@ -775,7 +775,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     protected NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", getHandle().getEntityString()); //TODO AT
+        nbttagcompound.setString("id", getHandle().getEntityString());
         getHandle().writeToNBT(nbttagcompound);
 
         return nbttagcompound;

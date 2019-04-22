@@ -60,7 +60,7 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
 
     @Override
     public HorseInventory getInventory() {
-        return new CraftInventoryHorse(getHandle().horseChest); //TODO AT
+        return new CraftInventoryHorse(getHandle().horseChest); 
     }
 
     @Override
