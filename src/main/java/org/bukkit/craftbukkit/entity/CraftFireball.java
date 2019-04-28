@@ -9,6 +9,8 @@ import org.bukkit.util.Vector;
 
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.timardo.forgekit.logging.LoggingUtil;
 
 public class CraftFireball extends AbstractProjectile implements Fireball {
     public CraftFireball(CraftServer server, EntityFireball entity) {
@@ -16,7 +18,8 @@ public class CraftFireball extends AbstractProjectile implements Fireball {
     }
 
     public float getYield() {
-        return getHandle().bukkitYield; //TODO impl (probably useless)
+    	LoggingUtil.log(LoggingUtil.LogType.INVESTIGATION, this.getClass(), "getYield");
+        return /*getHandle().bukkitYield*/1F;
     }
 
     public boolean isIncendiary() {
@@ -28,7 +31,8 @@ public class CraftFireball extends AbstractProjectile implements Fireball {
     }
 
     public void setYield(float yield) {
-        getHandle().bukkitYield = yield; //TODO impl (probably useless)
+    	LoggingUtil.log(LoggingUtil.LogType.INVESTIGATION, this.getClass(), "setYield");
+        /*getHandle().bukkitYield = yield*/;
     }
 
     public ProjectileSource getShooter() {

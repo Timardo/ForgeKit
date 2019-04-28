@@ -110,7 +110,7 @@ public class CraftEventFactory {
         WorldServer worldServer = world.getHandle();
         int spawnSize = Bukkit.getServer().getSpawnRadius();
 
-        if (world.getHandle().dimension != 0) return true; //TODO impl
+        if (world.getHandle().provider.getDimension() != 0) return true; //ForgeKit - replace WorldServer#dimension field with WorldServer#provider#getDimension()
         if (spawnSize <= 0) return true;
         if (((CraftServer) Bukkit.getServer()).getHandle().getOppedPlayers().isEmpty()) return true;
         if (player.isOp()) return true;

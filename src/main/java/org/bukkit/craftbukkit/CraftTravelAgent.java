@@ -17,7 +17,7 @@ public class CraftTravelAgent extends Teleporter implements TravelAgent {
 
     public CraftTravelAgent(WorldServer worldserver) {
         super(worldserver);
-        if (DEFAULT == null && worldserver.dimension == 0) { //TODO impl
+        if (DEFAULT == null && worldserver.provider.getDimension() == 0) {
             DEFAULT = this;
         }
     }

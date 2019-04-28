@@ -211,7 +211,7 @@ public final class CraftServer implements Server {
     private boolean printSaveWarning;
     private CraftIconCache icon;
     private boolean overrideAllCommandBlockCommands = false;
-    private boolean unrestrictedAdvancements;
+    // private boolean unrestrictedAdvancements; //Option to ignore all permissions while executing commands from an Advancement Reward - TODO
     private final List<CraftPlayer> playerView;
     public int reloadCount;
 
@@ -287,26 +287,26 @@ public final class CraftServer implements Server {
 
         saveCommandsConfig();
         overrideAllCommandBlockCommands = commandsConfiguration.getStringList("command-block-overrides").contains("*");
-        unrestrictedAdvancements = commandsConfiguration.getBoolean("unrestricted-advancements");
+        // unrestrictedAdvancements = commandsConfiguration.getBoolean("unrestricted-advancements");
         pluginManager.useTimings(configuration.getBoolean("settings.plugin-profiling"));
         monsterSpawn = configuration.getInt("spawn-limits.monsters");
         animalSpawn = configuration.getInt("spawn-limits.animals");
         waterAnimalSpawn = configuration.getInt("spawn-limits.water-animals");
         ambientSpawn = configuration.getInt("spawn-limits.ambient");
-        console.autosavePeriod = configuration.getInt("ticks-per.autosave"); //TODO impl
+        // console.autosavePeriod = configuration.getInt("ticks-per.autosave"); //TODO impl AutoSaves all data in MinecraftServer#tick() method L-729 currently not supported
         warningState = WarningState.value(configuration.getString("settings.deprecated-verbose"));
         chunkGCPeriod = configuration.getInt("chunk-gc.period-in-ticks");
         chunkGCLoadThresh = configuration.getInt("chunk-gc.load-threshold");
         loadIcon();
     }
 
-    public boolean getPermissionOverride(ICommandListener listener) {
-        while (listener instanceof CommandSenderWrapper) {
-            listener = ((CommandSenderWrapper) listener).base; //TODO impl
-        }
-
-        return unrestrictedAdvancements && listener instanceof AdvancementRewards.AdvancementCommandListener; //TODO impl
-    }
+//    public boolean getPermissionOverride(ICommandSender listener) { //This method checks for the unrestrictedAdvancements property, currently unsupported
+//        while (listener instanceof CommandSenderWrapper) {
+//            listener = ((CommandSenderWrapper) listener).delegate; 
+//        }
+//
+//        return unrestrictedAdvancements && listener instanceof AdvancementRewards.AdvancementCommandListener; //TODO impl
+//    }
 
     public boolean getCommandBlockOverride(String command) {
         return overrideAllCommandBlockCommands || commandsConfiguration.getStringList("command-block-overrides").contains(command);
@@ -912,7 +912,7 @@ public final class CraftServer implements Server {
         boolean used = false;
         do {
             for (WorldServer server : console.worlds) {
-                used = server.dimension == dimension; //TODO impl
+                used = server.provider.getDimension() == dimension;
                 if (used) {
                     dimension++;
                     break;
@@ -930,7 +930,7 @@ public final class CraftServer implements Server {
             worlddata = new WorldInfo(worldSettings, name);
         }
         if (!worlddata.getWorldName().equals(name)) {
-        	worlddata.setWorldName(name); // CraftBukkit - Migration did not rewrite the level.dat; This forces 1.8 to take the last loaded world as respawn (in this case the end)
+        	worlddata.setWorldName(name);
         }
         WorldServer internal = (WorldServer) new WorldServer(console, sdm, worlddata, dimension, console.profiler, creator.environment(), generator).init(); //TODO impl
 
@@ -997,7 +997,7 @@ public final class CraftServer implements Server {
             return false;
         }
 
-        if (handle.dimension == 0) { //TODO impl
+        if (handle.provider.getDimension() == 0) {
             return false;
         }
 
@@ -1128,21 +1128,25 @@ public final class CraftServer implements Server {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-    public void clearRecipes() {
-        CraftingManager.REGISTRY = new RegistryNamespaced();
-        FurnaceRecipes.instance().getSmeltingList().clear();
-        FurnaceRecipes.instance().customRecipes.clear(); //TODO impl
-        FurnaceRecipes.instance().customExperience.clear(); //TODO impl
+    public void clearRecipes() { //ForgeKit - the hell is this for?
+        // CraftingManager.REGISTRY = new RegistryNamespaced();
+        // FurnaceRecipes.instance().getSmeltingList().clear();
+        // FurnaceRecipes.instance().customRecipes.clear();
+        // FurnaceRecipes.instance().customExperience.clear();
+    	throw new UnsupportedOperationException("Something tried to clear server recipes, ")
     }
-
+    /*
+     * customRecipes + customExperience - used to add plugin-specific custom smelting recipes
+     * possible solution - rewrite it to fit the CraftTweaker's style of adding and removing 
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-    public void resetRecipes() {
-        CraftingManager.REGISTRY = new RegistryNamespaced();
-        CraftingManager.init();
-        FurnaceRecipes.instance().smeltingList = new FurnaceRecipes().getSmeltingList();
-        FurnaceRecipes.instance().customRecipes.clear(); //TODO impl
-        FurnaceRecipes.instance().customExperience.clear(); //TODO impl
+    public void resetRecipes() { //TODO ForgeKit - this would delete all recipes and add only the vanilla ones
+        // CraftingManager.REGISTRY = new RegistryNamespaced();
+        // CraftingManager.init();
+        // FurnaceRecipes.instance().smeltingList = new FurnaceRecipes().getSmeltingList();
+        // FurnaceRecipes.instance().customRecipes.clear();
+        // FurnaceRecipes.instance().customExperience.clear();
     }
 
     @Override
@@ -1436,9 +1440,14 @@ public final class CraftServer implements Server {
 
     @Override
     public ConsoleCommandSender getConsoleSender() {
-        return console.console; //TODO impl
+        return console.console;
     }
-
+    /*
+     * console - bukkit's custom ConsoleCommandSender used in various situations throughout the NMS package, instantiated during PlayerList init as a new
+     * ColouredConsoleSender, which is not very important. Also part of command/chat events
+     * possible solution - create this field anywhere in some custom field database class, declare it during some early forge event and then use it as normal
+     * TODO - impl
+     */
     public EntityMetadataStore getEntityMetadata() {
         return entityMetadata;
     }
@@ -1653,7 +1662,7 @@ public final class CraftServer implements Server {
     }
 
     public void checkSaveState() {
-        if (this.playerCommandState || this.printSaveWarning || this.console.autosavePeriod <= 0) { //TODO impl
+        if (this.playerCommandState || this.printSaveWarning/* || this.console.autosavePeriod <= 0*/) { //TODO impl
             return;
         }
         this.printSaveWarning = true;
@@ -1727,7 +1736,7 @@ public final class CraftServer implements Server {
         Preconditions.checkArgument(key != null, "key");
 
         Advancement advancement = console.getAdvancementManager().getAdvancement(CraftNamespacedKey.toMinecraft(key));
-        return (advancement == null) ? null : advancement.bukkit; //TODO impl
+        return (advancement == null) ? null : new org.bukkit.craftbukkit.advancement.CraftAdvancement(advancement); //ForgeKit - if this causes problems, inject the final bukkit field to Advancement class
     }
 
     @Override
@@ -1735,7 +1744,7 @@ public final class CraftServer implements Server {
         return Iterators.unmodifiableIterator(Iterators.transform(console.getAdvancementManager().getAdvancements().iterator(), new Function<Advancement, org.bukkit.advancement.Advancement>() {
             @Override
             public org.bukkit.advancement.Advancement apply(Advancement advancement) {
-                return advancement.bukkit; //TODO impl
+                return new org.bukkit.craftbukkit.advancement.CraftAdvancement(advancement); //L-1734
             }
         }));
     }

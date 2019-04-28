@@ -116,7 +116,16 @@ public class CraftInventoryCrafting extends CraftInventory implements CraftingIn
     }
 
     public Recipe getRecipe() {
-        IRecipe recipe = ((InventoryCrafting)getInventory()).currentRecipe; //TODO impl
+        IRecipe recipe = ((InventoryCrafting)getInventory()).currentRecipe;
+        /*
+         * currentRecipe - holds the currently crafted item for PrepareItemCraftEvent, declared in CraftingManager#findMatchingRecipe and in RecipeRepairItem#getCraftingResult
+         * this PrepareItemCraftEvent is actually called AFTER the forge's ItemCraftedEvent in fml's PlayerEvent class and BEFORE bukkit's CraftItemEvent, not sure about the 
+         * anvil version, but it looks like it's called after the AnvilUpdateEvent
+         * possible solution - subscribe to fml's PlayerEvent#ItemCraftedEvent and call the PrepareItemCraftEvent here with correct args, subscribe to AnvilUpdateEvent and also
+         * call the PrepareItemCraftEvent as an Anvil version with correct args, also replace this method's body with universal native getter to avoid problems with toBukkitRecipe
+         * method below so plugins will always get valid reference to the recipe being used in the crafting event
+         * TODO - event
+         */
         return recipe == null ? null : recipe.toBukkitRecipe(); //TODO impl
     }
 }

@@ -14,6 +14,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.attribute.CraftAttributeMap;
 import org.bukkit.craftbukkit.inventory.CraftEntityEquipment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.potion.CraftPotionUtil;
@@ -408,8 +409,9 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         getHandle().shouldPickupLoot = pickup;
     }
     /*
-     * Moved from EntityLiving to EntityLivingBase, only reason I see is that EntityPlayer and EntityPlayerMP are extending only the LivingBase
-     * potential solution: inject this field under different name, say shouldPickupLoot with ASM to EntityLivingBase TODO
+     * shouldPickupLoot - moved from EntityLiving to EntityLivingBase, only reason I see is that EntityPlayer and EntityPlayerMP are extending only the LivingBase
+     * possible solution - inject this field under name shouldPickupLoot with ASM to EntityLivingBase and insert declaration at the end of constructor of EntityPlayerMP
+     * TODO - ASM
      */
     public boolean getCanPickupItems() {
         return getHandle().shouldPickupLoot;
@@ -476,7 +478,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public AttributeInstance getAttribute(Attribute attribute) {
-        return getHandle().craftAttributes.getAttribute(attribute); //TODO impl (probably useless)
+        return new CraftAttributeMap(getHandle().getAttributeMap()).getAttribute(attribute); //ForgeKit - check if this is ok
     }
 
     @Override
@@ -493,11 +495,18 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public void setCollidable(boolean collidable) {
-        getHandle().collides = collidable; //TODO impl
+        getHandle().collides = collidable;
     }
+    /*
+     * collides - field that declares if an entity should collide with another one, used as an overrider for basic collision behavior
+     * possible solution - I don't any see other solution than applying a capability to an entity and also transforming the 
+     * EntityLivingBase#canBeCollidedWith and EntityLivingBase#canBePushed L-2821
+     * TODO - ASM
+     * TODO - capability
+     */
 
     @Override
     public boolean isCollidable() {
-        return getHandle().collides; //TODO impl
+        return getHandle().collides;
     }
 }

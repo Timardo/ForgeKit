@@ -19,11 +19,16 @@ public class CraftAgeable extends CraftCreature implements Ageable {
     }
 
     public void setAgeLock(boolean lock) {
-        getHandle().ageLocked = lock; //TODO impl
+        getHandle().ageLocked = lock;
     }
-
+    /* 
+     * ageLocked - used for locking entity's age so it won't grow up in EntityAgeable.onLivingUpdate() L-210
+     * possible solution - hook the LivingEvent#LivingUpdateEvent and handle EntityAgeable#growingAge - set it to growingAge-1 if a capability is true
+     * TODO - event
+     * TODO - capability
+     */
     public boolean getAgeLock() {
-        return getHandle().ageLocked; //TODO impl
+        return getHandle().ageLocked;
     }
 
     public void setBaby() {

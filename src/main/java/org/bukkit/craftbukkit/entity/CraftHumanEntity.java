@@ -293,7 +293,12 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         if (getHandle().inventoryContainer == formerContainer) {
             return null;
         }
-        getHandle().inventoryContainer.checkReachable = false; //TODO impl
+        getHandle().inventoryContainer.checkReachable = false;
+        /*
+         * checkReachable - overrides vanilla methods for checking if the inventory view can be accessed, used when opening virtual chests, enchantment tables etc.
+         * possible solution - create a wrapper class for each possible GUI with overrriden canInteractWith method
+         * TODO - override
+         */
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
 
@@ -331,7 +336,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         }
         getHandle().displayGui(new BlockWorkbench.InterfaceCraftingTable(getHandle().world, new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ())));
         if (force) {
-            getHandle().inventoryContainer.checkReachable = false; //TODO impl
+            getHandle().inventoryContainer.checkReachable = false; //L-299
         }
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
@@ -357,7 +362,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         getHandle().displayGui((TileEntityLockable) container);
 
         if (force) {
-            getHandle().inventoryContainer.checkReachable = false; //TODO impl
+            getHandle().inventoryContainer.checkReachable = false; //L-299
         }
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }

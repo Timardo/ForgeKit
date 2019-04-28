@@ -62,6 +62,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapDecoration;
+import net.timardo.forgekit.capabilities.IPlayerCapabilities;
+import net.timardo.forgekit.capabilities.PlayerCapabilityProvider;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.NotImplementedException;
@@ -108,6 +110,9 @@ import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scoreboard.Scoreboard;
 
 import javax.annotation.Nullable;
+
+import static net.timardo.forgekit.utils.UtilityMethods.getCapability;
+import static net.timardo.forgekit.Constants.*;
 
 @SuppressWarnings("deprecation")
 @DelegateDeserialization(CraftOfflinePlayer.class)
@@ -201,17 +206,20 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public String getDisplayName() {
-        return getHandle().displayName; //TODO impl (probably useless)
+        return getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getDisplayName(); //ForgeKit - use capabilities
     }
 
     @Override
     public void setDisplayName(final String name) {
-        getHandle().displayName = name == null ? getName() : name; //TODO impl (probably useless)
+    	IPlayerCapabilities capabilities = getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null);
+    	capabilities.setDisplayName(name == null ? getName() : name); //ForgeKit - use capabilities
+        
     }
 
     @Override
     public String getPlayerListName() {
-        return getHandle().listName == null ? getName() : CraftChatMessage.fromComponent(getHandle().listName, TextFormatting.WHITE); //TODO impl
+        return getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getListName() == null ? getName() : //ForgeKit - use capabilities
+        	CraftChatMessage.fromComponent(getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getListName(), TextFormatting.WHITE); 
     }
 
     @Override
@@ -262,9 +270,14 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public Location getCompassTarget() {
-        return getHandle().compassTarget; //TODO impl
+        return getHandle().compassTarget;
     }
-
+    /*
+     * compassTarget - declared only in NetHandlerPlayServer#sendPacket L-894 called from various sources, but every time it's just world spawnpoint
+     * also can be called by plugins to alter the compass direction, so we should support this
+     * possible solution - inject the field to EntityPlayerMP class and inject the if statement at the start of NetHandlerPlayServer#sendPacket L-894 method
+     * TODO - ASM
+     */
     @Override
     public void chat(String msg) {
         if (getHandle().connection == null) return;
@@ -535,7 +548,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         if (fromWorld == toWorld) {
             entity.connection.teleport(to); //TODO MD
         } else {
-            server.getHandle().moveToWorld(entity, toWorld.dimension, true, to, true); //TODO impl
+            server.getHandle().recreatePlayerEntity(entity, toWorld.provider.getDimension(), true, to, true); //TODO impl
         }
         return true;
     }

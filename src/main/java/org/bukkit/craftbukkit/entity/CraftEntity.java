@@ -4,6 +4,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import net.timardo.forgekit.NMSHelperMethods;
+import net.timardo.forgekit.utils.NMSMethods;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityCreature;
@@ -239,7 +241,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
         }
         else if (entity instanceof EntityXPOrb) { return new CraftExperienceOrb(server, (EntityXPOrb) entity); }
         else if (entity instanceof EntityTippedArrow) {
-        	if (((EntityTippedArrow) entity).isTipped()) { return new CraftTippedArrow(server, (EntityTippedArrow) entity); } //TODO MD
+        	if ((NMSMethods.isTipped((EntityTippedArrow) entity))) { return new CraftTippedArrow(server, (EntityTippedArrow) entity); } //ForgeKit - isTipped() implemented as a custom method
         	else { return new CraftArrow(server, (EntityArrow) entity); }
         }
         else if (entity instanceof EntitySpectralArrow) { return new CraftSpectralArrow(server, (EntitySpectralArrow) entity); }

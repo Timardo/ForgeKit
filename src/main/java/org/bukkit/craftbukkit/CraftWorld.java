@@ -140,6 +140,7 @@ import net.minecraft.world.gen.feature.WorldGenTaiga2;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.SaveHandler;
+import net.minecraftforge.common.util.BlockSnapshot;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.BlockChangeDelegate;
@@ -262,9 +263,14 @@ public class CraftWorld implements World {
     }
 
     public Chunk getChunkAt(int x, int z) {
-        return this.world.getChunkProvider().provideChunk(x, z).bukkitChunk; //TODO impl
+        return this.world.getChunkProvider().provideChunk(x, z).bukkitChunk;
     }
-
+    /*																|
+     * bukkitChunk - a bukkit reference in minecraft's Chunk class
+     * possible solution - can be instantiated during AttachCapabilitiesEvent in Chunk type constructor L-115 as a capability
+     * TODO - capability
+     * TODO - event
+     */
     public Chunk getChunkAt(Block block) {
         return getChunkAt(block.getX() >> 4, block.getZ() >> 4);
     }
@@ -279,7 +285,7 @@ public class CraftWorld implements World {
 
         for (int i = 0; i < chunks.length; i++) {
             net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) chunks[i];
-            craftChunks[i] = chunk.bukkitChunk; //TODO impl
+            craftChunks[i] = chunk.bukkitChunk; //L-268
         }
 
         return craftChunks;
@@ -399,7 +405,7 @@ public class CraftWorld implements World {
 
     public void loadChunk(Chunk chunk) {
         loadChunk(chunk.getX(), chunk.getZ());
-        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().bukkitChunk = chunk; //TODO impl
+        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().bukkitChunk = chunk; //L-268
     }
 
     public WorldServer getHandle() {
@@ -561,29 +567,33 @@ public class CraftWorld implements World {
     }
 
     public boolean generateTree(Location loc, TreeType type, BlockChangeDelegate delegate) {
-        world.captureTreeGeneration = true;  //TODO impl
-        world.captureBlockStates = true; //TODO impl
+    	/*
+    	 * captureTreeGeneration - after some time spent searching for usage of this field (captureTreeGeneration), it is only checked in 
+    	 * World#getBlockState(BlockPos) L-987, World#setBlockState L-376 and in ItemStack#onItemUse, it's declaration always surrounds 
+    	 * a code that could generate a tree
+    	 * possible solution - not yet
+    	 * TODO - investigation
+    	 */
+        // world.captureTreeGeneration = true;
+        world.captureBlockSnapshots = true;
         boolean grownTree = generateTree(loc, type);
-        world.captureBlockStates = false; //TODO impl
-        world.captureTreeGeneration = false; //TODO impl
-        if (grownTree) { // Copy block data to delegate
-            for (BlockState blockstate : world.capturedBlockStates) { //TODO impl
-                int x = blockstate.getX();
-                int y = blockstate.getY();
-                int z = blockstate.getZ();
-                BlockPos position = new BlockPos(x, y, z);
+        world.captureBlockSnapshots = false;
+        // world.captureTreeGeneration = false;
+        if (grownTree) {
+            for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
+                BlockPos position = snapshot.getPos();
                 IBlockState oldBlock = world.getBlockState(position);
-                int typeId = blockstate.getTypeId();
-                int data = blockstate.getRawData();
-                int flag = ((CraftBlockState)blockstate).getFlag();
-                delegate.setTypeIdAndData(x, y, z, typeId, data);
+//                int typeId = snapshot.getTypeId(); //TODO should we care about deprecated API?
+//                int data = blockstate.getRawData();
+                int flag = snapshot.getFlag();
+//                delegate.setTypeIdAndData(x, y, z, typeId, data);
                 IBlockState newBlock = world.getBlockState(position);
                 world.markAndNotifyBlock(position, null, oldBlock, newBlock, flag);
             }
-            world.capturedBlockStates.clear(); //TODO impl
+            world.capturedBlockSnapshots.clear(); //TODO check if this is ok
             return true;
         } else {
-            world.capturedBlockStates.clear(); //TODO impl
+            world.capturedBlockSnapshots.clear();
             return false;
         }
     }
@@ -1541,7 +1551,7 @@ public class CraftWorld implements World {
         double z = loc.getZ();
 
         SPacketCustomSound packet = new SPacketCustomSound(sound, SoundCategory.valueOf(category.name()), x, y, z, volume, pitch);
-        world.getMinecraftServer().getPlayerList().sendPacketNearby(null, x, y, z, volume > 1.0F ? 16.0F * volume : 16.0D, this.world.dimension, packet); //TODO impl
+        world.getMinecraftServer().getPlayerList().sendToAllNearExcept(null, x, y, z, volume > 1.0F ? 16.0F * volume : 16.0D, this.world.provider.getDimension(), packet);
     }
 
     public String getGameRuleValue(String rule) {

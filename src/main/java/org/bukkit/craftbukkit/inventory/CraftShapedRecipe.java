@@ -11,6 +11,11 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.RegistryManager;
+import net.timardo.forgekit.utils.UtilityMethods;
 
 public class CraftShapedRecipe extends ShapedRecipe implements CraftRecipe {
     public CraftShapedRecipe(NamespacedKey key, ItemStack result) {
@@ -52,6 +57,6 @@ public class CraftShapedRecipe extends ShapedRecipe implements CraftRecipe {
             }
         }
 
-        CraftingManager.register(CraftNamespacedKey.toMinecraft(this.getKey()), new ShapedRecipes("", width, shape.length, data, CraftItemStack.asNMSCopy(this.getResult()))); //TODO check if this is ok with forge (I don't think it is)
+        UtilityMethods.registerRecipe(CraftNamespacedKey.toMinecraft(this.getKey()), new ShapedRecipes("", width, shape.length, data, CraftItemStack.asNMSCopy(this.getResult())));
     }
 }
