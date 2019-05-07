@@ -416,11 +416,11 @@ public class CraftEventFactory {
         return !event.isCancelled();
     }
 
-    public static EntityDeathEvent callEntityDeathEvent(EntityLiving victim) {
+    public static EntityDeathEvent callEntityDeathEvent(EntityLivingBase victim) {
         return callEntityDeathEvent(victim, new ArrayList<org.bukkit.inventory.ItemStack>(0));
     }
 
-    public static EntityDeathEvent callEntityDeathEvent(EntityLiving victim, List<org.bukkit.inventory.ItemStack> drops) {
+    public static EntityDeathEvent callEntityDeathEvent(EntityLivingBase victim, List<org.bukkit.inventory.ItemStack> drops) {
         CraftLivingEntity entity = (CraftLivingEntity) victim.getBukkitEntity(); //TODO impl
         EntityDeathEvent event = new EntityDeathEvent(entity, drops, victim.getExpReward()); //TODO impl
         CraftWorld world = (CraftWorld) entity.getWorld();

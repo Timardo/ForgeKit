@@ -62,18 +62,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapDecoration;
-import net.timardo.forgekit.capabilities.IPlayerCapabilities;
-import net.timardo.forgekit.capabilities.PlayerCapabilityProvider;
+import net.timardo.forgekit.capabilities.player.IPlayerCapabilities;
+import net.timardo.forgekit.capabilities.player.PlayerCapabilityProvider;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.*;
-import org.bukkit.Achievement;
-import org.bukkit.BanList;
-import org.bukkit.Statistic;
-import org.bukkit.Material;
 import org.bukkit.Statistic.Type;
-import org.bukkit.World;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -111,7 +106,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import javax.annotation.Nullable;
 
-import static net.timardo.forgekit.utils.UtilityMethods.getCapability;
+import static net.timardo.forgekit.utils.UtilityMethods.getPlayerCapability;
 import static net.timardo.forgekit.Constants.*;
 
 @SuppressWarnings("deprecation")
@@ -206,20 +201,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public String getDisplayName() {
-        return getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getDisplayName(); //ForgeKit - use capabilities
+        return getPlayerCapability(getHandle()).getDisplayName(); //ForgeKit - use capabilities
     }
 
     @Override
     public void setDisplayName(final String name) {
-    	IPlayerCapabilities capabilities = getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null);
-    	capabilities.setDisplayName(name == null ? getName() : name); //ForgeKit - use capabilities
+    	getPlayerCapability(getHandle()).setDisplayName(name == null ? getName() : name); //ForgeKit - use capabilities
         
     }
 
     @Override
     public String getPlayerListName() {
-        return getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getListName() == null ? getName() : //ForgeKit - use capabilities
-        	CraftChatMessage.fromComponent(getHandle().getCapability(PlayerCapabilityProvider.PLAYER_CAPABILITIES, null).getListName(), TextFormatting.WHITE); 
+        return getPlayerCapability(getHandle()).getListName() == null ? getName() : //ForgeKit - use capabilities
+        	CraftChatMessage.fromComponent(getPlayerCapability(getHandle()).getListName(), TextFormatting.WHITE); 
     }
 
     @Override
@@ -227,7 +221,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         if (name == null) {
             name = getName();
         }
-        getHandle().listName = name.equals(getName()) ? null : CraftChatMessage.fromString(name)[0]; //TODO impl
+        getPlayerCapability(getHandle()).setListName(name.equals(getName()) ? null : CraftChatMessage.fromString(name)[0]); //ForgeKit - use capabilities
         for (EntityPlayerMP player : (List<EntityPlayerMP>)server.getHandle().getPlayers()) {
             if (player.getBukkitEntity().canSee(this)) { //TODO impl
                 player.connection.sendPacket(new SPacketPlayerListItem(SPacketPlayerListItem.Action.UPDATE_DISPLAY_NAME, getHandle()));
@@ -264,20 +258,20 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void setCompassTarget(Location loc) {
-        if (getHandle().connection == null) return;
-        getHandle().connection.sendPacket(new SPacketSpawnPosition(new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+        if (getHandle().connection == null) return; //ForgeKit - move this packet stuff from PacketHandler, other NMS calls to this methods are now handled in NMSReplacementEventHandler
+        SPacketSpawnPosition packet = new SPacketSpawnPosition(new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        
+        if (packet != null) {
+        	getHandle().connection.sendPacket(packet);
+        	getPlayerCapability(getHandle()).setCompassTarget(loc);
+        }
     }
 
     @Override
     public Location getCompassTarget() {
-        return getHandle().compassTarget;
+        return getPlayerCapability(getHandle()).getCompassTarget();
     }
-    /*
-     * compassTarget - declared only in NetHandlerPlayServer#sendPacket L-894 called from various sources, but every time it's just world spawnpoint
-     * also can be called by plugins to alter the compass direction, so we should support this
-     * possible solution - inject the field to EntityPlayerMP class and inject the if statement at the start of NetHandlerPlayServer#sendPacket L-894 method
-     * TODO - ASM
-     */
+
     @Override
     public void chat(String msg) {
         if (getHandle().connection == null) return;

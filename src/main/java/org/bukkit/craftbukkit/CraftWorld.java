@@ -141,6 +141,7 @@ import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.util.BlockSnapshot;
+import net.timardo.forgekit.capabilities.world.chunk.BukkitChunkCapProvider;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.BlockChangeDelegate;
@@ -263,7 +264,7 @@ public class CraftWorld implements World {
     }
 
     public Chunk getChunkAt(int x, int z) {
-        return this.world.getChunkProvider().provideChunk(x, z).bukkitChunk;
+        return this.world.getChunkProvider().provideChunk(x, z).getCapability(BukkitChunkCapProvider.BUKKIT_CHUNK_CAP_PROVIDER, null).getBukkitChunk(); //ForgeKit - field -> capability
     }
     /*																|
      * bukkitChunk - a bukkit reference in minecraft's Chunk class
@@ -285,7 +286,7 @@ public class CraftWorld implements World {
 
         for (int i = 0; i < chunks.length; i++) {
             net.minecraft.world.chunk.Chunk chunk = (net.minecraft.world.chunk.Chunk) chunks[i];
-            craftChunks[i] = chunk.bukkitChunk; //L-268
+            craftChunks[i] = chunk.getCapability(BukkitChunkCapProvider.BUKKIT_CHUNK_CAP_PROVIDER, null).getBukkitChunk(); //ForgeKit - field -> capability
         }
 
         return craftChunks;
@@ -405,7 +406,7 @@ public class CraftWorld implements World {
 
     public void loadChunk(Chunk chunk) {
         loadChunk(chunk.getX(), chunk.getZ());
-        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().bukkitChunk = chunk; //L-268
+        ((CraftChunk) getChunkAt(chunk.getX(), chunk.getZ())).getHandle().getCapability(BukkitChunkCapProvider.BUKKIT_CHUNK_CAP_PROVIDER, null).setBukkitChunk(chunk); //ForgeKit - field -> capability
     }
 
     public WorldServer getHandle() {

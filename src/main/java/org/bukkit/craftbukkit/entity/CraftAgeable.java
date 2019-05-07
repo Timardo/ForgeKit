@@ -4,6 +4,8 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Ageable;
 
 import net.minecraft.entity.EntityAgeable;
+import net.timardo.forgekit.capabilities.entity.EntityAgeableBukkitCapabilityProvider;
+import net.timardo.forgekit.capabilities.entity.EntityAgeableBukkitCapablityProvider;
 
 public class CraftAgeable extends CraftCreature implements Ageable {
     public CraftAgeable(CraftServer server, EntityAgeable entity) {
@@ -19,16 +21,11 @@ public class CraftAgeable extends CraftCreature implements Ageable {
     }
 
     public void setAgeLock(boolean lock) {
-        getHandle().ageLocked = lock;
+        getHandle().getCapability(EntityAgeableBukkitCapabilityProvider.ENTITY_AGEABLE_BUKKIT_CAP, null).setAgeLocked(lock); //ForgeKit - field -> capability
     }
-    /* 
-     * ageLocked - used for locking entity's age so it won't grow up in EntityAgeable.onLivingUpdate() L-210
-     * possible solution - hook the LivingEvent#LivingUpdateEvent and handle EntityAgeable#growingAge - set it to growingAge-1 if a capability is true
-     * TODO - event
-     * TODO - capability
-     */
+
     public boolean getAgeLock() {
-        return getHandle().ageLocked;
+        return getHandle().getCapability(EntityAgeableBukkitCapabilityProvider.ENTITY_AGEABLE_BUKKIT_CAP, null).getAgeLocked(); //ForgeKit - field -> capability
     }
 
     public void setBaby() {

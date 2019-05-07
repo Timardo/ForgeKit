@@ -30,6 +30,10 @@ import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.timardo.forgekit.override.BukkitAnvil;
+import net.timardo.forgekit.override.InterfaceBukkitCraftingTable;
+import net.timardo.forgekit.override.TileEntityBukkitBeacon;
+import net.timardo.forgekit.override.TileEntityBukkitEnchantmentTable;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -266,15 +270,15 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
                 }
                 break;
             case BEACON:
-                if (iinventory instanceof TileEntityBeacon) {
-                    getHandle().displayGUIChest((TileEntityBeacon) iinventory);
+                if (iinventory instanceof TileEntityBeacon || iinventory instanceof TileEntityBukkitBeacon) { //ForgeKit - Bukkit wrapper class
+                    getHandle().displayGUIChest((TileEntityBukkitBeacon) iinventory);
                 } else {
                     openCustomInventory(inventory, player, "minecraft:beacon");
                 }
                 break;
             case ANVIL:
-                if (iinventory instanceof BlockAnvil.Anvil) {
-                    getHandle().displayGui((BlockAnvil.Anvil) iinventory);
+                if (iinventory instanceof BlockAnvil.Anvil || iinventory instanceof BukkitAnvil) { //ForgeKit - Bukkit wrapper class
+                    getHandle().displayGui((BukkitAnvil) iinventory);
                 } else {
                     openCustomInventory(inventory, player, "minecraft:anvil");
                 }
@@ -293,12 +297,6 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         if (getHandle().inventoryContainer == formerContainer) {
             return null;
         }
-        getHandle().inventoryContainer.checkReachable = false;
-        /*
-         * checkReachable - overrides vanilla methods for checking if the inventory view can be accessed, used when opening virtual chests, enchantment tables etc.
-         * possible solution - create a wrapper class for each possible GUI with overrriden canInteractWith method
-         * TODO - override
-         */
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
 
@@ -334,9 +332,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         if (location == null) {
             location = getLocation();
         }
-        getHandle().displayGui(new BlockWorkbench.InterfaceCraftingTable(getHandle().world, new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ())));
         if (force) {
-            getHandle().inventoryContainer.checkReachable = false; //L-299
+        	getHandle().displayGui(new InterfaceBukkitCraftingTable(getHandle().world, new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()))); //ForgeKit - wrapper class
+        }
+        else {
+        	getHandle().displayGui(new BlockWorkbench.InterfaceCraftingTable(getHandle().world, new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ())));
         }
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
@@ -355,15 +355,12 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         BlockPos pos = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         TileEntity container = getHandle().world.getTileEntity(pos);
         if (container == null && force) {
-            container = new TileEntityEnchantmentTable();
+            container = new TileEntityBukkitEnchantmentTable(); //ForgeKit - bukkit wrapper class
             container.setWorld(getHandle().world);
             container.setPos(pos);
         }
         getHandle().displayGui((TileEntityLockable) container);
 
-        if (force) {
-            getHandle().inventoryContainer.checkReachable = false; //L-299
-        }
         return getHandle().inventoryContainer.getBukkitView(); //TODO impl
     }
 

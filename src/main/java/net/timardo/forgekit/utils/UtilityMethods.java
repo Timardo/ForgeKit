@@ -3,9 +3,12 @@ package net.timardo.forgekit.utils;
 import org.apache.commons.lang.Validate;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
+import net.timardo.forgekit.capabilities.player.ICustomPlayerCapability;
+import net.timardo.forgekit.capabilities.player.CustomPlayerCapabilityProvider;
 
 public class UtilityMethods {
 	
@@ -27,6 +30,10 @@ public class UtilityMethods {
 		((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).unfreeze(); //Unfreeze the registry, bad thing thus not supported
 		ForgeRegistries.RECIPES.register((IRecipe) recipe);
 		((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).freeze(); //Freeze again, just for fun
+	}
+	
+	public static ICustomPlayerCapability getPlayerCapability(EntityPlayer player) {
+		return player.getCapability(CustomPlayerCapabilityProvider.PLAYER_CAPABILITY, null);
 	}
 
 }
